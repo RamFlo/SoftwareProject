@@ -64,10 +64,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <NMakeBuildCommandLine>mingw32-make</NMakeBuildCommandLine>
-    <NMakeOutput>ex1_makefile.exe</NMakeOutput>
+    <NMakeOutput>ex1.exe</NMakeOutput>
     <NMakeCleanCommandLine>mingw32-make clean</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>mingw32-make clean all</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\ucrt;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <NMakeBuildCommandLine>mingw32-make</NMakeBuildCommandLine>
@@ -78,10 +79,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <NMakeBuildCommandLine>mingw32-make</NMakeBuildCommandLine>
-    <NMakeOutput>ex1_makefile.exe</NMakeOutput>
+    <NMakeOutput>ex1.exe</NMakeOutput>
     <NMakeCleanCommandLine>mingw32-make clean</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>mingw32-make clean all</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\ucrt;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <NMakeBuildCommandLine>mingw32-make</NMakeBuildCommandLine>
@@ -93,6 +95,11 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="main.c" />
+    <ClCompile Include="makefile" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="header1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
