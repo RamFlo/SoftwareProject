@@ -2,7 +2,7 @@
 * main.c
 *
 *  Created on: Nov 9, 2017
-*      Author: Guy Keller
+*      Author: Guy Keller and Ram Shimon
 */
 #include "header1.h"
 #include <stdio.h>
