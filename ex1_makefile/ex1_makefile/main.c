@@ -11,6 +11,7 @@
 
 int main() {
 	char c = '0';
+	int check = 0;
 	int a = 0;
 	int b = 0;
 	int curIndex = 0;
@@ -19,13 +20,21 @@ int main() {
 	char number[100] = "";
 	char newBaseNum[100] = "";
 	printf("Please enter the number's base:\n");
-	scanf("%d", &a);
+	check=scanf("%d", &a);
+	if (check == 0) {
+		printf("An error occurred!\n");
+		exit(1);
+	}
 	if (isBaseLegal(a) == 0) {
 		printf("Invalid input base\n");
 		exit(1);
 	}
 	printf("Please enter the desired base:\n");
-	scanf("%d", &b);
+	check = scanf("%d", &b);
+	if (check == 0) {
+		printf("An error occurred!\n");
+		exit(1);
+	}
 	if (isBaseLegal(b) == 0) {
 		printf("Invalid desired base\n");
 		exit(2);
