@@ -2,7 +2,7 @@
 * main.c
 *
 *  Created on: Nov 9, 2017
-*      Author: Guy Keller and Ram Shimon
+*      Author: Guy Keller and Ram Shimon the kingsmen
 */
 #include "header1.h"
 #include <stdio.h>
