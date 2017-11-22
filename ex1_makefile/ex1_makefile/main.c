@@ -14,6 +14,8 @@ int main() {
 	int check = 0;
 	int a = 0;
 	int b = 0;
+	unsigned int a2 = 1;
+	unsigned int b2 = 1;
 	int curIndex = 0;
 	unsigned int decimalNum = 0;
 	int newLength = 0;
@@ -39,6 +41,8 @@ int main() {
 		printf("Invalid desired base\n");
 		exit(2);
 	}
+	a2 = a;
+	b2 = b;
 	printf("Please enter a number in base %d:\n", a);
 	c = getchar();
 	c = getchar();
@@ -51,16 +55,16 @@ int main() {
 		curIndex++;
 		c = getchar();
 	}
-	decimalNum = baseToDecimal(a, number, curIndex);
+	decimalNum = baseToDecimal(a2, number, curIndex);
 	newLength = doLog(decimalNum, b);
-	decimalToNewBase(decimalNum, b, newBaseNum, newLength);
+	decimalToNewBase(decimalNum, b2, newBaseNum, newLength);
 	printf("The result is : %.*s\n", newLength, newBaseNum);
 	return 0;
 }
-//maybe change the call to decimalToNewBase to newBaseNum[0]
-unsigned int baseToDecimal(int intBase, char *number, int arraySize) {
+
+unsigned int baseToDecimal(unsigned int intBase, char *number, int arraySize) {
 	unsigned int decimalNum = 0;
-	int curDigit = 0;
+	unsigned int curDigit = 0;
 	for (int i = arraySize - 1; i >= 0; i--) {
 		if (isalpha(number[i]))
 			curDigit = number[i] - 'A' + 10;
@@ -71,7 +75,7 @@ unsigned int baseToDecimal(int intBase, char *number, int arraySize) {
 	return decimalNum;
 }
 
-void decimalToNewBase(unsigned int decimal, int base, char* arrayLocation, int arrayLength) {
+void decimalToNewBase(unsigned int decimal, unsigned int base, char* arrayLocation, int arrayLength) {
 	unsigned int curDec = decimal;
 	int curIndex = arrayLength - 1;
 	while (curDec > 0) {
