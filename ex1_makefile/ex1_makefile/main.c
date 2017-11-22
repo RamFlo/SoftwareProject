@@ -56,7 +56,7 @@ int main() {
 		c = getchar();
 	}
 	decimalNum = baseToDecimal(a2, number, curIndex);
-	newLength = doLog(decimalNum, b);
+	newLength = doLog(decimalNum, b2);
 	decimalToNewBase(decimalNum, b2, newBaseNum, newLength);
 	printf("The result is : %.*s\n", newLength, newBaseNum);
 	return 0;
@@ -94,7 +94,7 @@ int isBaseLegal(int base) {
 	return 0;
 }
 
-int doLog(int num, int base) {
+int doLog(unsigned int num, unsigned int base) {
 	if (num == 0)
 		return 1;
 	int counter = 0;

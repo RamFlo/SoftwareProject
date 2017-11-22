@@ -11,7 +11,7 @@
 unsigned int baseToDecimal(unsigned int intBase, char* number, int arraySize);
 void decimalToNewBase(unsigned int decimal, unsigned int base, char* arrayLocation, int arrayLength);
 int isBaseLegal(int base);
-int doLog(int num, int base);
+int doLog(unsigned int num, unsigned int base);
 int doPow(int num, int myPow);
 int isLegalDigit(char digit, int base);
 #endif /* HEADER1_H_ */
