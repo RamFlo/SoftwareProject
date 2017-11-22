@@ -15,7 +15,7 @@ int main() {
 	int a = 0;
 	int b = 0;
 	int curIndex = 0;
-	int decimalNum = 0;
+	unsigned int decimalNum = 0;
 	int newLength = 0;
 	char number[100] = "";
 	char newBaseNum[100] = "";
@@ -58,8 +58,8 @@ int main() {
 	return 0;
 }
 //maybe change the call to decimalToNewBase to newBaseNum[0]
-int baseToDecimal(int intBase, char *number, int arraySize) {
-	int decimalNum = 0;
+unsigned int baseToDecimal(int intBase, char *number, int arraySize) {
+	unsigned int decimalNum = 0;
 	int curDigit = 0;
 	for (int i = arraySize - 1; i >= 0; i--) {
 		if (isalpha(number[i]))
@@ -71,8 +71,8 @@ int baseToDecimal(int intBase, char *number, int arraySize) {
 	return decimalNum;
 }
 
-void decimalToNewBase(int decimal, int base, char* arrayLocation, int arrayLength) {
-	int curDec = decimal;
+void decimalToNewBase(unsigned int decimal, int base, char* arrayLocation, int arrayLength) {
+	unsigned int curDec = decimal;
 	int curIndex = arrayLength - 1;
 	while (curDec > 0) {
 		if (curDec % base <= 9)

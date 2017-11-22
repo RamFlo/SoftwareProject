@@ -8,8 +8,8 @@
 #ifndef HEADER1_H_
 #define HEADER1_H_
 
-int baseToDecimal(int intBase, char* number, int arraySize);
-void decimalToNewBase(int decimal, int base, char* arrayLocation, int arrayLength);
+unsigned int baseToDecimal(int intBase, char* number, int arraySize);
+void decimalToNewBase(unsigned int decimal, int base, char* arrayLocation, int arrayLength);
 int isBaseLegal(int base);
 int doLog(int num, int base);
 int doPow(int num, int myPow);
