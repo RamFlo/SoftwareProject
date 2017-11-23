@@ -4,62 +4,17 @@
 *  Created on: Nov 9, 2017
 *      Author: Guy Keller and Ram Shimon the kingsmen
 */
-#include "header1.h"
+//#include "header1.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-int main() {
-	char c = '0';
-	int check = 0;
-	int a = 0;
-	int b = 0;
-	unsigned int a2 = 1;
-	unsigned int b2 = 1;
-	int curIndex = 0;
-	unsigned int decimalNum = 0;
-	int newLength = 0;
-	char number[100] = "";
-	char newBaseNum[100] = "";
-	printf("Please enter the number's base:\n");
-	check=scanf("%d", &a);
-	if (check == 0) {
-		printf("An error occurred!\n");
-		exit(1);
+int doPow(int num, int myPow) {
+	int newNum = 1;
+	for (int i = 0; i < myPow; i++) {
+		newNum *= num;
 	}
-	if (isBaseLegal(a) == 0) {
-		printf("Invalid input base\n");
-		exit(1);
-	}
-	printf("Please enter the desired base:\n");
-	check = scanf("%d", &b);
-	if (check == 0) {
-		printf("An error occurred!\n");
-		exit(1);
-	}
-	if (isBaseLegal(b) == 0) {
-		printf("Invalid desired base\n");
-		exit(2);
-	}
-	a2 = a;
-	b2 = b;
-	printf("Please enter a number in base %d:\n", a);
-	c = getchar();
-	c = getchar();
-	while (c != EOF && c != '\n') {
-		if (isLegalDigit(c, a) == 0) {
-			printf("Invalid number!\n");
-			exit(3);
-		}
-		number[curIndex] = c;
-		curIndex++;
-		c = getchar();
-	}
-	decimalNum = baseToDecimal(a2, number, curIndex);
-	newLength = doLog(decimalNum, b2);
-	decimalToNewBase(decimalNum, b2, newBaseNum, newLength);
-	printf("The result is : %.*s\n", newLength, newBaseNum);
-	return 0;
+	return newNum;
 }
 
 unsigned int baseToDecimal(unsigned int intBase, char *number, int arraySize) {
@@ -105,14 +60,6 @@ int doLog(unsigned int num, unsigned int base) {
 	return counter;
 }
 
-int doPow(int num, int myPow) {
-	int newNum = 1;
-	for (int i = 0; i < myPow; i++) {
-		newNum *= num;
-	}
-	return newNum;
-}
-
 int isLegalDigit(char digit, int base) {
 	if (base <= 10) {
 		if (digit - '0' < base && digit - '0' >= 0)
@@ -127,7 +74,58 @@ int isLegalDigit(char digit, int base) {
 	return 0;
 }
 
-
+int main() {
+	char c = '0';
+	int check = 0;
+	int a = 0;
+	int b = 0;
+	unsigned int a2 = 1;
+	unsigned int b2 = 1;
+	int curIndex = 0;
+	unsigned int decimalNum = 0;
+	int newLength = 0;
+	char number[100] = "";
+	char newBaseNum[100] = "";
+	printf("Please enter the number's base:\n");
+	check = scanf("%d", &a);
+	if (check == 0) {
+		printf("An error occurred!\n");
+		exit(1);
+	}
+	if (isBaseLegal(a) == 0) {
+		printf("Invalid input base\n");
+		exit(1);
+	}
+	printf("Please enter the desired base:\n");
+	check = scanf("%d", &b);
+	if (check == 0) {
+		printf("An error occurred!\n");
+		exit(1);
+	}
+	if (isBaseLegal(b) == 0) {
+		printf("Invalid desired base\n");
+		exit(2);
+	}
+	a2 = a;
+	b2 = b;
+	printf("Please enter a number in base %d:\n", a);
+	c = getchar();
+	c = getchar();
+	while (c != EOF && c != '\n') {
+		if (isLegalDigit(c, a) == 0) {
+			printf("Invalid number!\n");
+			exit(3);
+		}
+		number[curIndex] = c;
+		curIndex++;
+		c = getchar();
+	}
+	decimalNum = baseToDecimal(a2, number, curIndex);
+	newLength = doLog(decimalNum, b2);
+	decimalToNewBase(decimalNum, b2, newBaseNum, newLength);
+	printf("The result is : %.*s\n", newLength, newBaseNum);
+	return 0;
+}
 
 
 
