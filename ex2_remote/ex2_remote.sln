@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2008
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ex2_remote", "ex2_remote\ex2_remote.vcxproj", "{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Debug|ARM.ActiveCfg = Debug|ARM
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Debug|ARM.Build.0 = Debug|ARM
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Debug|x64.ActiveCfg = Debug|x64
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Debug|x64.Build.0 = Debug|x64
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Debug|x86.ActiveCfg = Debug|x86
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Debug|x86.Build.0 = Debug|x86
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Release|ARM.ActiveCfg = Release|ARM
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Release|ARM.Build.0 = Release|ARM
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Release|x64.ActiveCfg = Release|x64
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Release|x64.Build.0 = Release|x64
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Release|x86.ActiveCfg = Release|x86
+		{1EE2D2EB-A956-4D0D-B98B-BCAC23453AB7}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9CE79536-E47D-4B62-A1C3-66C5C59B56B5}
+	EndGlobalSection
+EndGlobal
