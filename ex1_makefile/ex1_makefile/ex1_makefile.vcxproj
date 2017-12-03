@@ -72,7 +72,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <NMakeBuildCommandLine>mingw32-make</NMakeBuildCommandLine>
-    <NMakeOutput>ex1_makefile.exe</NMakeOutput>
+    <NMakeOutput>ex1.exe</NMakeOutput>
     <NMakeCleanCommandLine>mingw32-make clean</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>mingw32-make clean all</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
