@@ -40,6 +40,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <ConfigurationType>Makefile</ConfigurationType>
+    <RemoteRootDir>~/</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -66,13 +67,31 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
-  <ItemGroup>
-    <ClInclude Include="..\..\ex2_makefile\ex2_makefile\Header.h" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <RemoteProjectDir>$(RemoteRootDir)/</RemoteProjectDir>
+    <RemoteBuildCommandLine>make</RemoteBuildCommandLine>
+    <RemoteReBuildCommandLine>make clean all</RemoteReBuildCommandLine>
+    <RemoteCleanCommandLine>make clean</RemoteCleanCommandLine>
+    <RemoteBuildOutputs>nim</RemoteBuildOutputs>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ex2_makefile\ex2_makefile\main.c" />
+    <ClCompile Include="..\..\ex2_makefile\ex2_makefile\main_aux.c" />
+    <ClCompile Include="..\..\ex2_makefile\ex2_makefile\sp_nim.c" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemGroup>
+    <ClInclude Include="..\..\ex2_makefile\ex2_makefile\main_aux.h" />
+    <ClInclude Include="..\..\ex2_makefile\ex2_makefile\SPBufferset.h" />
+    <ClInclude Include="..\..\ex2_makefile\ex2_makefile\sp_nim.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ex2_makefile\ex2_makefile\makefile" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <RemotePostBuildEvent>
+      <Command>nim</Command>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

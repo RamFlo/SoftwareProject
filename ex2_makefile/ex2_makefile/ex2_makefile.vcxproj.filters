@@ -21,9 +21,21 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main_aux.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sp_nim.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="main_aux.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sp_nim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPBufferset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

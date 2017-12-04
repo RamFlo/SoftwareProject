@@ -15,12 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\ex2_makefile\ex2_makefile\Header.h">
+    <ClInclude Include="..\..\ex2_makefile\ex2_makefile\main_aux.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ex2_makefile\ex2_makefile\sp_nim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ex2_makefile\ex2_makefile\SPBufferset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ex2_makefile\ex2_makefile\main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ex2_makefile\ex2_makefile\main_aux.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ex2_makefile\ex2_makefile\sp_nim.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

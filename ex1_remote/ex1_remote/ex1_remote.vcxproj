@@ -99,7 +99,11 @@
   <ItemGroup>
     <None Include="..\..\ex1_makefile\ex1_makefile\makefile" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <RemotePostBuildEvent>
+      <Command>ex1</Command>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

@@ -94,10 +94,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="main_aux.c" />
     <ClCompile Include="makefile" />
+    <ClCompile Include="sp_nim.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h" />
+    <ClInclude Include="main_aux.h" />
+    <ClInclude Include="SPBufferset.h" />
+    <ClInclude Include="sp_nim.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
