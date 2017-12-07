@@ -1,4 +1,6 @@
 #include <stdio.h>
+/*This function takes the number of heaps as input from the user, and checks if the input was legal (a number between 1 and 32).
+If the input was legal, the number of heaps is returned. else, -1 is returned.*/
 int askNumOfHeaps() {
 	int heapNum = 0;
 	printf("Enter the number of heaps:\n");

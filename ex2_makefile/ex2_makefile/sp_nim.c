@@ -1,4 +1,7 @@
 #include <stdio.h>
+/*
+This function checks for an enpty board at the start of each turn. If the board is empty (the heaps are empty), it prints the winner and returns 1. Else, it return -1.
+*/
 int checkWinner(int turn, int* heapSizes,int heapNum) {
 	int i = 0;
 	for (i = 0; i < heapNum; i++)
@@ -10,6 +13,11 @@ int checkWinner(int turn, int* heapSizes,int heapNum) {
 		printf("Computer wins!\n");
 	return 1;
 }
+/*
+This function executes the user's turn. It scans the heap's index and number of objects to be removed from the user, and checks if they are legal (the index must be a number between 1
+and the number of heaps and the number of objects to be removed must be a positive number smaller or equal to the number of objects currently in the heap).
+If the input is legal, the objects are removed from the corresponding heap. Else, the user is asked to enter a different input.
+*/
 void userTurn(int* heapSizes, int heapNum) {
 	int index = 0, removed = 0;
 	printf("Your turn: please enter the heap index and the number of removed objects.\n");
