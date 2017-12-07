@@ -21,6 +21,10 @@ int askSizeOfHeaps(int* heapSizes, int heapNum) {
 	}
 	return 1;
 }
+/*
+This function prints the current state of the board.
+Namely, it prints the current turn, then the heaps sizes ordered from 1 to n.
+*/
 void printBoard(int* heapSizes, int heapNum,int turn) {
 	int i = 0;
 	printf("In turn %d heap sizes are:",turn+1);
