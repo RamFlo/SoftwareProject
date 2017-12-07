@@ -9,7 +9,10 @@ int askNumOfHeaps() {
 	printf("Error: the number of heaps must be between 1 and 32.\n");
 	return -1;
 }
-//Check if &heapSizes[i] or heapSizes[i]
+/*
+This function takes the number of objects at each heap as input from the user.
+If the input was illegal (anything other than a positive integer) it returns -1. Else, it returns 1.
+*/
 int askSizeOfHeaps(int* heapSizes, int heapNum) {
 	int i = 0;
 	printf("Enter the heap sizes:\n");
