@@ -31,14 +31,10 @@ typedef struct command_t {
 */
 bool spParserIsInt(const char* str) {
 	int size = 0;
-	
 	if (sizeof(str) == 0)
 		return false;
 	size = sizeof(str) / sizeof(str[0]);
-
-
-
-
+	for (int i=0; i < size; i++)
 	return true;
 }
 
