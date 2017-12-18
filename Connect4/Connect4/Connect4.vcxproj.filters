@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SPFIARParser.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="makefile">
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SPFIARParser.h">
+    <None Include="..\..\Connect4_makefile\Connect4_makefile\makefile" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
