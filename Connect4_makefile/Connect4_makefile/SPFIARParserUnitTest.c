@@ -28,8 +28,8 @@ static bool spParserCheckParseLine() {
 	ASSERT_TRUE(cmd.cmd == SP_INVALID_LINE && !cmd.validArg);
 	return true;
 }
-int main() {
+/*int main() {
 	RUN_TEST(spParserCheckIsInt);
 	RUN_TEST(spParserCheckParseLine);
 	return 0;
-}
+}*/

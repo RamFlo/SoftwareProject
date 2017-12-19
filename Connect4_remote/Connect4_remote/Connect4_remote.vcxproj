@@ -69,7 +69,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <RemoteProjectDir>$(RemoteRootDir)/</RemoteProjectDir>
-    <RemoteBuildCommandLine>make SPFIARParserUnitTest</RemoteBuildCommandLine>
+    <RemoteBuildCommandLine>make SPArrayListUnitTest</RemoteBuildCommandLine>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\Connect4_makefile\Connect4_makefile\makefile" />
@@ -84,14 +84,16 @@
     <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\unit_test_util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayList.c" />
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayListUnitTest.c" />
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGame.c" />
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGameUnitTest.c" />
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.c" />
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParserUnitTest.c" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <RemotePostBuildEvent>
-      <Command>./SPFIARParserUnitTest</Command>
+      <Command>./SPArrayListUnitTest</Command>
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

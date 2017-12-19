@@ -33,6 +33,9 @@
     <ClCompile Include="SPArrayList.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SPFIARGame.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SPFIARParser.h">

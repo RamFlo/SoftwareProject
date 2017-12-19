@@ -66,11 +66,11 @@ static bool spArrayListCreateTest() {
 	return true;
 }
 
-int main() {
+/*int main() {
 	RUN_TEST(spArrayListCreateTest);
 	RUN_TEST(spArrayListBasicAddTest);
 	RUN_TEST(spArrayListBasicRemoveTest);
 	RUN_TEST(spArrayListBasicGetTest);
 	RUN_TEST(spArrayListBasicCopyTest);
 	return 0;
-}
+}*/
