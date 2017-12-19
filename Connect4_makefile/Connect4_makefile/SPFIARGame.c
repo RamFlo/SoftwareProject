@@ -73,10 +73,21 @@ SPFiarGame* spFiarGameCreate(int historySize);
 */
 SPFiarGame* spFiarGameCopy(SPFiarGame* src) {
 	SPFiarGame *g;
-
+	int i = 0, j = 0, k=0;
+	SPArrayList* p;
 	g = spFiarGameCreate(src->history->maxSize);
-
-
+	g->currentPlayer = src->currentPlayer;
+	for (i = 0; i < SP_FIAR_GAME_N_ROWS; i++) {
+		for (j = 0; j < SP_FIAR_GAME_N_COLUMNS; j++) {
+			(g->gameBoard)[i][j] = (src->gameBoard)[i][j];
+		}
+	}
+	p = spArrayListCopy(src->history);
+	for (k = 0; k < SP_FIAR_GAME_N_COLUMNS; k++) {
+		(g->tops)[k] = (src->tops)[k];
+	}
+	g->history = p;
+	return g;
 }
 
 /**
