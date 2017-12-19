@@ -22,7 +22,7 @@ typedef struct command_t {
 	int arg;
 } SPCommand;
 
-char *strdup(const char *s);
+char *my_strdup(const char *s);
 
 /**
 * Checks if a specified string represents a valid integer. It is recommended
