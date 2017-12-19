@@ -85,7 +85,7 @@ SPArrayList* spArrayListCreate(int maxSize) {
 */
 SPArrayList* spArrayListCopy(SPArrayList* src) {
 	int* newArr;
-	int newAct = src->actualSize, newMax = src->maxSize, i = 0;
+	int newAct, newMax, i = 0;
 	SPArrayList* p;
 	int* curNewPointer = newArr;
 	int* curOldPointer = src->elements;
@@ -94,6 +94,8 @@ SPArrayList* spArrayListCopy(SPArrayList* src) {
 	newArr = (int *)malloc(src->maxSize);
 	if (!newArr)
 		return NULL;
+	newAct = src->actualSize;
+	newMax = src->maxSize;
 	for (i = 0; i < src->maxSize; i++) {
 		*curNewPointer = *curOldPointer;
 		curNewPointer++;
@@ -274,7 +276,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src) {
 int spArrayListGetAt(SPArrayList* src, int index) {
 	if (src == NULL || index >= src->actualSize)
 		return -1;
-	return src->elements + index;
+	return *(src->elements + index);
 }
 	
 
