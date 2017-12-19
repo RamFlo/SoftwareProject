@@ -209,19 +209,23 @@ SP_ARRAY_LIST_MESSAGE spArrayListAddLast(SPArrayList* src, int elem) {
 * SP_ARRAY_LIST_SUCCESS - otherwise
 */
 SP_ARRAY_LIST_MESSAGE spArrayListRemoveAt(SPArrayList* src, int index) {
-	int numIter,i=0,*curAddress=src->elements,*nextAddress=src->elements;
-	if (src == NULL || index >= src->actualSize)
+	int numIter,i=0,*curAddress,*nextAddress;
+	if (src == NULL || index >= src->actualSize || index < 0)
 		return SP_ARRAY_LIST_INVALID_ARGUMENT;
 	if (src->actualSize == 0)
 		return SP_ARRAY_LIST_EMPTY;
 	numIter = (src->actualSize) - index;
+	curAddress = src->elements;
+	nextAddress = src->elements;
 	nextAddress++;
+	curAddress += index;
+	nextAddress += index;
 	for (i = 0; i < numIter; i++) {
 		*curAddress = *nextAddress;
 		curAddress++;
 		nextAddress++;
 	}
-	src->actualSize = (src->actualSize) + 1;
+	src->actualSize = (src->actualSize) - 1;
 	return SP_ARRAY_LIST_SUCCESS;
 }
 
@@ -268,6 +272,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src) {
 * Otherwise, the element at the specified index is returned.
 */
 int spArrayListGetAt(SPArrayList* src, int index);
+	
 
 /**
 * Returns the element at the beginning of the list. The function is called
@@ -278,8 +283,10 @@ int spArrayListGetAt(SPArrayList* src, int index);
 * Undefined value if either src == NULL or the list is empty
 * Otherwise, the element at the beginning of the list is returned.
 */
-int spArrayListGetFirst(SPArrayList* src);
-
+int spArrayListGetFirst(SPArrayList* src) {
+	spArrayListGetAt(src, 0)
+}
+	
 /**
 * Returns the element at the end of the list. The function is called
 * with the assertion that all arguments are valid. If any of the arguments is
@@ -289,7 +296,9 @@ int spArrayListGetFirst(SPArrayList* src);
 * Undefined value if either src == NULL or the list is empty
 * Otherwise, the element at the end of the list is returned.
 */
-int spArrayListGetLast(SPArrayList* src);
+int spArrayListGetLast(SPArrayList* src) {
+	spArrayListGetAt(src, (src->actualSize) - 1);
+}
 
 /**
 * Returns the maximum capacity of the list. The function is called
