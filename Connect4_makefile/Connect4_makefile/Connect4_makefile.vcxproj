@@ -94,6 +94,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="makefile" />
+    <ClCompile Include="SPArrayList.c" />
     <ClCompile Include="SPArrayListUnitTest.c" />
     <ClCompile Include="SPFIARGameUnitTest.c" />
     <ClCompile Include="SPFIARParser.c" />

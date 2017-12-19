@@ -30,6 +30,9 @@
     <ClCompile Include="SPFIARParserUnitTest.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SPArrayList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SPFIARParser.h">

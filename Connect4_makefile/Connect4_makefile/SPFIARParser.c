@@ -43,7 +43,6 @@ char *my_strdup(const char *s) {
 */
 bool spParserIsInt(const char* str) {
 	int size = 0;
-	int isDigit = 0;
 	if (sizeof(str) == 0)
 		return false;
 	size = strlen(str);
@@ -81,7 +80,7 @@ SPCommand spParserPraseLine(const char* str) {
 	SPCommand result;
 	result.validArg = false;
 	result.cmd = SP_INVALID_LINE;
-	const char delimiter[7] = "\t\r\n";
+	const char delimiter[5] = " \t\r\n";
 	char *token;
 	char* strCopy = my_strdup(str);
 	token = strtok(strCopy, delimiter);

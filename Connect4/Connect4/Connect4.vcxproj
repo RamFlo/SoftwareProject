@@ -112,8 +112,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayListUnitTest.c" />
-    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGameUnitTest.c" />
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.c" />
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParserUnitTest.c" />
   </ItemGroup>

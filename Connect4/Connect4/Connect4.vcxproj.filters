@@ -18,12 +18,6 @@
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayListUnitTest.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGameUnitTest.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParserUnitTest.c">
       <Filter>Source Files</Filter>
     </ClCompile>
