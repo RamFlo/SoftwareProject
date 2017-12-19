@@ -33,10 +33,20 @@ typedef struct command_t {
 */
 bool spParserIsInt(const char* str) {
 	int size = 0;
+	int isDigit = 0;
 	if (sizeof(str) == 0)
 		return false;
 	size = sizeof(str) / sizeof(str[0]);
-	for (int i=0; i < size; i++)
+	if (str[0] - 55 != 0) {
+		isDigit = isdigit(str[0]);
+		if (isDigit == 0)
+			return false;
+	}
+	for (int i = 1; i < size; i++) {
+		isDigit = isdigit(str[i]);
+		if (isDigit == 0)
+			return false;
+	}
 	return true;
 }
 
