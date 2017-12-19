@@ -271,7 +271,11 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src) {
 * Undefined value if either src == NULL or index out of bound.
 * Otherwise, the element at the specified index is returned.
 */
-int spArrayListGetAt(SPArrayList* src, int index);
+int spArrayListGetAt(SPArrayList* src, int index) {
+	if (src == NULL || index >= src->actualSize)
+		return -1;
+	return src->elements + index;
+}
 	
 
 /**
@@ -284,7 +288,7 @@ int spArrayListGetAt(SPArrayList* src, int index);
 * Otherwise, the element at the beginning of the list is returned.
 */
 int spArrayListGetFirst(SPArrayList* src) {
-	spArrayListGetAt(src, 0)
+	return spArrayListGetAt(src, 0)
 }
 	
 /**
@@ -297,7 +301,7 @@ int spArrayListGetFirst(SPArrayList* src) {
 * Otherwise, the element at the end of the list is returned.
 */
 int spArrayListGetLast(SPArrayList* src) {
-	spArrayListGetAt(src, (src->actualSize) - 1);
+	return spArrayListGetAt(src, (src->actualSize) - 1);
 }
 
 /**
@@ -309,7 +313,9 @@ int spArrayListGetLast(SPArrayList* src) {
 * Undefined value if either src == NULL
 * Otherwise, the maximum capacity of the list is returned.
 */
-int spArrayListMaxCapacity(SPArrayList* src);
+int spArrayListMaxCapacity(SPArrayList* src) {
+	return src->maxSize;
+}
 
 /**
 * Returns the number of elements in the list. The function is called
@@ -341,6 +347,10 @@ bool spArrayListIsFull(SPArrayList* src);
 * false if either src == NULL or the number of elements in the list is not zero.
 * Otherwise, true is returned.
 */
-bool spArrayListIsEmpty(SPArrayList* src);
+bool spArrayListIsEmpty(SPArrayList* src) {
+	if (src != NULL && src->actualSize == 0)
+		return true;
+	return false;
+}
 
 #endif
