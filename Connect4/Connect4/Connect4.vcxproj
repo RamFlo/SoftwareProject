@@ -111,13 +111,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayListUnitTest.c" />
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGameUnitTest.c" />
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.c" />
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParserUnitTest.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Connect4_makefile\Connect4_makefile\makefile" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayList.h" />
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGame.h" />
     <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.h" />
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPMainAux.h" />
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPMinimax.h" />
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPMinimaxNode.h" />
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\unit_test_util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

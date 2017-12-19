@@ -21,9 +21,36 @@
     <ClCompile Include="makefile">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SPArrayListUnitTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFIARGameUnitTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFIARParserUnitTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SPFIARParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPArrayList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFIARGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPMainAux.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPMinimax.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPMinimaxNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unit_test_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

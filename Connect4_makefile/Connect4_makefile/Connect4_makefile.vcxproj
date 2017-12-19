@@ -94,10 +94,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="makefile" />
+    <ClCompile Include="SPArrayListUnitTest.c" />
+    <ClCompile Include="SPFIARGameUnitTest.c" />
     <ClCompile Include="SPFIARParser.c" />
+    <ClCompile Include="SPFIARParserUnitTest.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SPArrayList.h" />
+    <ClInclude Include="SPFIARGame.h" />
     <ClInclude Include="SPFIARParser.h" />
+    <ClInclude Include="SPMainAux.h" />
+    <ClInclude Include="SPMinimax.h" />
+    <ClInclude Include="SPMinimaxNode.h" />
+    <ClInclude Include="unit_test_util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

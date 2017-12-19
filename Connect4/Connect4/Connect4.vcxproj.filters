@@ -18,12 +18,39 @@
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayListUnitTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGameUnitTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParserUnitTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Connect4_makefile\Connect4_makefile\makefile" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPMainAux.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPMinimax.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPMinimaxNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\unit_test_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

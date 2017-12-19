@@ -2,6 +2,8 @@
 #define SPFIARPARSER_H_
 #include <stdbool.h>
 #include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
 //specify the maximum line length
 #define SP_MAX_LINE_LENGTH 1024
 
@@ -53,6 +55,36 @@ bool spParserIsInt(const char* str) {
 *              is valid
 *   arg      - the integer argument in case validArg is set to true
 */
-SPCommand spParserPraseLine(const char* str) {}
+//subject to change: validarg and cmd in case of invalid add_disc 
+SPCommand spParserPraseLine(const char* str) {
+	SPCommand result;
+	result.validArg = false;
+	result.cmd = SP_INVALID_LINE;
+	const char delimiter[7] = "\t\r\n";
+	char *token;
+	token = strtok(str, delimiter);
+	if (strcmp(token, "suggest_move") == 0)
+		result.cmd = SP_SUGGEST_MOVE;
+	else if (strcmp(token, "undo_move") == 0)
+		result.cmd = SP_UNDO_MOVE;
+	else if (strcmp(token, "quit") == 0)
+		result.cmd = SP_QUIT;
+	else if (strcmp(token, "restart_game") == 0)
+		result.cmd = SP_RESTART;
+	else if (strcmp(token, "add_disc") == 0) {
+		result.cmd = SP_ADD_DISC;
+		token = strtok(NULL, delimiter);
+		if (spParserIsInt(token)) {
+			result.arg = atoi(token);
+			result.validArg = true;
+		}
+		if (strtok(NULL, delimiter) != NULL)
+			result.validArg = false;
+		return result;
+	}
+	if (strtok(NULL, delimiter) != NULL)
+		result.cmd = SP_INVALID_LINE;
+	return result;
+}
 
 #endif
