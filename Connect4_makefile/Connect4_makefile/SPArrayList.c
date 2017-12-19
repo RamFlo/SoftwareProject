@@ -288,7 +288,7 @@ int spArrayListGetAt(SPArrayList* src, int index) {
 * Otherwise, the element at the beginning of the list is returned.
 */
 int spArrayListGetFirst(SPArrayList* src) {
-	return spArrayListGetAt(src, 0)
+	return spArrayListGetAt(src, 0);
 }
 	
 /**
