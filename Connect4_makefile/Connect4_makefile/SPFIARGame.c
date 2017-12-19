@@ -1,6 +1,7 @@
 #ifndef SPFIARGAME_H_
 #define SPFIARGAME_H_
 #include <stdbool.h>
+#include <stdlib.h>
 #include "SPArrayList.h"
 
 /**
@@ -59,7 +60,16 @@ typedef enum sp_fiar_game_message_t {
 * NULL if either a memory allocation failure occurs or historySize <= 0.
 * Otherwise, a new game instant is returned.
 */
-SPFiarGame* spFiarGameCreate(int historySize);
+SPFiarGame* spFiarGameCreate(int historySize) {
+	SPFiarGame* g;
+	int i = 0;
+	g = (SPFiarGame *)malloc(sizeof(SPFiarGame));
+	if (g==NULL)
+		return NULL;
+	for (i = 0; i < SP_FIAR_GAME_N_COLUMNS; i++)
+		g->tops[i] = 0;
+	g->currentPlayer = SP_FIAR_GAME_PLAYER_1_SYMBOL;
+}
 
 /**
 *	Creates a copy of a given game.
