@@ -46,14 +46,16 @@ bool spParserIsInt(const char* str) {
 	int isDigit = 0;
 	if (sizeof(str) == 0)
 		return false;
-	size = sizeof(str) / sizeof(str[0]);
+	size = strlen(str) / sizeof(str[0]);
 	if (str[0] - 45 != 0) {
 		if (!isdigit(str[0]))
 			return false;
+	} else {
+		if (size == 1)
+			return false;
 	}
 	for (int i = 1; i < size; i++) {
-		isDigit = isdigit(str[i]);
-		if (isDigit == 0)
+		if (!isdigit(str[i]))
 			return false;
 	}
 	return true;
