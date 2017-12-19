@@ -320,7 +320,11 @@ int spArrayListMaxCapacity(SPArrayList* src);
 * Undefined value if either src == NULL
 * Otherwise, the number of the elements in the list is returned.
 */
-int spArrayListSize(SPArrayList* src);
+int spArrayListSize(SPArrayList* src) {
+	if (src!=NULL)
+		return src->actualSize;
+	return -1;
+}
 
 /**
 * Returns true if the list is full, that is the number of elements in the list
@@ -331,7 +335,11 @@ int spArrayListSize(SPArrayList* src);
 * than its maximum capacity.
 * Otherwise, true is returned.
 */
-bool spArrayListIsFull(SPArrayList* src);
+bool spArrayListIsFull(SPArrayList* src) {
+	if (src != NULL)
+		return src->actualSize == src->maxSize;
+	return false;
+}
 
 /**
 * Returns true if the list is empty, that is the number of elements in the list
