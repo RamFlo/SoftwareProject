@@ -69,10 +69,7 @@ SPArrayList* spArrayListCreate(int maxSize);
 *	NULL if either an allocation error occurs or src == NULL.
 *	A new copy of the source array list, otherwise.
 */
-SPArrayList* spArrayListCopy(SPArrayList* src) {
-	int newAct = src->actualSize;
-	int newMax = src->maxSize;
-	
+SPArrayList* spArrayListCopy(SPArrayList* src);
 }
 
 /*
