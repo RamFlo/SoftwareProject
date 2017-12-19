@@ -33,7 +33,7 @@ typedef struct sp_fiar_game_t {
 	char gameBoard[SP_FIAR_GAME_N_ROWS][SP_FIAR_GAME_N_COLUMNS];
 	int tops[SP_FIAR_GAME_N_COLUMNS];
 	char currentPlayer;
-	//You May add any fields you like
+	SPArrayList* history;
 } SPFiarGame;
 
 /**
@@ -71,7 +71,13 @@ SPFiarGame* spFiarGameCreate(int historySize);
 *	Otherwise, an new copy of the source game is returned.
 *
 */
-SPFiarGame* spFiarGameCopy(SPFiarGame* src);
+SPFiarGame* spFiarGameCopy(SPFiarGame* src) {
+	SPFiarGame *g;
+
+	g = spFiarGameCreate(src->history->maxSize);
+
+
+}
 
 /**
 * Frees all memory allocation associated with a given game. If src==NULL
