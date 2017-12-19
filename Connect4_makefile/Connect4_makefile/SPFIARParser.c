@@ -24,7 +24,7 @@ typedef struct command_t {
 	int arg;
 } SPCommand;
 
-char *strdup(const char *s) {
+char *my_strdup(const char *s) {
 	size_t size = strlen(s) + 1;
 	char *p = malloc(size);
 	if (p) {
@@ -82,7 +82,7 @@ SPCommand spParserPraseLine(const char* str) {
 	result.cmd = SP_INVALID_LINE;
 	const char delimiter[7] = "\t\r\n";
 	char *token;
-	char* strCopy = strdup(str);
+	char* strCopy = my_strdup(str);
 	token = strtok(strCopy, delimiter);
 	if (strcmp(token, "suggest_move") == 0)
 		result.cmd = SP_SUGGEST_MOVE;
