@@ -183,10 +183,16 @@ bool spFiarGameIsValidMove(SPFiarGame* src, int col) {
 *                                 board is removed and the current player is changed
 */
 SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
+	int lastCol = 0, lastRow = 0;
 	if (src == NULL) 
 		return SP_ARRAY_LIST_INVALID_ARGUMENT;
 	if (src->history->actualSize == 0)
 		return SP_FIAR_GAME_NO_HISTORY;
+	spFiarGameSwitchPlayer(src);
+	lastCol = spArrayListGetLast(src->history);
+	(src->tops)[lastCol]--;
+	spArrayListRemoveLast(src->history);
+	return SP_FIAR_GAME_SUCCESS;
 }
 
 /**
