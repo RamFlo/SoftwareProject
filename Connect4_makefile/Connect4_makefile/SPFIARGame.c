@@ -2,6 +2,7 @@
 #define SPFIARGAME_H_
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "SPArrayList.h"
 
 /**
@@ -78,7 +79,7 @@ SPFiarGame* spFiarGameCreate(int historySize) {
 	for (i = 0; i < SP_FIAR_GAME_N_COLUMNS; i++)
 		g->tops[i] = 0;
 	g->currentPlayer = SP_FIAR_GAME_PLAYER_1_SYMBOL;
-	g->history = spArrayListCreate(historySize * 2);
+	g->history = spArrayListCreate(historySize);
 	if (g->history == NULL)
 		return NULL;
 	return g;
@@ -222,7 +223,7 @@ SP_FIAR_GAME_MESSAGE spFiarGamePrintBoard(SPFiarGame* src) {
 	}
 	for (i = 0; i < 2 * SP_FIAR_GAME_N_COLUMNS + 3; i++)
 		printf("-");
-	printf("/n  ");
+	printf("\n  ");
 	for (i = 1; i <= SP_FIAR_GAME_N_COLUMNS; i++)
 		printf("%d ", i);
 	printf(" \n");
