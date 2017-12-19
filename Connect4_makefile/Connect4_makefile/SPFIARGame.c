@@ -51,7 +51,10 @@ typedef enum sp_fiar_game_message_t {
 
 void spFiarGameSwitchPlayer(SPFiarGame* src) {
 	if (src != NULL) {
-		if ()
+		if (src->currentPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+			src->currentPlayer = SP_FIAR_GAME_PLAYER_2_SYMBOL;
+		else
+			src->currentPlayer = SP_FIAR_GAME_PLAYER_1_SYMBOL;
 	}
 }
 /**
@@ -139,8 +142,14 @@ SP_FIAR_GAME_MESSAGE spFiarGameSetMove(SPFiarGame* src, int col) {
 		return SP_FIAR_GAME_INVALID_ARGUMENT;
 	if (src->tops[col] == SP_FIAR_GAME_N_ROWS)
 		return SP_FIAR_GAME_INVALID_MOVE;
-	src->gameBoard[src->tops[col]][col]=src->currentPlayer
-
+	src->gameBoard[src->tops[col]][col] = src->currentPlayer;
+	src->tops[col]++;
+	spFiarGameSwitchPlayer(src);
+	if (spArrayListAddLast(src->history, col) != SP_ARRAY_LIST_SUCCESS) {
+		spArrayListRemoveFirst(src->history);
+		spArrayListAddLast(src->history, col);
+	}
+	return SP_FIAR_GAME_SUCCESS;
 }
 
 /**
