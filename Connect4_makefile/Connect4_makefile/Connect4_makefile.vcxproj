@@ -96,6 +96,7 @@
     <ClCompile Include="makefile" />
     <ClCompile Include="SPArrayList.c" />
     <ClCompile Include="SPArrayListUnitTest.c" />
+    <ClCompile Include="SPFIARGame.c" />
     <ClCompile Include="SPFIARGameUnitTest.c" />
     <ClCompile Include="SPFIARParser.c" />
     <ClCompile Include="SPFIARParserUnitTest.c" />
