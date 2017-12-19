@@ -94,7 +94,12 @@ It goes over the array and returns an exact copy of it.
 * source array is NULL, then the function does nothing.
 * @param src - the source array list
 */
-void spArrayListDestroy(SPArrayList* src);
+void spArrayListDestroy(SPArrayList* src) {
+	if (src != NULL) {
+		free(src->elements);
+		free(src);
+	}
+}
 
 /**
 * Clears all elements from the source array list. After invoking this function,
@@ -105,7 +110,12 @@ void spArrayListDestroy(SPArrayList* src);
 * SP_ARRAY_LIST_INVALID_ARGUMENT if src == NULL
 * SP_ARRAY_LIST_SUCCESS otherwise
 */
-SP_ARRAY_LIST_MESSAGE spArrayListClear(SPArrayList* src);
+SP_ARRAY_LIST_MESSAGE spArrayListClear(SPArrayList* src) {
+	if (src == NULL)
+		return SP_ARRAY_LIST_INVALID_ARGUMENT;
+	src->actualSize = 0;
+	return SP_ARRAY_LIST_SUCCESS;
+}
 
 /**
 * Inserts element at a specified index. The elements residing at and after the
@@ -121,7 +131,10 @@ SP_ARRAY_LIST_MESSAGE spArrayListClear(SPArrayList* src);
 * SP_ARRAY_LIST_FULL - if the source array list reached its maximum capacity
 * SP_ARRAY_LIST_SUCCESS - otherwise
 */
-SP_ARRAY_LIST_MESSAGE spArrayListAddAt(SPArrayList* src, int elem, int index);
+SP_ARRAY_LIST_MESSAGE spArrayListAddAt(SPArrayList* src, int elem, int index) {
+	if (src == NULL || index >= src->actualSize || index < 0)
+		return SP_ARRAY_LIST_INVALID_ARGUMENT
+}
 
 /**
 * Inserts element at a the beginning of the source element. The elements
