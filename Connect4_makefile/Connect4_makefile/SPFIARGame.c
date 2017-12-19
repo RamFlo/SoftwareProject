@@ -140,7 +140,6 @@ SP_FIAR_GAME_MESSAGE spFiarGameSetMove(SPFiarGame* src, int col) {
 	if (src->tops[col] == SP_FIAR_GAME_N_ROWS)
 		return SP_FIAR_GAME_INVALID_MOVE;
 	src->gameBoard[src->tops[col]][col]=src->currentPlayer
-
 }
 
 /**
@@ -176,7 +175,9 @@ bool spFiarGameIsValidMove(SPFiarGame* src, int col) {
 SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
 	if (src == NULL) 
 		return SP_ARRAY_LIST_INVALID_ARGUMENT;
-	if (sr)
+	if (src->history->actualSize == 0)
+		return SP_FIAR_GAME_NO_HISTORY;
+
 }
 
 /**
