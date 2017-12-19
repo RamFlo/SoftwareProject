@@ -61,9 +61,13 @@ typedef enum sp_array_list_message_t {
 */
 SPArrayList* spArrayListCreate(int maxSize) {
 	int realSize = maxSize * sizeof(int);
-	int* elements = malloc(realSize);
-	int actualSize = 0;
-	SPArrayList myArrayList = 
+	int* elements = (int *)malloc(realSize);
+	SPArrayList* p;
+	p = (SPArrayList *)malloc(sizeof(SPArrayList));
+	p->actualSize = 0;
+	p->elements = elements;
+	p->maxSize = maxSize;
+	return p;
 }
 
 /**
@@ -74,7 +78,16 @@ SPArrayList* spArrayListCreate(int maxSize) {
 *	NULL if either an allocation error occurs or src == NULL.
 *	A new copy of the source array list, otherwise.
 */
-SPArrayList* spArrayListCopy(SPArrayList* src);
+SPArrayList* spArrayListCopy(SPArrayList* src) {
+	int newAct = src->actualSize;
+	int newMax = src->maxSize;
+	
+}
+
+/*
+This function is a helper function to copy an array.
+It goes over the array and returns an exact copy of it.
+*/
 
 /**
 * Frees all memory resources associated with the source array list. If the
