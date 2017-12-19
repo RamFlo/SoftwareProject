@@ -185,7 +185,8 @@ bool spFiarGameIsValidMove(SPFiarGame* src, int col) {
 SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
 	if (src == NULL) 
 		return SP_ARRAY_LIST_INVALID_ARGUMENT;
-	if (sr)
+	if (src->history->actualSize == 0)
+		return SP_FIAR_GAME_NO_HISTORY;
 }
 
 /**
