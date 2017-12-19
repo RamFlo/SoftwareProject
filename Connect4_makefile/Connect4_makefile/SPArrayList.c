@@ -314,6 +314,8 @@ int spArrayListGetLast(SPArrayList* src) {
 * Otherwise, the maximum capacity of the list is returned.
 */
 int spArrayListMaxCapacity(SPArrayList* src) {
+	if (src == NULL)
+		return -1;
 	return src->maxSize;
 }
 
