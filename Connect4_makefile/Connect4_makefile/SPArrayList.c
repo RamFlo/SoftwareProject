@@ -84,17 +84,17 @@ SPArrayList* spArrayListCreate(int maxSize) {
 *	A new copy of the source array list, otherwise.
 */
 SPArrayList* spArrayListCopy(SPArrayList* src) {
-	if (src == NULL)
-		return NULL;
+	int* newArr;
 	int newAct = src->actualSize, newMax = src->maxSize, i = 0;
 	SPArrayList* p;
-	int* newArr;
-	newArr = (int *)malloc(src->maxSize);
 	int* curNewPointer = newArr;
 	int* curOldPointer = src->elements;
+	if (src == NULL)
+		return NULL;
+	newArr = (int *)malloc(src->maxSize);
 	if (!newArr)
 		return NULL;
-	for (int i = 0; i < src->maxSize; i++) {
+	for (i = 0; i < src->maxSize; i++) {
 		*curNewPointer = *curOldPointer;
 		curNewPointer++;
 		curOldPointer++;
@@ -165,7 +165,9 @@ SP_ARRAY_LIST_MESSAGE spArrayListAddAt(SPArrayList* src, int elem, int index) {
 * SP_ARRAY_LIST_FULL - if the source array list reached its maximum capacity
 * SP_ARRAY_LIST_SUCCESS - otherwise
 */
-SP_ARRAY_LIST_MESSAGE spArrayListAddFirst(SPArrayList* src, int elem);
+SP_ARRAY_LIST_MESSAGE spArrayListAddFirst(SPArrayList* src, int elem) {
+	return spArrayListAddAt(src, elem, 0);
+}
 
 /**
 * Inserts element at a the end of the source element. If the array list
@@ -178,7 +180,9 @@ SP_ARRAY_LIST_MESSAGE spArrayListAddFirst(SPArrayList* src, int elem);
 * SP_ARRAY_LIST_FULL - if the source array list reached its maximum capacity
 * SP_ARRAY_LIST_SUCCESS - otherwise
 */
-SP_ARRAY_LIST_MESSAGE spArrayListAddLast(SPArrayList* src, int elem);
+SP_ARRAY_LIST_MESSAGE spArrayListAddLast(SPArrayList* src, int elem) {
+	return spArrayListAddAt(src, elem, src->actualSize);
+}
 
 /**
 * Removes an element from a specified index. The elements residing after the
@@ -193,7 +197,22 @@ SP_ARRAY_LIST_MESSAGE spArrayListAddLast(SPArrayList* src, int elem);
 * SP_ARRAY_LIST_EMPTY - if the source array list is empty
 * SP_ARRAY_LIST_SUCCESS - otherwise
 */
-SP_ARRAY_LIST_MESSAGE spArrayListRemoveAt(SPArrayList* src, int index);
+SP_ARRAY_LIST_MESSAGE spArrayListRemoveAt(SPArrayList* src, int index) {
+	int numIter,i=0,*curAddress=src->elements,*nextAddress=src->elements;
+	if (src == NULL || index >= src->actualSize)
+		return SP_ARRAY_LIST_INVALID_ARGUMENT;
+	if (src->actualSize == 0)
+		return SP_ARRAY_LIST_EMPTY;
+	numIter = (src->actualSize) - index;
+	nextAddress++;
+	for (i = 0; i < numIter; i++) {
+		*curAddress = *nextAddress;
+		curAddress++;
+		nextAddress++;
+	}
+	src->actualSize = (src->actualSize) + 1;
+	return SP_ARRAY_LIST_SUCCESS;
+}
 
 /**
 * Removes an element from a the beginning of the list.
