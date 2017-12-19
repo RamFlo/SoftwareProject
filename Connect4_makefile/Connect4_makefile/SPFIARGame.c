@@ -48,6 +48,12 @@ typedef enum sp_fiar_game_message_t {
 	//You may add any message you like
 } SP_FIAR_GAME_MESSAGE;
 
+
+void spFiarGameSwitchPlayer(SPFiarGame* src) {
+	if (src != NULL) {
+		if ()
+	}
+}
 /**
 * Creates a new game with a specified history size. The history size is a
 * parameter which specifies the number of previous moves to store. If the number
@@ -69,6 +75,10 @@ SPFiarGame* spFiarGameCreate(int historySize) {
 	for (i = 0; i < SP_FIAR_GAME_N_COLUMNS; i++)
 		g->tops[i] = 0;
 	g->currentPlayer = SP_FIAR_GAME_PLAYER_1_SYMBOL;
+	g->history = spArrayListCreate(historySize * 2);
+	if (g->history == NULL)
+		return NULL;
+	return g;
 }
 
 /**
@@ -95,7 +105,12 @@ SPFiarGame* spFiarGameCopy(SPFiarGame* src) {
 *
 * @param src - the source game
 */
-void spFiarGameDestroy(SPFiarGame* src);
+void spFiarGameDestroy(SPFiarGame* src) {
+	if (src != NULL) {
+		spArrayListDestroy(src->history);
+		free(src);
+	}
+}
 
 /**
 * Sets the next move in a given game by specifying column index. The
@@ -108,7 +123,14 @@ void spFiarGameDestroy(SPFiarGame* src);
 * SP_FIAR_GAME_INVALID_MOVE - if the given column is full.
 * SP_FIAR_GAME_SUCCESS - otherwise
 */
-SP_FIAR_GAME_MESSAGE spFiarGameSetMove(SPFiarGame* src, int col);
+SP_FIAR_GAME_MESSAGE spFiarGameSetMove(SPFiarGame* src, int col) {
+	if (src == NULL || col >= SP_FIAR_GAME_N_COLUMNS || col < 0)
+		return SP_FIAR_GAME_INVALID_ARGUMENT;
+	if (src->tops[col] == SP_FIAR_GAME_N_ROWS)
+		return SP_FIAR_GAME_INVALID_MOVE;
+	src->gameBoard[src->tops[col]][col]=src->currentPlayer
+
+}
 
 /**
 * Checks if a disk can be put in the specified column.
