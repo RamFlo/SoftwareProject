@@ -70,7 +70,6 @@ SPArrayList* spArrayListCreate(int maxSize);
 *	A new copy of the source array list, otherwise.
 */
 SPArrayList* spArrayListCopy(SPArrayList* src);
-}
 
 /*
 This function is a helper function to copy an array.

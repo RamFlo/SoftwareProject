@@ -1,6 +1,7 @@
 #ifndef SPARRAYLIST_H_
 #define SPARRAYLIST_H_
 #include <stdbool.h>
+#include <stdlib.h>
 
 /**
 * SPArrayList summary:
@@ -62,11 +63,15 @@ typedef enum sp_array_list_message_t {
 SPArrayList* spArrayListCreate(int maxSize) {
 	int realSize = maxSize * sizeof(int);
 	int* elements = (int *)malloc(realSize);
+	if (!elements || maxSize <= 0)
+		return NULL;
 	SPArrayList* p;
 	p = (SPArrayList *)malloc(sizeof(SPArrayList));
 	p->actualSize = 0;
 	p->elements = elements;
 	p->maxSize = maxSize;
+	if (!p)
+		return NULL;
 	return p;
 }
 
@@ -88,6 +93,8 @@ SPArrayList* spArrayListCopy(SPArrayList* src) {
 This function is a helper function to copy an array.
 It goes over the array and returns an exact copy of it.
 */
+
+private int* copyArray(int* curArray)
 
 /**
 * Frees all memory resources associated with the source array list. If the
