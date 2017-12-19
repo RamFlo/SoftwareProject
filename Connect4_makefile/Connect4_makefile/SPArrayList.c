@@ -149,8 +149,19 @@ SP_ARRAY_LIST_MESSAGE spArrayListClear(SPArrayList* src) {
 * SP_ARRAY_LIST_SUCCESS - otherwise
 */
 SP_ARRAY_LIST_MESSAGE spArrayListAddAt(SPArrayList* src, int elem, int index) {
-	if (src == NULL || index >= src->actualSize || index < 0)
-		return SP_ARRAY_LIST_INVALID_ARGUMENT
+	int i = 0,*curArrayLoc;
+	if (src == NULL || index > src->actualSize || index < 0)
+		return SP_ARRAY_LIST_INVALID_ARGUMENT;
+	if (src->actualSize == src->maxSize)
+		return SP_ARRAY_LIST_FULL;
+	curArrayLoc = src->elements + src->actualSize;
+	for (i = 0; i < src->actualSize - index; i++) {
+		*curArrayLoc = *(curArrayLoc - 1);
+		curArrayLoc--;
+	}
+	*curArrayLoc = elem;
+	src->actualSize++;
+	return SP_ARRAY_LIST_SUCCESS;
 }
 
 /**
@@ -207,7 +218,9 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveAt(SPArrayList* src, int index);
 * SP_ARRAY_LIST_EMPTY - if the source array list is empty
 * SP_ARRAY_LIST_SUCCESS - otherwise
 */
-SP_ARRAY_LIST_MESSAGE spArrayListRemoveFirst(SPArrayList* src);
+SP_ARRAY_LIST_MESSAGE spArrayListRemoveFirst(SPArrayList* src) {
+	return spArrayListRemoveAt(src, 0);
+}
 
 /**
 * Removes an element from a the end of the list.
@@ -221,7 +234,9 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveFirst(SPArrayList* src);
 * SP_ARRAY_LIST_EMPTY - if the source array list is empty
 * SP_ARRAY_LIST_SUCCESS - otherwise.
 */
-SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src);
+SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src) {
+	return spArrayListRemoveAt(src, src->actualSize - 1);
+}
 
 /**
 * Returns the element at the specified index. The function is called
