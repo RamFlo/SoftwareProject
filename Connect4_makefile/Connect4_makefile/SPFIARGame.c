@@ -200,7 +200,28 @@ SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
 * SP_FIAR_GAME_SUCCESS - otherwise
 *
 */
-SP_FIAR_GAME_MESSAGE spFiarGamePrintBoard(SPFiarGame* src);
+SP_FIAR_GAME_MESSAGE spFiarGamePrintBoard(SPFiarGame* src) {
+	int i = 0, j = 0;
+	if (src == NULL)
+		return SP_FIAR_GAME_INVALID_ARGUMENT;
+	for (i = SP_FIAR_GAME_N_ROWS-1; i >=0 ; i--) {
+		printf("|");
+		for (j = 0; j < SP_FIAR_GAME_N_COLUMNS; j++) {
+			if (src->tops[j] > i)
+				printf(" %c", src->gameBoard[i][j]);
+			else
+				printf("  ");
+		}
+		printf(" |\n");
+	}
+	for (i = 0; i < 2 * SP_FIAR_GAME_N_COLUMNS + 3; i++)
+		printf("-");
+	printf("/n  ");
+	for (i = 1; i <= SP_FIAR_GAME_N_COLUMNS; i++)
+		printf("%d ", i);
+	printf(" \n");
+	return SP_FIAR_GAME_SUCCESS;
+}
 
 /**
 * Returns the current player of the specified game.
