@@ -100,9 +100,8 @@ SPArrayList* spArrayListCopy(SPArrayList* src) {
 		curNewPointer++;
 		curOldPointer++;
 	}
-	p = (SPArrayList *)malloc(sizeof(SPArrayList));
+	p = spArrayListCreate(newMax);
 	p->actualSize = newAct;
-	p->maxSize = newMax;
 	p->elements = newArr;
 	return p;
 }
