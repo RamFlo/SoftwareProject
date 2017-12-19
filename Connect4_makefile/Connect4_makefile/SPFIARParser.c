@@ -24,6 +24,16 @@ typedef struct command_t {
 	int arg;
 } SPCommand;
 
+char *strdup(const char *s) {
+	size_t size = strlen(s) + 1;
+	char *p = malloc(size);
+	if (p) {
+		memcpy(p, s, size);
+	}
+	return p;
+}
+
+
 /**
 * Checks if a specified string represents a valid integer. It is recommended
 * to use this function prior to calling the standard library function atoi.
@@ -72,7 +82,8 @@ SPCommand spParserPraseLine(const char* str) {
 	result.cmd = SP_INVALID_LINE;
 	const char delimiter[7] = "\t\r\n";
 	char *token;
-	token = strtok(str, delimiter);
+	char* strCopy = strdup(str);
+	token = strtok(strCopy, delimiter);
 	if (strcmp(token, "suggest_move") == 0)
 		result.cmd = SP_SUGGEST_MOVE;
 	else if (strcmp(token, "undo_move") == 0)
@@ -90,10 +101,12 @@ SPCommand spParserPraseLine(const char* str) {
 		}
 		if (strtok(NULL, delimiter) != NULL)
 			result.validArg = false;
+		free(strCopy);
 		return result;
 	}
 	if (strtok(NULL, delimiter) != NULL)
 		result.cmd = SP_INVALID_LINE;
+	free(strCopy);
 	return result;
 }
 

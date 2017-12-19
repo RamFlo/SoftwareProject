@@ -22,6 +22,8 @@ typedef struct command_t {
 	int arg;
 } SPCommand;
 
+char *strdup(const char *s);
+
 /**
 * Checks if a specified string represents a valid integer. It is recommended
 * to use this function prior to calling the standard library function atoi.
