@@ -21,6 +21,9 @@
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParserUnitTest.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Connect4_makefile\Connect4_makefile\makefile" />
