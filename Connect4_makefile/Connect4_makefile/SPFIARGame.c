@@ -130,7 +130,13 @@ SP_FIAR_GAME_MESSAGE spFiarGameSetMove(SPFiarGame* src, int col);
 * true  - if the a disc can be put in the target column
 * false - otherwise.
 */
-bool spFiarGameIsValidMove(SPFiarGame* src, int col);
+bool spFiarGameIsValidMove(SPFiarGame* src, int col) {
+	if (col < 0 || col > SP_FIAR_GAME_N_COLUMNS -1 || src == NULL)
+		return false;
+	if ((src->tops)[col] == SP_FIAR_GAME_N_ROWS)
+		return false;
+	return true;
+}
 
 /**
 * Removes a disc that was put in the previous move and changes the current
@@ -145,7 +151,11 @@ bool spFiarGameIsValidMove(SPFiarGame* src, int col);
 * SP_FIAR_GAME_SUCCESS          - on success. The last disc that was put on the
 *                                 board is removed and the current player is changed
 */
-SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src);
+SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
+	if (src == NULL) 
+		return SP_ARRAY_LIST_INVALID_ARGUMENT;
+	if (sr)
+}
 
 /**
 * On success, the function prints the board game. If an error occurs, then the
