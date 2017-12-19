@@ -84,7 +84,7 @@ SPArrayList* spArrayListCreate(int maxSize) {
 *	A new copy of the source array list, otherwise.
 */
 SPArrayList* spArrayListCopy(SPArrayList* src) {
-	int i = 0, *newArr, *curNewPointer, *curOldPointer;
+	int i = 0, *curNewPointer, *curOldPointer;
 	SPArrayList* p;
 	if (src == NULL)
 		return NULL;
