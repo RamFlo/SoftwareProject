@@ -33,6 +33,12 @@
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGameUnitTest.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPMinimax.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPMinimaxNode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Connect4_makefile\Connect4_makefile\makefile" />

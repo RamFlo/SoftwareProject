@@ -36,6 +36,12 @@
     <ClCompile Include="SPFIARGame.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SPMinimaxNode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SPMinimax.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SPFIARParser.h">

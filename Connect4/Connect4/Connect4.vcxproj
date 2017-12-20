@@ -119,6 +119,8 @@
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGameUnitTest.c" />
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.c" />
     <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParserUnitTest.c" />
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPMinimax.c" />
+    <ClCompile Include="..\..\Connect4_makefile\Connect4_makefile\SPMinimaxNode.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Connect4_makefile\Connect4_makefile\makefile" />

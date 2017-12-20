@@ -100,6 +100,8 @@
     <ClCompile Include="SPFIARGameUnitTest.c" />
     <ClCompile Include="SPFIARParser.c" />
     <ClCompile Include="SPFIARParserUnitTest.c" />
+    <ClCompile Include="SPMinimax.c" />
+    <ClCompile Include="SPMinimaxNode.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SPArrayList.h" />
