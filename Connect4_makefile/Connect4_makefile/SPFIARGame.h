@@ -163,3 +163,4 @@ bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove);
 bool checkRowWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove);
 bool checkDiagUpWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove);
 bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove);
+char getOtherPlayer(char player);
