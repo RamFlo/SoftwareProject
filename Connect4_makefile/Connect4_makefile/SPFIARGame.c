@@ -355,4 +355,9 @@ bool isGameBoardFull(SPFiarGame* src) {
 	return true;
 }
 
+char getOtherPlayer(char player) {
+	if (char == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+		return SP_FIAR_GAME_PLAYER_2_SYMBOL;
+	return SP_FIAR_GAME_PLAYER_1_SYMBOL;
+}
 //#endif

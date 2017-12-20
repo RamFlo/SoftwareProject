@@ -2,6 +2,7 @@
 #define SPMINIMAXNODE_H_
 #include "SPFIARGame.h"
 #include <stdlib.h>
+#include <limits.h>
 #define CHILDREN SP_FIAR_GAME_N_COLUMNS
 const int weights[] = {-5,-2,-1,0,1,2,5};
 
@@ -16,7 +17,7 @@ typedef struct Node {
 Node* createNode(SPFiarGame* gameStatus) {
 	Node *newNode, *children;
 	bool isLeaf = true;
-	newNode = (Node*)calloc(sizeof(Node));
+	newNode = (Node*)calloc(1,sizeof(Node));
 	if (newNode == NULL)
 		return NULL;
 	newNode->gameStatus = gameStatus;
@@ -55,6 +56,64 @@ int col4score(Node* node, int col, int row, char player) {
 				sum--;
 		return weights[sum+3];
 	}
+}
+
+int* calcChildrenMax(Node* node, int depth, char player) {
+	int maxIndex = -1, maxValue = INT_MIN, i = 0, *curCalc;
+	char winner = spFiarCheckWinner(node->gameStatus);
+	Node* point = node->children;
+	if (winner != NULL) {
+		if (winner == SP_FIAR_GAME_TIE_SYMBOL)
+			return 0;
+		else if (winner == player)
+			return INT_MAX;
+		return INT_MIN;
+	}
+	if (depth == 0)
+		return scoringFunction(node, player);
+
+	for (i; i < SP_FIAR_GAME_N_COLUMNS;i++) {
+		if (spFiarGameIsValidMove(node->gameStatus, i)) {
+			*node->children = *createNode(spFiarGameSetMove(spFiarGameCopy(node->gameStatus), i));
+			curCalc = calcChildrenMin(node->children+i, depth - 1, getOtherPlayer(player));
+			if (curCalc[0] > maxValue) {
+				maxIndex = i;
+				maxValue = curCalc[0];
+			}
+		}
+		point++;
+	}
+	//call for destroy
+	return curCalc;
+}
+
+int* calcChildrenMin(Node* node, int depth, char player) {
+	int minIndex = -1, minValue = INT_MAX, i = 0, *curCalc;
+	char winner = spFiarCheckWinner(node->gameStatus);
+	Node* point = node->children;
+	if (winner != NULL) {
+		if (winner == SP_FIAR_GAME_TIE_SYMBOL)
+			return 0;
+		else if (winner == player)
+			return INT_MAX;
+		return INT_MIN;
+	}
+	if (depth == 0)
+		return scoringFunction(node, player);
+
+	for (i; i < SP_FIAR_GAME_N_COLUMNS; i++) {
+		if (spFiarGameIsValidMove(node->gameStatus, i)) {
+			*node->children = *createNode(spFiarGameSetMove(spFiarGameCopy(node->gameStatus), i));
+			curCalc = calcChildrenMax(node->children + i, depth - 1, getOtherPlayer(player));
+			if (curCalc[0] < minValue) {
+				minIndex = i;
+				minValue = curCalc[0];
+			}
+		}
+		point++;
+	}
+	//call for destroy
+	return curCalc;
 }
 
 
