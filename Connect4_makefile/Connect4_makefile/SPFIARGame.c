@@ -253,6 +253,38 @@ char spFiarGameGetCurrentPlayer(SPFiarGame* src);
 * SP_FIAR_GAME_TIE_SYMBOL - If the game is over and there's a tie
 * null character - otherwise
 */
-char spFiarCheckWinner(SPFiarGame* src);
+char spFiarCheckWinner(SPFiarGame* src) {
 
+}
+
+bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
+	int i = 0, curChecked = lastRow - 1, counter = 0, curRow= lastRow;
+	while (curRow > lastRow - SP_FIAR_GAME_SPAN) {
+		if ((src->gameBoard)[curRow][lastCol] == lastMove)
+			counter++;
+		curRow--;
+	}
+	if (counter == SP_FIAR_GAME_SPAN)
+		return true;
+	return false;
+}
+
+bool checkRowWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
+	int firstColIndex = max(0, lastCol - SP_FIAR_GAME_SPAN + 1), lastColIndex = min(lastCol, SP_FIAR_GAME_N_COLUMNS - SP_FIAR_GAME_SPAN + 1);
+	for (firstColIndex; firstColIndex < lastColIndex; firstColIndex++) {
+		if (checkCurRowWinner(src, firstColIndex, lastRow, lastMove))
+			return true;
+	}
+	return false;
+}
+
+bool checkCurRowWinner(SPFiarGame* src, int startCol, int lastRow ,char lastMove) {
+	int iter = SP_FIAR_GAME_SPAN, curCol = startCol, i=0;
+	for (i = 0; i < iter; i++) {
+		if ((src->gameBoard)[lastRow][curCol] != lastMove) {
+			return false;
+		}
+		return true;
+	}
+}
 #endif
