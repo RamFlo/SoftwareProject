@@ -43,20 +43,20 @@ int discValue(Node* node, int colNum, int rowNum, char player) {
 int col4score(Node* node, int col, int row, char player) {
 	int curRow = row, sum = 0, index = 0, i = 0;
 	for (i = 0; i < SP_FIAR_GAME_SPAN; i++) {
-		if (node->gameStatus->gameBoard[curRow + i][col] == player && node->gameStatus->tops[col] > curRow)
+		if (node->gameStatus->gameBoard[curRow][col] == player && node->gameStatus->tops[col] > curRow)
 			sum++;
-		else
-			if (node->gameStatus->tops[col] > curRow)
-				sum--;
-		return weights[sum + 3];
+		else if (node->gameStatus->tops[col] > curRow)
+			sum--;
+		curRow++;
 	}
+	return weights[sum + 3];
 }
 
 int colsScoring(Node* node, char player) {
 	int weight = 0, lastRow = SP_FIAR_GAME_N_ROWS - SP_FIAR_GAME_SPAN + 1,curRow=0,curCol=0, lastCol= SP_FIAR_GAME_N_COLUMNS;
 	for (curCol; curCol < lastCol; curCol++) {
 		curRow = 0;
-		for (curRow; curRow <= lastRow; curRow++) {
+		for (curRow; curRow < lastRow; curRow++) {
 			weight += col4score(node, curCol, curRow, player);
 		}
 	}
