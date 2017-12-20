@@ -13,6 +13,7 @@ typedef struct Node_t {
 	struct Node_t* children;
 	SPFiarGame* gameStatus;
 	bool isLeaf;
+	nodeType type;
 } Node;
 
 typedef enum nodeType_t {
