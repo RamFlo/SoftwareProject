@@ -244,41 +244,6 @@ char spFiarGameGetCurrentPlayer(SPFiarGame* src) {
 	return src->currentPlayer;
 }
 
-bool checkDiagUpWinner(SPFiarGame* src,int lastCol,int lastRow,char lastMove) {
-	int i = 0,lastRowCopy=lastRow,counter=0;
-	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
-		if (++lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i]== lastMove)
-			counter++;
-		else
-			break;
-	}
-	lastRowCopy = lastRow;
-	for (i = lastCol - 1; i >= 0; i--) {
-		if (--lastRowCopy >= 0 && lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
-			counter++;
-		else
-			break;
-	}
-	return counter >= SP_FIAR_GAME_SPAN;
-}
-
-bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
-	int i = 0, lastRowCopy = lastRow, counter = 0;
-	for (i = lastCol - 1; i >= 0; i--) {
-		if (++lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
-			counter++;
-		else
-			break;
-	}
-	lastRowCopy = lastRow;
-	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
-		if (--lastRowCopy >= 0 && lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
-			counter++;
-		else
-			break;
-	}
-	return counter >= SP_FIAR_GAME_SPAN;
-}
 
 
 
@@ -296,37 +261,82 @@ bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMov
 * null character - otherwise
 */
 char spFiarCheckWinner(SPFiarGame* src) {
-
+	int lastCol = 0, lastRow = 0;
+	char lastMove = 'a';
+	bool rowWinner = true, colWinner = true, diagWinner = true;
+	if (src == NULL)
+		return NULL;
+	lastCol = spArrayListGetLast(src->history);
+	lastRow = (src->tops)[lastCol];
+	lastMove = (src->gameBoard)[lastRow][lastCol];
+	rowWinner = checkRowWinner(src, lastCol, lastRow, lastMove);
+	colWinner = checkColWinner(src, lastCol, lastRow, lastMove);
+	diagWinner = checkDiagUpWinner(src, lastCol, lastRow, lastMove) || checkDiagDownWinner(src, lastCol, lastRow, lastMove);
+	if (rowWinner || colWinner || diagWinner)
+		return lastMove;
 }
 
 bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
-	int i = 0, curChecked = lastRow - 1, counter = 0, curRow= lastRow;
-	while (curRow > lastRow - SP_FIAR_GAME_SPAN) {
-		if ((src->gameBoard)[curRow][lastCol] == lastMove)
-			counter++;
+	int i = 0, curChecked = lastRow - 1, curRow= lastRow;
+	while (curRow > lastRow - SP_FIAR_GAME_SPAN && curRow >= 0) {
+		if ((src->gameBoard)[curRow][lastCol] != lastMove) {
+			return false;
 		curRow--;
 	}
-	if (counter == SP_FIAR_GAME_SPAN)
 		return true;
-	return false;
 }
 
 bool checkRowWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
-	int firstColIndex = max(0, lastCol - SP_FIAR_GAME_SPAN + 1), lastColIndex = min(lastCol, SP_FIAR_GAME_N_COLUMNS - SP_FIAR_GAME_SPAN + 1);
-	for (firstColIndex; firstColIndex < lastColIndex; firstColIndex++) {
-		if (checkCurRowWinner(src, firstColIndex, lastRow, lastMove))
-			return true;
+	int i = 0, counter = 1;
+	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
+		if (lastRow < src->tops[i] && src->gameBoard[lastRow][i] == lastMove)
+			counter++;
+		else
+			break;
 	}
-	return false;
+	for (i = lastCol - 1; i >= 0; i--) {
+		if (lastRow < src->tops[i] && src->gameBoard[lastRow][i] == lastMove)
+			counter++;
+		else
+			break;
+	}
+	return counter >= SP_FIAR_GAME_SPAN;
 }
 
-bool checkCurRowWinner(SPFiarGame* src, int startCol, int lastRow ,char lastMove) {
-	int iter = SP_FIAR_GAME_SPAN, curCol = startCol, i=0;
-	for (i = 0; i < iter; i++) {
-		if ((src->gameBoard)[lastRow][curCol] != lastMove) {
-			return false;
-		}
-		return true;
+bool checkDiagUpWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
+	int i = 0, lastRowCopy = lastRow, counter = 1;
+	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
+		if (++lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
+			counter++;
+		else
+			break;
 	}
+	lastRowCopy = lastRow;
+	for (i = lastCol - 1; i >= 0; i--) {
+		if (--lastRowCopy >= 0 && lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
+			counter++;
+		else
+			break;
+	}
+	return counter >= SP_FIAR_GAME_SPAN;
 }
+
+bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
+	int i = 0, lastRowCopy = lastRow, counter = 1;
+	for (i = lastCol - 1; i >= 0; i--) {
+		if (++lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
+			counter++;
+		else
+			break;
+	}
+	lastRowCopy = lastRow;
+	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
+		if (--lastRowCopy >= 0 && lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
+			counter++;
+		else
+			break;
+	}
+	return counter >= SP_FIAR_GAME_SPAN;
+}
+
 #endif
