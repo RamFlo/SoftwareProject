@@ -5,11 +5,18 @@
 const int weights[] = { -5,-2,-1,0,1,2,5 };
 
 //Put all decleartions and constants here
+typedef enum nodeType_t {
+	TIE,
+	PLAYER_1_WIN,
+	PLAYER_2_WIN,
+	REGULAR,
+} nodeType;
 
 typedef struct Node_t {
 	struct Node_t* children;
 	SPFiarGame* gameStatus;
 	bool isLeaf;
+	nodeType type;
 } Node;
 
 Node* createNode(SPFiarGame* gameStatus);
@@ -37,5 +44,7 @@ int discValue(Node* node, int colNum, int rowNum, char player);
 //int* calcChildrenMax(Node* node, int depth, char player);
 
 //int* calcChildrenMin(Node* node, int depth, char player);
+
+
 
 #endif
