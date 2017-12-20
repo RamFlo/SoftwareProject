@@ -8,6 +8,12 @@
 const int weights[] = {-5,-2,-1,0,1,2,5};
 
 //Put all decleartions and constants here
+typedef enum nodeType_t {
+	TIE,
+	PLAYER_1_WIN,
+	PLAYER_2_WIN,
+	REGULAR,
+} nodeType;
 
 typedef struct Node_t {
 	struct Node_t* children;
@@ -16,12 +22,7 @@ typedef struct Node_t {
 	nodeType type;
 } Node;
 
-typedef enum nodeType_t {
-	TIE,
-	PLAYER_1_WIN,
-	PLAYER_2_WIN,
-	REGULAR,
-} nodeType;
+
 
 Node* createNode(SPFiarGame* gameStatus) {
 	Node *newNode, *children;
