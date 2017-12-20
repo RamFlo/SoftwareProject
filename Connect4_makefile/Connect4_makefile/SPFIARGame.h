@@ -157,3 +157,5 @@ char spFiarGameGetCurrentPlayer(SPFiarGame* src);
 * null character - otherwise
 */
 char spFiarCheckWinner(SPFiarGame* src);
+
+bool isGameBoardFull(SPFiarGame* src);
