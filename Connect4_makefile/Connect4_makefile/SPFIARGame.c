@@ -1,5 +1,5 @@
-#ifndef SPFIARGAME_H_
-#define SPFIARGAME_H_
+//#ifndef SPFIARGAME_H_
+//#define SPFIARGAME_H_
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -99,7 +99,11 @@ SPFiarGame* spFiarGameCopy(SPFiarGame* src) {
 	SPFiarGame *g;
 	int i = 0, j = 0, k=0;
 	SPArrayList* p;
+	if (src == NULL)
+		return NULL;
 	g = spFiarGameCreate(src->history->maxSize);
+	if (g == NULL)
+		return NULL;
 	g->currentPlayer = src->currentPlayer;
 	for (i = 0; i < SP_FIAR_GAME_N_ROWS; i++) {
 		for (j = 0; j < SP_FIAR_GAME_N_COLUMNS; j++) {
@@ -274,12 +278,15 @@ char spFiarCheckWinner(SPFiarGame* src) {
 	diagWinner = checkDiagUpWinner(src, lastCol, lastRow, lastMove) || checkDiagDownWinner(src, lastCol, lastRow, lastMove);
 	if (rowWinner || colWinner || diagWinner)
 		return lastMove;
+	else if (isGameBoardFull(src))
+		return SP_FIAR_GAME_TIE_SYMBOL;
+	return NULL;
 }
 
 bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
 	int i = 0, curChecked = lastRow - 1, curRow= lastRow;
 	while (curRow > lastRow - SP_FIAR_GAME_SPAN && curRow >= 0) {
-		if ((src->gameBoard)[curRow][lastCol] != lastMove) {
+		if ((src->gameBoard)[curRow][lastCol] != lastMove)
 			return false;
 		curRow--;
 	}
@@ -339,4 +346,13 @@ bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMov
 	return counter >= SP_FIAR_GAME_SPAN;
 }
 
-#endif
+bool isGameBoardFull(SPFiarGame* src) {
+	int colNum = SP_FIAR_GAME_N_COLUMNS, rowNum = SP_FIAR_GAME_N_ROWS, i=0;
+	for (i = 0; i < colNum; i++) {
+		if (src->tops[i] != rowNum)
+			return false;
+	}
+	return true;
+}
+
+//#endif
