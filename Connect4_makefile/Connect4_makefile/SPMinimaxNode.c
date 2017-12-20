@@ -95,11 +95,12 @@ int diagUpSpanValue(Node* node, int colNum, int rowNum, char player) {
 int diagUpScoring(Node* node, char player) {
 	int diagsInCol = SP_FIAR_GAME_N_ROWS / SP_FIAR_GAME_SPAN + SP_FIAR_GAME_N_ROWS % SP_FIAR_GAME_SPAN;
 	int diagsInRow = SP_FIAR_GAME_N_COLUMNS / SP_FIAR_GAME_SPAN + SP_FIAR_GAME_N_COLUMNS % SP_FIAR_GAME_SPAN;
-	int i = 0, j = 0, weight = 0;;
+	int i = 0, j = 0, weight = 0;
 	for (i = 0; i < diagsInCol; i++) {
 		for (j = 0; j < diagsInRow; j++)
 			weight += weights[3 + diagUpSpanValue(node, j, i, player)];
 	}
+	return weight;
 }
 int diagDownSpanValue(Node* node, int colNum, int rowNum, char player) {
 	int i = 0, sum = 0;
@@ -114,8 +115,9 @@ int diagDownScoring(Node* node, char player) {
 	int i = 0, j = 0, weight = 0;;
 	for (i = SP_FIAR_GAME_N_ROWS - 1; i >= SP_FIAR_GAME_N_ROWS - diagsInCol; i--) {
 		for (j = 0; j < diagsInRow; j++)
-			weight += weights[3 + diagUpSpanValue(node, j, i, player)];
+			weight += weights[3 + diagDownSpanValue(node, j, i, player)];
 	}
+	return weight;
 }
 
 int scoringFunction(Node* node, char player) {
