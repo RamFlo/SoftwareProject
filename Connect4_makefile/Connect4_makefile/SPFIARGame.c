@@ -1,9 +1,10 @@
-//#ifndef SPFIARGAME_H_
-//#define SPFIARGAME_H_
+#ifndef SPFIARGAME_H_
+#define SPFIARGAME_H_
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "SPArrayList.h"
+#include "SPFIARGame.h"
 
 /**
 * SPFIARGame Summary:
@@ -264,24 +265,6 @@ char spFiarGameGetCurrentPlayer(SPFiarGame* src) {
 * SP_FIAR_GAME_TIE_SYMBOL - If the game is over and there's a tie
 * null character - otherwise
 */
-char spFiarCheckWinner(SPFiarGame* src) {
-	int lastCol = 0, lastRow = 0;
-	char lastMove = 'a';
-	bool rowWinner = true, colWinner = true, diagWinner = true;
-	if (src == NULL)
-		return NULL;
-	lastCol = spArrayListGetLast(src->history);
-	lastRow = (src->tops)[lastCol];
-	lastMove = (src->gameBoard)[lastRow][lastCol];
-	rowWinner = checkRowWinner(src, lastCol, lastRow, lastMove);
-	colWinner = checkColWinner(src, lastCol, lastRow, lastMove);
-	diagWinner = checkDiagUpWinner(src, lastCol, lastRow, lastMove) || checkDiagDownWinner(src, lastCol, lastRow, lastMove);
-	if (rowWinner || colWinner || diagWinner)
-		return lastMove;
-	else if (isGameBoardFull(src))
-		return SP_FIAR_GAME_TIE_SYMBOL;
-	return NULL;
-}
 
 bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
 	int i = 0, curChecked = lastRow - 1, curRow= lastRow;
@@ -354,10 +337,27 @@ bool isGameBoardFull(SPFiarGame* src) {
 	}
 	return true;
 }
-
+char spFiarCheckWinner(SPFiarGame* src) {
+	int lastCol = 0, lastRow = 0;
+	char lastMove = 'a';
+	bool rowWinner = true, colWinner = true, diagWinner = true;
+	if (src == NULL)
+		return '\0';
+	lastCol = spArrayListGetLast(src->history);
+	lastRow = (src->tops)[lastCol];
+	lastMove = (src->gameBoard)[lastRow][lastCol];
+	rowWinner = checkRowWinner(src, lastCol, lastRow, lastMove);
+	colWinner = checkColWinner(src, lastCol, lastRow, lastMove);
+	diagWinner = checkDiagUpWinner(src, lastCol, lastRow, lastMove) || checkDiagDownWinner(src, lastCol, lastRow, lastMove);
+	if (rowWinner || colWinner || diagWinner)
+		return lastMove;
+	else if (isGameBoardFull(src))
+		return SP_FIAR_GAME_TIE_SYMBOL;
+	return '\0';
+}
 char getOtherPlayer(char player) {
-	if (char == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+	if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
 		return SP_FIAR_GAME_PLAYER_2_SYMBOL;
 	return SP_FIAR_GAME_PLAYER_1_SYMBOL;
 }
-//#endif
+#endif

@@ -1,6 +1,7 @@
 #ifndef SPMINIMAXNODE_H_
 #define SPMINIMAXNODE_H_
 #include "SPFIARGame.h"
+#include "SPMinimaxNode.h"
 #include <stdlib.h>
 #include <limits.h>
 #define CHILDREN SP_FIAR_GAME_N_COLUMNS
@@ -8,8 +9,8 @@ const int weights[] = {-5,-2,-1,0,1,2,5};
 
 //Put all decleartions and constants here
 
-typedef struct Node {
-	Node* children;
+typedef struct Node_t {
+	struct Node_t* children;
 	SPFiarGame* gameStatus;
 	bool isLeaf;
 } Node;
@@ -30,9 +31,25 @@ Node* createNode(SPFiarGame* gameStatus) {
 	newNode->isLeaf = isLeaf;
 	return newNode;
 }
-
-int scoringFunction(Node* node, char player) {
-	return colsScoring(node, player) + rowScoring(node, player) + diagScoring(node, player);
+int discValue(Node* node, int colNum, int rowNum, char player) {
+	if (node->gameStatus->tops[colNum] > rowNum) {
+		if (player == node->gameStatus->gameBoard[rowNum][colNum])
+			return 1;
+		else
+			return -1;
+	}
+	return 0;
+}
+int col4score(Node* node, int col, int row, char player) {
+	int curRow = row, sum = 0, index = 0, i = 0;
+	for (i = 0; i < SP_FIAR_GAME_SPAN; i++) {
+		if (node->gameStatus->gameBoard[curRow + i][col] == player && node->gameStatus->tops[col] > curRow)
+			sum++;
+		else
+			if (node->gameStatus->tops[col] > curRow)
+				sum--;
+		return weights[sum + 3];
+	}
 }
 
 int colsScoring(Node* node, char player) {
@@ -45,18 +62,13 @@ int colsScoring(Node* node, char player) {
 	}
 	return weight;
 }
-
-int col4score(Node* node, int col, int row, char player) {
-	int curRow = row, sum = 0, index = 0, iterNum = SP_FIAR_GAME_SPAN, i=0;
-	for (i = 0; i < SP_FIAR_GAME_SPAN; i++) {
-		if (node->gameStatus->gameBoard[curRow + i][col] == player && node->gameStatus->tops[col] > curRow)
-			sum++;
-		else
-			if (node->gameStatus->tops[col] > curRow)
-				sum--;
-		return weights[sum+3];
-	}
+int rowSpanValue(Node* node, int colNum, int rowNum, char player) {
+	int i = 0, sum = 0;
+	for (i = colNum; i < colNum + SP_FIAR_GAME_SPAN; i++)
+		sum += discValue(node, i, rowNum, player);
+	return sum;
 }
+
 int rowScoring(Node* node, char player) {
 	int i = 0, j = 0, weight = 0, curValue = 0, rowSpans = SP_FIAR_GAME_N_COLUMNS / SP_FIAR_GAME_SPAN + SP_FIAR_GAME_N_COLUMNS % SP_FIAR_GAME_SPAN;
 	for (i = 0; i < SP_FIAR_GAME_N_ROWS; i++)
@@ -71,10 +83,11 @@ int rowScoring(Node* node, char player) {
 	return weight;
 }
 
-int rowSpanValue(Node* node, int colNum, int rowNum, char player) {
+
+int diagUpSpanValue(Node* node, int colNum, int rowNum, char player) {
 	int i = 0, sum = 0;
 	for (i = colNum; i < colNum + SP_FIAR_GAME_SPAN; i++)
-		sum += discValue(node, i, rowNum, player);
+		sum += discValue(node, i, rowNum + i - colNum, player);
 	return sum;
 }
 
@@ -88,11 +101,10 @@ int diagUpScoring(Node* node, char player) {
 			weight += weights[3 + diagUpSpanValue(node, j, i, player)];
 	}
 }
-
-int diagUpSpanValue(Node* node, int colNum, int rowNum, char player) {
+int diagDownSpanValue(Node* node, int colNum, int rowNum, char player) {
 	int i = 0, sum = 0;
 	for (i = colNum; i < colNum + SP_FIAR_GAME_SPAN; i++)
-		sum += discValue(node, i, rowNum + i - colNum, player);
+		sum += discValue(node, i, rowNum - i + colNum, player);
 	return sum;
 }
 
@@ -106,25 +118,11 @@ int diagDownScoring(Node* node, char player) {
 	}
 }
 
-int diagDownSpanValue(Node* node, int colNum, int rowNum, char player) {
-	int i = 0, sum = 0;
-	for (i = colNum; i < colNum + SP_FIAR_GAME_SPAN; i++)
-		sum += discValue(node, i, rowNum - i + colNum, player);
-	return sum;
+int scoringFunction(Node* node, char player) {
+	return colsScoring(node, player) + rowScoring(node, player) + diagUpScoring(node, player) + diagDownScoring(node, player);
 }
 
-
-int discValue(Node* node, int colNum, int rowNum, char player) {
-	if (node->gameStatus->tops[colNum] > rowNum) {
-		if (player == node->gameStatus->gameBoard[rowNum][colNum])
-			return 1;
-		else
-			return -1;
-	}
-	return 0;
-}
-
-int* calcChildrenMax(Node* node, int depth, char player) {
+/*int* calcChildrenMax(Node* node, int depth, char player) {
 	int maxIndex = -1, maxValue = INT_MIN, i = 0, *curCalc;
 	char winner = spFiarCheckWinner(node->gameStatus);
 	Node* point = node->children;
@@ -180,7 +178,31 @@ int* calcChildrenMin(Node* node, int depth, char player) {
 	}
 	//call for destroy
 	return curCalc;
+}*/
+
+
+
+int main() {
+	SPFiarGame* g = spFiarGameCreate(20);
+	spFiarGameSetMove(g, 1);
+	spFiarGameSetMove(g, 3);
+	spFiarGameSetMove(g, 1);
+	spFiarGameSetMove(g, 3);
+	
+	spFiarGameSetMove(g, 3);
+	spFiarGameSetMove(g, 1);
+
+	spFiarGameSetMove(g, 1);
+	spFiarGameSetMove(g, 5);
+	spFiarGameSetMove(g, 2);
+	spFiarGameSetMove(g, 2);
+	spFiarGameSetMove(g, 1);
+	spFiarGameSetMove(g, 6);
+	spFiarGameSetMove(g, 4);
+	spFiarGameSetMove(g, 2);
+	spFiarGamePrintBoard(g);
+	Node* n = createNode(g);
+	printf("\n\n%d", scoringFunction(n, SP_FIAR_GAME_PLAYER_1_SYMBOL));
+	return 0;
 }
-
-
 #endif
