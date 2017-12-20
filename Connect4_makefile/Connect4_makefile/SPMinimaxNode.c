@@ -15,6 +15,13 @@ typedef struct Node_t {
 	bool isLeaf;
 } Node;
 
+typedef enum nodeType_t {
+	TIE,
+	PLAYER_1_WIN,
+	PLAYER_2_WIN,
+	REGULAR,
+} nodeType;
+
 Node* createNode(SPFiarGame* gameStatus) {
 	Node *newNode, *children;
 	bool isLeaf = true;
@@ -184,7 +191,7 @@ int* calcChildrenMin(Node* node, int depth, char player) {
 
 
 
-int main() {
+/*int main() {
 	SPFiarGame* g = spFiarGameCreate(20);
 	spFiarGameSetMove(g, 1);
 	spFiarGameSetMove(g, 3);
@@ -206,5 +213,5 @@ int main() {
 	Node* n = createNode(g);
 	printf("\n\n%d", scoringFunction(n, SP_FIAR_GAME_PLAYER_1_SYMBOL));
 	return 0;
-}
+}*/
 #endif
