@@ -157,3 +157,10 @@ char spFiarGameGetCurrentPlayer(SPFiarGame* src);
 * null character - otherwise
 */
 char spFiarCheckWinner(SPFiarGame* src);
+
+
+void spFiarGameSwitchPlayer(SPFiarGame* src);
+bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove);
+bool checkRowWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove);
+bool checkDiagUpWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove);
+bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove);
