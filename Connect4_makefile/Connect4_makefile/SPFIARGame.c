@@ -238,7 +238,49 @@ SP_FIAR_GAME_MESSAGE spFiarGamePrintBoard(SPFiarGame* src) {
 * SP_FIAR_GAME_PLAYER_2_SYMBOL - if it's player two's turn
 * SP_FIAR_GAME_EMPTY_ENTRY     - otherwise
 */
-char spFiarGameGetCurrentPlayer(SPFiarGame* src);
+char spFiarGameGetCurrentPlayer(SPFiarGame* src) {
+	if (src == NULL)
+		return SP_FIAR_GAME_EMPTY_ENTRY;
+	return src->currentPlayer;
+}
+
+bool checkDiagUpWinner(SPFiarGame* src,int lastCol,int lastRow,char lastMove) {
+	int i = 0,lastRowCopy=lastRow,counter=0;
+	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
+		if (++lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i]== lastMove)
+			counter++;
+		else
+			break;
+	}
+	lastRowCopy = lastRow;
+	for (i = lastCol - 1; i >= 0; i--) {
+		if (--lastRowCopy >= 0 && lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
+			counter++;
+		else
+			break;
+	}
+	return counter >= SP_FIAR_GAME_SPAN;
+}
+
+bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
+	int i = 0, lastRowCopy = lastRow, counter = 0;
+	for (i = lastCol - 1; i >= 0; i--) {
+		if (++lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
+			counter++;
+		else
+			break;
+	}
+	lastRowCopy = lastRow;
+	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
+		if (--lastRowCopy >= 0 && lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
+			counter++;
+		else
+			break;
+	}
+	return counter >= SP_FIAR_GAME_SPAN;
+}
+
+
 
 /**
 * Checks if there's a winner in the specified game status. The function returns either
