@@ -117,6 +117,7 @@
     <ClInclude Include="SPArrayList.h" />
     <ClInclude Include="SPFIARGame.h" />
     <ClInclude Include="SPFIARParser.h" />
+    <ClInclude Include="SPMainAux.h" />
     <ClInclude Include="SPMinimax.h" />
     <ClInclude Include="SPMinimaxNode.h" />
     <ClInclude Include="unit_test_util.h" />
@@ -128,6 +129,7 @@
     <ClCompile Include="SPFIARGameUnitTest.c" />
     <ClCompile Include="SPFIARParser.c" />
     <ClCompile Include="SPFIARParserUnitTest.c" />
+    <ClCompile Include="SPMainAux.c" />
     <ClCompile Include="SPMinimax.c" />
     <ClCompile Include="SPMinimaxNode.c" />
   </ItemGroup>

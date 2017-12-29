@@ -34,7 +34,7 @@ int diagDownSpanValue(Node* node, int colNum, int rowNum, char player);
 int discValue(Node* node, int colNum, int rowNum, char player);
 int* calcChildrenMax(Node* node);
 int* calcChildrenMin(Node* node);
-
+void destroyNode(Node* node);
 
 
 #endif

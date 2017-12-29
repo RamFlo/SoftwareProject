@@ -16,3 +16,7 @@ bool checkDiagUpWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove)
 bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove);
 bool isGameBoardFull(SPFiarGame* src);
 char getOtherPlayer(char player);
+
+//SPMinimax
+bool delTree = false;
+Node* createTree(SPFiarGame* currentGame, unsigned int maxDepth);

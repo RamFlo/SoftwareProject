@@ -17,6 +17,13 @@ Node* createNode(SPFiarGame* gameStatus) {
 	return newNode;
 }
 
+void destroyNode(Node* node) {
+	if (node != NULL) {
+		free(node->children);
+		free(node);
+	}
+}
+
 int discValue(Node* node, int colNum, int rowNum, char player) {
 	if (node->gameStatus->tops[colNum] > rowNum) {
 		if (player == node->gameStatus->gameBoard[rowNum][colNum])
@@ -202,7 +209,7 @@ int* calcChildrenMin(Node* node) {
 
 
 
-int main() {
+/*int main() {
 SPFiarGame* g = spFiarGameCreate(20);
 spFiarGameSetMove(g, 1);
 spFiarGameSetMove(g, 3);
@@ -224,4 +231,4 @@ spFiarGamePrintBoard(g);
 Node* n = createNode(g);
 printf("\n\n%d", scoringFunction(n, SP_FIAR_GAME_PLAYER_1_SYMBOL));
 return 0;
-}
+}*/

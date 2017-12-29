@@ -36,6 +36,9 @@
     <ClInclude Include="SPMinimax.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SPMainAux.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPFIARParser.c">
@@ -60,6 +63,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SPMinimax.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SPMainAux.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
