@@ -1,5 +1,16 @@
 #include "SPMinimaxNode.h"
 
+int getWeight(int index) {
+	int w[] = { -5,-2,-1,0,1,2,5 };
+	return w[index];
+}
+
+char getOtherPlayer(char player) {
+	if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+		return SP_FIAR_GAME_PLAYER_2_SYMBOL;
+	return SP_FIAR_GAME_PLAYER_1_SYMBOL;
+}
+
 Node* createNode(SPFiarGame* gameStatus) {
 	Node *newNode, *children;
 	bool isLeaf = true;
@@ -20,6 +31,7 @@ Node* createNode(SPFiarGame* gameStatus) {
 void destroyNode(Node* node) {
 	if (node != NULL) {
 		free(node->children);
+		spFiarGameDestroy(node->gameStatus);
 		free(node);
 	}
 }
@@ -43,7 +55,7 @@ int col4score(Node* node, int col, int row, char player) {
 			sum--;
 		curRow++;
 	}
-	return weights[sum + 3];
+	return getWeight(sum + 3);
 }
 
 int colsScoring(Node* node, char player) {
@@ -69,10 +81,10 @@ int rowScoring(Node* node, char player) {
 	for (i = 0; i < SP_FIAR_GAME_N_ROWS; i++)
 	{
 		curValue = rowSpanValue(node, 0, i, player);
-		weight += weights[curValue + 3];
+		weight += getWeight(curValue + 3);
 		for (j = 1; j < rowSpans; j++) {
 			curValue = curValue - discValue(node, j - 1, i, player) + discValue(node, j + SP_FIAR_GAME_SPAN - 1, i, player);
-			weight += weights[curValue + 3];
+			weight += getWeight(curValue + 3);
 		}
 	}
 	return weight;
@@ -91,7 +103,7 @@ int diagUpScoring(Node* node, char player) {
 	int i = 0, j = 0, weight = 0;
 	for (i = 0; i < diagsInCol; i++) {
 		for (j = 0; j < diagsInRow; j++)
-			weight += weights[3 + diagUpSpanValue(node, j, i, player)];
+			weight += getWeight(3 + diagUpSpanValue(node, j, i, player));
 	}
 	return weight;
 }
@@ -109,7 +121,7 @@ int diagDownScoring(Node* node, char player) {
 	int i = 0, j = 0, weight = 0;;
 	for (i = SP_FIAR_GAME_N_ROWS - 1; i >= SP_FIAR_GAME_N_ROWS - diagsInCol; i--) {
 		for (j = 0; j < diagsInRow; j++)
-			weight += weights[3 + diagDownSpanValue(node, j, i, player)];
+			weight += getWeight(3 + diagDownSpanValue(node, j, i, player));
 	}
 	return weight;
 }
@@ -190,8 +202,10 @@ int* calcChildrenMin(Node* node) {
 		}
 
 	}
-	if (node->isLeaf)
-		return scoringFunction(node, getOtherPlayer(player));
+	if (node->isLeaf) {
+		retCalc[0] = scoringFunction(node, player);
+		return retCalc;
+	}
 	for (i = SP_FIAR_GAME_N_COLUMNS - 1; i >= 0; i--) {
 		if (point != NULL) {
 			curCalc = calcChildrenMax(point);

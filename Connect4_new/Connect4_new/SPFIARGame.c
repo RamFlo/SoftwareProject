@@ -1,5 +1,5 @@
-#include "MasterHeader.h"
 #include "SPFIARGame.h"
+#include <stdlib.h>
 
 void spFiarGameSwitchPlayer(SPFiarGame* src) {
 	if (src != NULL) {
@@ -208,9 +208,4 @@ char spFiarCheckWinner(SPFiarGame* src) {
 	else if (isGameBoardFull(src))
 		return SP_FIAR_GAME_TIE_SYMBOL;
 	return '\0';
-}
-char getOtherPlayer(char player) {
-	if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
-		return SP_FIAR_GAME_PLAYER_2_SYMBOL;
-	return SP_FIAR_GAME_PLAYER_1_SYMBOL;
 }

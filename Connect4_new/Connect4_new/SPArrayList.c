@@ -1,5 +1,5 @@
 #include "SPArrayList.h"
-#include "MasterHeader.h"
+#include <stdlib.h>
 
 SPArrayList* spArrayListCreate(int maxSize) {
 	int realSize = maxSize * sizeof(int);

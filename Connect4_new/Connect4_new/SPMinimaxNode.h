@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <limits.h>
 #define CHILDREN SP_FIAR_GAME_N_COLUMNS
-const int weights[] = { -5,-2,-1,0,1,2,5 };
+//const int weights[] = { -5,-2,-1,0,1,2,5 };
+//extern const int weights[7]= { -5,-2,-1,0,1,2,5 };
 
 //Put all decleartions and constants here
 typedef enum nodeType_t {
@@ -19,6 +20,8 @@ typedef struct Node_t {
 	SPFiarGame* gameStatus;
 	bool isLeaf;
 	nodeType type;
+	int childIndex;
+	int value;
 } Node;
 
 Node* createNode(SPFiarGame* gameStatus);

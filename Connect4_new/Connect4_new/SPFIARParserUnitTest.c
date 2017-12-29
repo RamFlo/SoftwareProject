@@ -28,8 +28,19 @@ static bool spParserCheckParseLine() {
 	ASSERT_TRUE(cmd.cmd == SP_INVALID_LINE && !cmd.validArg);
 	return true;
 }
-/*int main() {
-	RUN_TEST(spParserCheckIsInt);
-	RUN_TEST(spParserCheckParseLine);
+int main() {
+	SPCommand cmd;
+	char command[SP_MAX_LINE_LENGTH];
+	char *p = command;
+	const char *cp;
+	fgets(command, SP_MAX_LINE_LENGTH, stdin);
+	cp = p;
+	cmd = spParserPraseLine(command);
+
+
+	//RUN_TEST(spParserCheckIsInt);
+	//RUN_TEST(spParserCheckParseLine);
+
+	
 	return 0;
-}*/
+}

@@ -18,9 +18,6 @@
     <ClInclude Include="SPFIARParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MasterHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="unit_test_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>

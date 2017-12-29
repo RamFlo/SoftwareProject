@@ -113,7 +113,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="MasterHeader.h" />
     <ClInclude Include="SPArrayList.h" />
     <ClInclude Include="SPFIARGame.h" />
     <ClInclude Include="SPFIARParser.h" />

@@ -1,5 +1,8 @@
-#include "MasterHeader.h"
 #include "SPFIARParser.h"
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
 
 
 char *my_strdup(const char *s) {
