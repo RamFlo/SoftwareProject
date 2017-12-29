@@ -126,6 +126,7 @@
     <None Include="..\..\Connect4_makefile\Connect4_makefile\makefile" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\MasterHeader.h" />
     <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPArrayList.h" />
     <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARGame.h" />
     <ClInclude Include="..\..\Connect4_makefile\Connect4_makefile\SPFIARParser.h" />

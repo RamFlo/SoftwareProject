@@ -1,6 +1,8 @@
 #ifndef SPMINIMAXNODE_H_
 #define SPMINIMAXNODE_H_
 #include "SPFIARGame.h"
+#include <stdlib.h>
+#include <limits.h>
 #define CHILDREN SP_FIAR_GAME_N_COLUMNS
 const int weights[] = { -5,-2,-1,0,1,2,5 };
 
