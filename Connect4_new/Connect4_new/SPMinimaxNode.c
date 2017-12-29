@@ -161,18 +161,25 @@ int* calcChildrenMin(Node* node) {
 	int retCalc[2] = { 0 };
 	char player = node->gameStatus->currentPlayer;
 	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS;
+	retCalc[1] = -1;
 	if (node->type != REGULAR) {
-		if (node->type == TIE)
-			return 0;
+		if (node->type == TIE) {
+			retCalc[0] = 0;
+			return retCalc;
+		}
 		else if (node->type == PLAYER_1_WIN) {
 			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
-				return INT_MIN;
-			return INT_MAX;
+				retCalc[0] = INT_MIN;
+			else
+				retCalc[0] = INT_MAX;
+			return retCalc;
 		}
 		else {
 			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
-				return INT_MAX;
-			return INT_MIN;
+				retCalc[0]= INT_MAX;
+			else
+				retCalc[0] = INT_MIN;
+			return retCalc;
 		}
 
 	}
