@@ -28,7 +28,7 @@ static bool spParserCheckParseLine() {
 	ASSERT_TRUE(cmd.cmd == SP_INVALID_LINE && !cmd.validArg);
 	return true;
 }
-int main() {
+/*int main() {
 	SPCommand cmd;
 	char command[SP_MAX_LINE_LENGTH];
 	char *p = command;
@@ -43,4 +43,4 @@ int main() {
 
 	
 	return 0;
-}
+}*/

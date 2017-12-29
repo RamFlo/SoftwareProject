@@ -1,6 +1,6 @@
 #include "SPMinimax.h"
 
-
+bool delTree = false;
 Node* createTree(SPFiarGame* currentGame, unsigned int maxDepth) {
 	Node* root = createNode(currentGame);
 	Node* child;
@@ -72,6 +72,7 @@ int spMinimaxSuggestMove(SPFiarGame* currentGame, unsigned int maxDepth) {
 	root = createTree(spFiarGameCopy(currentGame), maxDepth);
 	if (root == NULL || delTree){
 		destroyTree(root);
+		delTree = false;
 		return -1;
 	}
 	res = calcChildrenMax(root)[1];
