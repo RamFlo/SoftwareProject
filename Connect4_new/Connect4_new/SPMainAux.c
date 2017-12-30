@@ -6,6 +6,23 @@
 
 
 
+void printWinner(SPFiarGame* curGame) {
+	if (spFiarCheckWinner(curGame) == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+		printf("Game over: you win\nPlease enter 'quit' to exit or 'restart' to start a new game!\n");
+	if (spFiarCheckWinner(curGame) == SP_FIAR_GAME_PLAYER_2_SYMBOL)
+		printf("Game over: computer wins\nPlease enter 'quit' to exit or 'restart' to start a new game!\n");
+	if (spFiarCheckWinner(curGame) == SP_FIAR_GAME_TIE_SYMBOL)
+		printf("Game over: it’s a tie\nPlease enter 'quit' to exit or 'restart' to start a new game!\n");
+}
+
+void memError(char * funcName) {
+	printf("Error: %s has failed", funcName);
+}
+
+void endGame(SPFiarGame * game) {
+	spFiarGameDestroy(game);
+	exit(0);
+}
 
 char *my_strdup_main(const char *s) {
 	size_t size = strlen(s) + 1;
@@ -66,13 +83,50 @@ int getMaxDepth() {
 
 
 int main() {
-	int maxDepth = 0;
-	//while(true){
+	SPFiarGame * curGame = NULL;
+	SPCommand curCommand;
+	int maxDepth = 0,moveSuggestion=0;
+	//while(true)
+	curGame = spFiarGameCreate(HISTORY_SIZE);
+	if (curGame == NULL) {
+		memError("spFiarGameCreate");
+		endGame(curGame);
+	}
 	maxDepth = getMaxDepth();
-		
+	if (maxDepth == -1)
+		endGame(curGame);
+	while (true) {
+		if (spFiarCheckWinner(curGame) != NULL) {
+			spFiarGamePrintBoard(curGame);
+			printWinner(curGame);
+			curCommand = readCommand();
+			while (curCommand.cmd != SP_RESTART && curCommand.cmd != SP_QUIT && curCommand.cmd != SP_UNDO_MOVE) {
+				printf("Error: invalid command\n");
+				curCommand = readCommand();
+			}
+			if (curCommand.cmd == SP_QUIT)
+				endGame(curGame);
+			else if (curCommand.cmd == SP_RESTART)
+				break;
+			else {
+				spFiarGameUndoPrevMove(curGame);
+				if (spFiarCheckWinner(curGame) != SP_FIAR_GAME_PLAYER_1_SYMBOL)
+					spFiarGameUndoPrevMove(curGame);
+				continue;
+			}
+		}
+		if (spFiarGameGetCurrentPlayer(curGame) == SP_FIAR_GAME_PLAYER_2_SYMBOL) {
+			moveSuggestion = spMinimaxSuggestMove(curGame, maxDepth);
+			if (moveSuggestion == -1) {
+				memError("spMinimaxSuggestMove");
+				endGame(curGame);
+			}
+			spFiarGameSetMove(curGame, moveSuggestion);
+			printf("Computer move: add disc to column %d\n", moveSuggestion + 1);
+		}
+	}
 
 
 
-	//}
-	return 0;
+
 }

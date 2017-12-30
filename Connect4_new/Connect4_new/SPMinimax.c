@@ -75,7 +75,7 @@ int spMinimaxSuggestMove(SPFiarGame* currentGame, unsigned int maxDepth) {
 		delTree = false;
 		return -1;
 	}
-	res = calcChildrenMax(root)[1];
+	res = calcChildrenMax(root)->childIndex;
 	destroyTree(root);
 	return res;
 }

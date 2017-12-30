@@ -35,8 +35,8 @@ int diagUpSpanValue(Node* node, int colNum, int rowNum, char player);
 int diagDownScoring(Node* node, char player);
 int diagDownSpanValue(Node* node, int colNum, int rowNum, char player);
 int discValue(Node* node, int colNum, int rowNum, char player);
-int* calcChildrenMax(Node* node);
-int* calcChildrenMin(Node* node);
+Node* calcChildrenMax(Node* node);
+Node* calcChildrenMin(Node* node);
 void destroyNode(Node* node);
 
 

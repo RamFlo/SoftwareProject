@@ -84,8 +84,12 @@ SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
 		return SP_ARRAY_LIST_INVALID_ARGUMENT;
 	if (src->history->actualSize == 0)
 		return SP_FIAR_GAME_NO_HISTORY;
-	spFiarGameSwitchPlayer(src);
 	lastCol = spArrayListGetLast(src->history);
+	if (src->currentPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+		printf("Remove disc: remove user's disc at column %d\n", lastCol);
+	else
+		printf("Remove disc: remove computer's disc at column %d\n", lastCol);
+	spFiarGameSwitchPlayer(src);
 	(src->tops)[lastCol]--;
 	spArrayListRemoveLast(src->history);
 	return SP_FIAR_GAME_SUCCESS;

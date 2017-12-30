@@ -130,7 +130,103 @@ int scoringFunction(Node* node, char player) {
 	return colsScoring(node, player) + rowScoring(node, player) + diagUpScoring(node, player) + diagDownScoring(node, player);
 }
 
-int* calcChildrenMax(Node* node) {
+
+
+
+
+Node* calcChildrenMax(Node* node) {
+	int maxIndex = -1, maxValue = INT_MIN, i = 0;
+	char player = node->gameStatus->currentPlayer;
+	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS;
+	Node* curNode = NULL;
+	node->childIndex = -1;
+	if (node->type != REGULAR) {
+		if (node->type == TIE) {
+			node->value = 0;
+			return node;
+		}
+		else if (node->type == PLAYER_1_WIN) {
+			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+				node->value = INT_MAX;
+			else
+				node->value = INT_MIN;
+			return node;
+		}
+		else {
+			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+				node->value = INT_MIN;
+			else
+				node->value = INT_MAX;
+			return node;
+		}
+	}
+	if (node->isLeaf) {
+		node->value = scoringFunction(node, player);
+		return node;
+	}
+	for (i = SP_FIAR_GAME_N_COLUMNS - 1; i >= 0; i--) {
+		if (point != NULL) {
+			curNode = calcChildrenMin(point);
+			if (curNode->value >= maxValue) {
+				maxValue = curNode->value;
+				maxIndex = i;
+			}
+		}
+		point--;
+	}
+	node->value = maxValue;
+	node->childIndex = maxIndex;
+	return node;
+}
+
+
+Node* calcChildrenMin(Node* node) {
+	int minIndex = -1, minValue = INT_MAX, i = 0;
+	char player = node->gameStatus->currentPlayer;
+	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS;
+	Node* curNode = NULL;
+	node->childIndex = -1;
+	if (node->type != REGULAR) {
+		if (node->type == TIE) {
+			node->value = 0;
+			return node;
+		}
+		else if (node->type == PLAYER_1_WIN) {
+			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+				node->value = INT_MIN;
+			else
+				node->value = INT_MAX;
+			return node;
+		}
+		else {
+			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+				node->value = INT_MAX;
+			else
+				node->value = INT_MIN;
+			return node;
+		}
+	}
+	if (node->isLeaf) {
+		node->value = scoringFunction(node, player);
+		return node;
+	}
+	for (i = SP_FIAR_GAME_N_COLUMNS - 1; i >= 0; i--) {
+		if (point != NULL) {
+			curNode = calcChildrenMax(point);
+			if (curNode->value <= minValue) {
+				minValue = curNode->value;
+				minIndex = i;
+			}
+		}
+		point--;
+	}
+	node->value = minValue;
+	node->childIndex = minIndex;
+	return node;
+}
+
+
+/*int* calcChildrenMaxOld(Node* node) {
 	int maxIndex = -1, maxValue = INT_MIN, i = 0, *curCalc;
 	int retCalc[2] = { 0 };
 	char player = node->gameStatus->currentPlayer;
@@ -219,7 +315,7 @@ int* calcChildrenMin(Node* node) {
 	retCalc[0] = minValue;
 	retCalc[1] = minIndex;
 	return retCalc;
-}
+}*/
 
 
 
