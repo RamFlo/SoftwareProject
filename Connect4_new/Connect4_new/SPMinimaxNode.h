@@ -24,7 +24,7 @@ typedef struct Node_t {
 	int value;
 } Node;
 
-Node* createNode(SPFiarGame* gameStatus);
+Node* createRoot();
 int scoringFunction(Node* node, char player);
 int colsScoring(Node* node, char player);
 int col4score(Node* node, int col, int row, char player);
@@ -37,7 +37,6 @@ int diagDownSpanValue(Node* node, int colNum, int rowNum, char player);
 int discValue(Node* node, int colNum, int rowNum, char player);
 Node* calcChildrenMax(Node* node,char actualPlayer);
 Node* calcChildrenMin(Node* node,char actualPlayer);
-void destroyNode(Node* node);
 
 
 #endif

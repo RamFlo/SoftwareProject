@@ -130,6 +130,8 @@ char spFiarGameGetCurrentPlayer(SPFiarGame* src) {
 
 bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
 	int i = 0, curChecked = lastRow - 1, curRow = lastRow;
+	if (lastRow < SP_FIAR_GAME_SPAN - 1)
+		return false;
 	while (curRow > lastRow - SP_FIAR_GAME_SPAN && curRow >= 0) {
 		if ((src->gameBoard)[curRow][lastCol] != lastMove)
 			return false;
@@ -208,7 +210,7 @@ char spFiarCheckWinner(SPFiarGame* src) {
 	if (src->history->actualSize == 0)
 		return '\0';
 	lastCol = spArrayListGetLast(src->history);
-	lastRow = (src->tops)[lastCol];
+	lastRow = (src->tops)[lastCol]-1;
 	lastMove = (src->gameBoard)[lastRow][lastCol];
 	rowWinner = checkRowWinner(src, lastCol, lastRow, lastMove);
 	colWinner = checkColWinner(src, lastCol, lastRow, lastMove);
