@@ -11,7 +11,7 @@ char getOtherPlayer(char player) {
 	return SP_FIAR_GAME_PLAYER_1_SYMBOL;
 }
 
-Node* createNode(SPFiarGame* gameStatus) {
+Node* createRoot(SPFiarGame* gameStatus) {
 	Node *newNode, *children;
 	bool isLeaf = false;
 	newNode = (Node*)calloc(1, sizeof(Node));

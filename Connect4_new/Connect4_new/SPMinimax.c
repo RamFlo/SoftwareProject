@@ -1,34 +1,44 @@
 #include "SPMinimax.h"
 
 bool delTree = false;
-Node* createTree(SPFiarGame* currentGame, unsigned int maxDepth) {
-	Node* root = createNode(currentGame);
+void createTree(SPFiarGame* currentGame, unsigned int maxDepth,Node* root) {
+	//Node* root = createNode(currentGame);
 	Node* child;
 	SPFiarGame* gameCpy = NULL;
 	if (root == NULL)
-		return NULL;
-	Node* point = root->children;
+		return;
+	Node* point;
 	int i = 0;
 	char winner = spFiarCheckWinner(currentGame);
 	if (winner != '\0') {
+		root->isLeaf = true;
 		if (winner == SP_FIAR_GAME_TIE_SYMBOL)
 			root->type = TIE;
 		else if (winner == SP_FIAR_GAME_PLAYER_1_SYMBOL)
 			root->type = PLAYER_1_WIN;
 		else
 			root->type = PLAYER_2_WIN;
-		return root;
+		return;
 	}
 	root->type = REGULAR;
 	if (maxDepth == 0) {
 		root->isLeaf = true;
-		return root;
+		return;
 	}
+
+	root->children = (Node*)calloc(CHILDREN, sizeof(Node));
+	if (root->children == NULL) {
+		printf("Error: calloc has failed\n");
+		delTree = true;
+		return;
+	}
+	point = root->children;
+	
 	for (i; i < CHILDREN; i++) {
 		if (!delTree &&	spFiarGameIsValidMove(currentGame, i)) {
 			gameCpy = spFiarGameCopy(currentGame);
 			spFiarGameSetMove(gameCpy, i);
-			child = createTree(gameCpy, maxDepth - 1);
+			createTree(gameCpy, maxDepth - 1,point);
 			if (child == NULL)
 				delTree = true;
 			*point = *child;
@@ -36,6 +46,22 @@ Node* createTree(SPFiarGame* currentGame, unsigned int maxDepth) {
 		point++;
 	}
 	return root;
+}
+
+
+void destroyGamesInTree(Node* root) {
+	int i = 0;
+	Node* point = NULL;
+	if (root == NULL)
+		return;
+	if (!root->isLeaf) {
+		point = root->children;
+		for (i; i < CHILDREN; i++) {
+			destroyGamesInTree(point);
+			point++;
+		}
+	}
+	spFiarGameDestroy(root->gameStatus);
 }
 
 
@@ -71,7 +97,8 @@ int spMinimaxSuggestMove(SPFiarGame* currentGame, unsigned int maxDepth) {
 	int res;
 	if (currentGame == NULL || maxDepth <= 0)
 		return -1;
-	root = createTree(spFiarGameCopy(currentGame), maxDepth);
+	root = createRoot(spFiarGameCopy(currentGame));
+	createTree(spFiarGameCopy(currentGame), maxDepth, root);
 	if (root == NULL || delTree){
 		destroyTree(root);
 		delTree = false;
