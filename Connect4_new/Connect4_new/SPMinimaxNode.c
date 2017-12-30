@@ -114,8 +114,8 @@ int diagDownScoring(Node* node, char player) {
 }
 
 int scoringFunction(Node* node, char player) {
-	int a = colsScoring(node, player), b = rowScoring(node, player), c = diagUpScoring(node, player), d = diagDownScoring(node, player);
-	printf("colScore:%d, rowScore:%d, diagUpScore:%d, diagDownScore:%d\n", a, b, c, d);
+	//int a = colsScoring(node, player), b = rowScoring(node, player), c = diagUpScoring(node, player), d = diagDownScoring(node, player);
+	//printf("colScore:%d, rowScore:%d, diagUpScore:%d, diagDownScore:%d\n", a, b, c, d);
 	return colsScoring(node, player) + rowScoring(node, player) + diagUpScoring(node, player) + diagDownScoring(node, player);
 }
 
@@ -130,7 +130,7 @@ void printChildrenValues(Node* root) {
 
 Node* calcChildrenMax(Node* node,char actualPlayer) {
 	int maxIndex = -1, maxValue = INT_MIN, i = 0;
-	char player = node->gameStatus->currentPlayer;
+	//char player = node->gameStatus->currentPlayer;
 	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS-1;
 	Node* curNode = NULL;
 	node->childIndex = -1;
@@ -162,8 +162,10 @@ Node* calcChildrenMax(Node* node,char actualPlayer) {
 	}
 	for (i = SP_FIAR_GAME_N_COLUMNS - 1; i >= 0; i--) {
 		if (point != NULL) {
-			if (!point->isValidMove)
+			if (!point->isValidMove) {
+				point--;
 				continue;
+			}
 			curNode = calcChildrenMin(point, actualPlayer);
 			if (curNode->value >= maxValue) {
 				maxValue = curNode->value;
@@ -180,7 +182,7 @@ Node* calcChildrenMax(Node* node,char actualPlayer) {
 
 Node* calcChildrenMin(Node* node,char actualPlayer) {
 	int minIndex = -1, minValue = INT_MAX, i = 0;
-	char player = node->gameStatus->currentPlayer;
+	//char player = node->gameStatus->currentPlayer;
 	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS-1;
 	Node* curNode = NULL;
 	node->childIndex = -1;
@@ -212,8 +214,10 @@ Node* calcChildrenMin(Node* node,char actualPlayer) {
 	}
 	for (i = SP_FIAR_GAME_N_COLUMNS - 1; i >= 0; i--) {
 		if (point != NULL) {
-			if (!point->isValidMove)
+			if (!point->isValidMove) {
+				point--;
 				continue;
+			}
 			curNode = calcChildrenMax(point, actualPlayer);
 			if (curNode->value <= minValue) {
 				minValue = curNode->value;
@@ -228,24 +232,22 @@ Node* calcChildrenMin(Node* node,char actualPlayer) {
 }
 
 
-int main() {
+/*int main() {
 SPFiarGame* g = spFiarGameCreate(20);
 spFiarGameSetMove(g, 3);
 spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 3);
-
-spFiarGameSetMove(g, 5);
-spFiarGameSetMove(g, 5);
-
-
 spFiarGameSetMove(g, 1);
+spFiarGameSetMove(g, 2);
+spFiarGameSetMove(g, 3);
+spFiarGameSetMove(g, 3);
+spFiarGameSetMove(g, 3);
+spFiarGameSetMove(g, 3);
+spFiarGameSetMove(g, 5);
 spFiarGameSetMove(g, 2);
 spFiarGamePrintBoard(g);
 Node* n = createRoot();
 n->gameStatus = g;
 printf("\n\n%d", scoringFunction(n, SP_FIAR_GAME_PLAYER_2_SYMBOL));
+printf("winner: %c\n", spFiarCheckWinner(g));
 return 0;
-}
+}*/

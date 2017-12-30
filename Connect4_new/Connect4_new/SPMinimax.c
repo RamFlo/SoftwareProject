@@ -93,7 +93,8 @@ void printRootChildrenValues(Node* root) {
 	Node* point = root->children;
 	if (point != NULL) {
 		for (i; i < CHILDREN; i++) {
-			printf("col: %d value: %d\n", i + 1, point->value);
+			if(point->isValidMove)
+				printf("col: %d value: %d\n", i + 1, point->value);
 			point++;
 		}
 	}
