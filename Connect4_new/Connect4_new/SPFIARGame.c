@@ -82,8 +82,10 @@ SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
 	int lastCol = 0, lastRow = 0;
 	if (src == NULL)
 		return SP_ARRAY_LIST_INVALID_ARGUMENT;
-	if (src->history->actualSize == 0)
+	if (src->history->actualSize == 0) {
+		printf("Error: cannot undo previous move!\n");
 		return SP_FIAR_GAME_NO_HISTORY;
+	}
 	lastCol = spArrayListGetLast(src->history);
 	if (src->currentPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
 		printf("Remove disc: remove user's disc at column %d\n", lastCol);
