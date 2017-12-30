@@ -90,9 +90,9 @@ SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
 	}
 	lastCol = spArrayListGetLast(src->history);
 	if (src->currentPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
-		printf("Remove disc: remove user's disc at column %d\n", lastCol);
+		printf("Remove disc: remove user's disc at column %d\n", lastCol+1);
 	else
-		printf("Remove disc: remove computer's disc at column %d\n", lastCol);
+		printf("Remove disc: remove computer's disc at column %d\n", lastCol+1);
 	spFiarGameSwitchPlayer(src);
 	(src->tops)[lastCol]--;
 	spArrayListRemoveLast(src->history);

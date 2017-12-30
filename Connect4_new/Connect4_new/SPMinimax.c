@@ -8,6 +8,7 @@ void createTree(SPFiarGame* currentGame, unsigned int maxDepth,Node* root) {
 	char winner = spFiarCheckWinner(currentGame);
 	if (root == NULL)
 		return;
+	root->isValidMove = true;
 	root->gameStatus = currentGame;
 	if (winner != '\0') {
 		root->isLeaf = true;
@@ -52,14 +53,15 @@ void destroyGamesInTree(Node* root) {
 	Node* point = NULL;
 	if (root == NULL)
 		return;
-	if (!root->isLeaf) {
+	if (!root->isLeaf && root->isValidMove) {
 		point = root->children;
 		for (i; i < CHILDREN; i++) {
 			destroyGamesInTree(point);
 			point++;
 		}
 	}
-	spFiarGameDestroy(root->gameStatus);
+	if (root->isValidMove)
+		spFiarGameDestroy(root->gameStatus);
 }
 
 
@@ -68,14 +70,15 @@ void destroyChildren(Node* root) {
 	Node* point = NULL;
 	if (root == NULL)
 		return;
-	if (!root->isLeaf) {
+	if (!root->isLeaf && root->isValidMove) {
 		point = root->children;
 		for (i; i < CHILDREN; i++) {
 			destroyChildren(point);
 			point++;
 		}
 	}
-	free(root->children);
+	if (root->isValidMove)
+		free(root->children);
 }
 
 void destroyTree(Node* root) {
@@ -83,6 +86,31 @@ void destroyTree(Node* root) {
 	destroyChildren(root);
 	free(root);
 }
+
+
+void printRootChildrenValues(Node* root) {
+	int i = 0;
+	Node* point = root->children;
+	if (point != NULL) {
+		for (i; i < CHILDREN; i++) {
+			printf("col: %d value: %d\n", i + 1, point->value);
+			point++;
+		}
+	}
+}
+
+void printTree(Node* root) {
+	Node* point;
+	if (root!=NULL &&!root->isLeaf && root->isValidMove) {
+		//spFiarGamePrintBoard(root->gameStatus);
+		point = root->children + root->childIndex;
+		printf("chose col: %d\n\n", root->childIndex + 1);
+		printRootChildrenValues(point);
+		printTree(point);
+	}
+		
+}
+
 /**
 * Given a game state, this function evaluates the best move according to
 * the current player. The function initiates a Minimax algorithm up to a
@@ -109,6 +137,8 @@ int spMinimaxSuggestMove(SPFiarGame* currentGame, unsigned int maxDepth) {
 		return -1;
 	}
 	res = calcChildrenMax(root, currentGame->currentPlayer)->childIndex;
+	printRootChildrenValues(root);
+	printTree(root);
 	destroyTree(root);
 	return res;
 }

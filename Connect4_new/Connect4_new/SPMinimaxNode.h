@@ -22,6 +22,7 @@ typedef struct Node_t {
 	nodeType type;
 	int childIndex;
 	int value;
+	bool isValidMove;
 } Node;
 
 Node* createRoot();

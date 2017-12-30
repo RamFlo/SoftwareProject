@@ -18,7 +18,7 @@ void printWinner(SPFiarGame* curGame) {
 void endGame(SPFiarGame * game, bool isMemError) {
 	spFiarGameDestroy(game);
 	if (!isMemError)
-		printf("Exiting…\n");
+		printf("Exiting...\n");
 	exit(0);
 }
 
