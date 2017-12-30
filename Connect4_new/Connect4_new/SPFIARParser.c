@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include "SPMainAux.h"
 
 char *my_strdup(const char *s) {
 	size_t size = strlen(s) + 1;
@@ -11,6 +11,10 @@ char *my_strdup(const char *s) {
 	if (p) {
 		memcpy(p, s, size);
 	}
+	else {
+		printf("Error: malloc has failed\n");
+		parserMemError = true;
+	}	
 	return p;
 }
 

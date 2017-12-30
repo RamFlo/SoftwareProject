@@ -25,7 +25,7 @@ Node* createTree(SPFiarGame* currentGame, unsigned int maxDepth) {
 		return root;
 	}
 	for (i; i < CHILDREN; i++) {
-		if (spFiarGameIsValidMove(currentGame, i)) {
+		if (!delTree &&	spFiarGameIsValidMove(currentGame, i)) {
 			gameCpy = spFiarGameCopy(currentGame);
 			spFiarGameSetMove(gameCpy, i);
 			child = createTree(gameCpy, maxDepth - 1);
@@ -42,14 +42,16 @@ Node* createTree(SPFiarGame* currentGame, unsigned int maxDepth) {
 void destroyTree(Node* root) {
 	int i = 0;
 	Node* point = NULL;
-	if (root != NULL) {
+	if (root == NULL)
+		return;
+	if (!root->isLeaf) {
 		point = root->children;
-		for (i; i <= CHILDREN; i++) {
+		for (i; i < CHILDREN; i++) {
 			destroyTree(point);
 			point++;
 		}
-		destroyNode(root);
 	}
+	destroyNode(root);
 }
 /**
 * Given a game state, this function evaluates the best move according to
@@ -75,7 +77,7 @@ int spMinimaxSuggestMove(SPFiarGame* currentGame, unsigned int maxDepth) {
 		delTree = false;
 		return -1;
 	}
-	res = calcChildrenMax(root)->childIndex;
+	res = calcChildrenMax(root, currentGame->currentPlayer)->childIndex;
 	destroyTree(root);
 	return res;
 }

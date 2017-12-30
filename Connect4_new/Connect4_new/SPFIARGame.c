@@ -14,8 +14,10 @@ SPFiarGame* spFiarGameCreate(int historySize) {
 	SPFiarGame* g;
 	int i = 0;
 	g = (SPFiarGame *)malloc(sizeof(SPFiarGame));
-	if (g == NULL)
+	if (g == NULL) {
+		printf("Error: malloc has failed\n");
 		return NULL;
+	}	
 	for (i = 0; i < SP_FIAR_GAME_N_COLUMNS; i++)
 		g->tops[i] = 0;
 	g->currentPlayer = SP_FIAR_GAME_PLAYER_1_SYMBOL;
@@ -202,6 +204,8 @@ char spFiarCheckWinner(SPFiarGame* src) {
 	char lastMove = 'a';
 	bool rowWinner = true, colWinner = true, diagWinner = true;
 	if (src == NULL)
+		return '\0';
+	if (src->history->actualSize == 0)
 		return '\0';
 	lastCol = spArrayListGetLast(src->history);
 	lastRow = (src->tops)[lastCol];

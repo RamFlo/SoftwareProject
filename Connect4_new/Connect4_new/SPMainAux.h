@@ -5,6 +5,7 @@
 #include "SPFIARGame.h"
 #include <stdio.h>
 #include "SPMinimax.h"
+extern bool parserMemError;
 //put auxiliary functions and constants used by the main function here.
 
 #endif

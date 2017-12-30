@@ -1,5 +1,5 @@
 #include "SPMinimaxNode.h"
-
+#include <stdio.h>
 int getWeight(int index) {
 	int w[] = { -5,-2,-1,0,1,2,5 };
 	return w[index];
@@ -13,13 +13,16 @@ char getOtherPlayer(char player) {
 
 Node* createNode(SPFiarGame* gameStatus) {
 	Node *newNode, *children;
-	bool isLeaf = true;
+	bool isLeaf = false;
 	newNode = (Node*)calloc(1, sizeof(Node));
-	if (newNode == NULL)
+	if (newNode == NULL) {
+		printf("Error: calloc has failed\n");
 		return NULL;
+	}
 	newNode->gameStatus = gameStatus;
 	children = (Node*)calloc(CHILDREN, sizeof(Node));
 	if (children == NULL) {
+		printf("Error: calloc has failed\n");
 		free(newNode);
 		return NULL;
 	}
@@ -30,7 +33,8 @@ Node* createNode(SPFiarGame* gameStatus) {
 
 void destroyNode(Node* node) {
 	if (node != NULL) {
-		free(node->children);
+		if (!node->isLeaf)
+			free(node->children);
 		spFiarGameDestroy(node->gameStatus);
 		free(node);
 	}
@@ -134,10 +138,10 @@ int scoringFunction(Node* node, char player) {
 
 
 
-Node* calcChildrenMax(Node* node) {
+Node* calcChildrenMax(Node* node,char actualPlayer) {
 	int maxIndex = -1, maxValue = INT_MIN, i = 0;
 	char player = node->gameStatus->currentPlayer;
-	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS;
+	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS-1;
 	Node* curNode = NULL;
 	node->childIndex = -1;
 	if (node->type != REGULAR) {
@@ -146,14 +150,14 @@ Node* calcChildrenMax(Node* node) {
 			return node;
 		}
 		else if (node->type == PLAYER_1_WIN) {
-			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+			if (actualPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
 				node->value = INT_MAX;
 			else
 				node->value = INT_MIN;
 			return node;
 		}
 		else {
-			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+			if (actualPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
 				node->value = INT_MIN;
 			else
 				node->value = INT_MAX;
@@ -161,12 +165,12 @@ Node* calcChildrenMax(Node* node) {
 		}
 	}
 	if (node->isLeaf) {
-		node->value = scoringFunction(node, player);
+		node->value = scoringFunction(node, actualPlayer);
 		return node;
 	}
 	for (i = SP_FIAR_GAME_N_COLUMNS - 1; i >= 0; i--) {
 		if (point != NULL) {
-			curNode = calcChildrenMin(point);
+			curNode = calcChildrenMin(point, actualPlayer);
 			if (curNode->value >= maxValue) {
 				maxValue = curNode->value;
 				maxIndex = i;
@@ -180,10 +184,10 @@ Node* calcChildrenMax(Node* node) {
 }
 
 
-Node* calcChildrenMin(Node* node) {
+Node* calcChildrenMin(Node* node,char actualPlayer) {
 	int minIndex = -1, minValue = INT_MAX, i = 0;
 	char player = node->gameStatus->currentPlayer;
-	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS;
+	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS-1;
 	Node* curNode = NULL;
 	node->childIndex = -1;
 	if (node->type != REGULAR) {
@@ -192,27 +196,27 @@ Node* calcChildrenMin(Node* node) {
 			return node;
 		}
 		else if (node->type == PLAYER_1_WIN) {
-			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
-				node->value = INT_MIN;
-			else
+			if (actualPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
 				node->value = INT_MAX;
+			else
+				node->value = INT_MIN;
 			return node;
 		}
 		else {
-			if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
-				node->value = INT_MAX;
-			else
+			if (actualPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
 				node->value = INT_MIN;
+			else
+				node->value = INT_MAX;
 			return node;
 		}
 	}
 	if (node->isLeaf) {
-		node->value = scoringFunction(node, player);
+		node->value = scoringFunction(node, actualPlayer);
 		return node;
 	}
 	for (i = SP_FIAR_GAME_N_COLUMNS - 1; i >= 0; i--) {
 		if (point != NULL) {
-			curNode = calcChildrenMax(point);
+			curNode = calcChildrenMax(point, actualPlayer);
 			if (curNode->value <= minValue) {
 				minValue = curNode->value;
 				minIndex = i;

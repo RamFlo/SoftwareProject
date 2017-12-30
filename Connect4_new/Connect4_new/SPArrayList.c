@@ -4,12 +4,17 @@
 SPArrayList* spArrayListCreate(int maxSize) {
 	int realSize = maxSize * sizeof(int);
 	int* elements = (int *)malloc(realSize);
-	if (!elements || maxSize <= 0)
+	if (maxSize <= 0)
 		return NULL;
+	if (!elements) {
+		printf("Error: malloc has failed\n");
+		return NULL;
+	}
 	SPArrayList* p;
 	p = (SPArrayList *)malloc(sizeof(SPArrayList));
 	if (!p) {
 		free(elements);
+		printf("Error: malloc has failed\n");
 		return NULL;
 	}
 	p->actualSize = 0;
@@ -115,7 +120,7 @@ int spArrayListGetFirst(SPArrayList* src) {
 }
 
 int spArrayListGetLast(SPArrayList* src) {
-	return spArrayListGetAt(src, (src->actualSize) - 1);
+	return spArrayListGetAt(src, (src->actualSize)-1);
 }
 
 int spArrayListMaxCapacity(SPArrayList* src) {
