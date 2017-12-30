@@ -9,10 +9,10 @@
 
 //Put all decleartions and constants here
 typedef enum nodeType_t {
-	TIE,
+	REGULAR,
 	PLAYER_1_WIN,
 	PLAYER_2_WIN,
-	REGULAR,
+	TIE,
 } nodeType;
 
 typedef struct Node_t {

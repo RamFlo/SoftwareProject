@@ -145,7 +145,7 @@ void computerTurn(SPFiarGame* curGame,int maxDepth) {
 	printf("Computer move: add disc to column %d\n", moveSuggestion + 1);
 }
 
-int main() {
+/*int main() {
 	SPFiarGame * curGame = NULL;
 	SPCommand curCommand;
 	int maxDepth = 0;
@@ -202,4 +202,4 @@ int main() {
 		}
 		printf("Game restarted!\n");
 	}
-}
+}*/

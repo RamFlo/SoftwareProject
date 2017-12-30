@@ -114,6 +114,8 @@ int diagDownScoring(Node* node, char player) {
 }
 
 int scoringFunction(Node* node, char player) {
+	int a = colsScoring(node, player), b = rowScoring(node, player), c = diagUpScoring(node, player), d = diagDownScoring(node, player);
+	printf("colScore:%d, rowScore:%d, diagUpScore:%d, diagDownScore:%d\n", a, b, c, d);
 	return colsScoring(node, player) + rowScoring(node, player) + diagUpScoring(node, player) + diagDownScoring(node, player);
 }
 
@@ -132,6 +134,8 @@ Node* calcChildrenMax(Node* node,char actualPlayer) {
 	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS-1;
 	Node* curNode = NULL;
 	node->childIndex = -1;
+
+
 	if (node->type != REGULAR) {
 		if (node->type == TIE) {
 			node->value = 0;
@@ -180,6 +184,8 @@ Node* calcChildrenMin(Node* node,char actualPlayer) {
 	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS-1;
 	Node* curNode = NULL;
 	node->childIndex = -1;
+
+
 	if (node->type != REGULAR) {
 		if (node->type == TIE) {
 			node->value = 0;
@@ -222,23 +228,24 @@ Node* calcChildrenMin(Node* node,char actualPlayer) {
 }
 
 
-/*int main() {
+int main() {
 SPFiarGame* g = spFiarGameCreate(20);
 spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 2);
-spFiarGameSetMove(g, 1);
-spFiarGameSetMove(g, 1);
-
-spFiarGameSetMove(g, 2);
+spFiarGameSetMove(g, 3);
+spFiarGameSetMove(g, 3);
+spFiarGameSetMove(g, 3);
+spFiarGameSetMove(g, 3);
 spFiarGameSetMove(g, 3);
 
-spFiarGameSetMove(g, 3);
+spFiarGameSetMove(g, 5);
+spFiarGameSetMove(g, 5);
+
+
+spFiarGameSetMove(g, 1);
 spFiarGameSetMove(g, 2);
-spFiarGameSetMove(g, 2);
-spFiarGameSetMove(g, 3);
 spFiarGamePrintBoard(g);
 Node* n = createRoot();
 n->gameStatus = g;
-printf("\n\n%d", scoringFunction(n, SP_FIAR_GAME_PLAYER_1_SYMBOL));
+printf("\n\n%d", scoringFunction(n, SP_FIAR_GAME_PLAYER_2_SYMBOL));
 return 0;
-}*/
+}
