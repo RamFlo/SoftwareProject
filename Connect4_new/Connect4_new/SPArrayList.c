@@ -93,7 +93,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveAt(SPArrayList* src, int index) {
 	nextAddress++;
 	curAddress += index;
 	nextAddress += index;
-	for (i = 0; i < numIter; i++) {
+	for (i = 0; i < numIter-1; i++) {
 		*curAddress = *nextAddress;
 		curAddress++;
 		nextAddress++;

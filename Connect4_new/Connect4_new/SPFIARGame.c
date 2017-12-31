@@ -52,7 +52,8 @@ SPFiarGame* spFiarGameCopy(SPFiarGame* src) {
 	for (k = 0; k < SP_FIAR_GAME_N_COLUMNS; k++) {
 		(g->tops)[k] = (src->tops)[k];
 	}
-	free(g->history);
+	//free(g->history);
+	spArrayListDestroy(g->history);
 	g->history = p;
 	return g;
 }
