@@ -66,10 +66,14 @@ int doUserCommand(SPFiarGame* curGame,int maxDepth) {
 			return doUserCommand(curGame, maxDepth);
 		}
 		curGameMsg = spFiarGameSetMove(curGame, curCommand.arg - 1);
-		if (curGameMsg==SP_FIAR_GAME_INVALID_ARGUMENT)
+		if (curGameMsg==SP_FIAR_GAME_INVALID_ARGUMENT) {
 			printf("Error: column number must be in range 1-7\n");
-		if (curGameMsg == SP_FIAR_GAME_INVALID_MOVE)
+			return doUserCommand(curGame, maxDepth);
+		}
+		if (curGameMsg == SP_FIAR_GAME_INVALID_MOVE) {
 			printf("Error: column %d is full\n", curCommand.arg);
+			return doUserCommand(curGame, maxDepth);
+		}	
 		if (curGameMsg == SP_FIAR_GAME_SUCCESS)
 			return 0;
 	}

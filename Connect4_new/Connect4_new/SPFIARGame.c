@@ -13,12 +13,17 @@ void spFiarGameSwitchPlayer(SPFiarGame* src) {
 
 SPFiarGame* spFiarGameCreate(int historySize) {
 	SPFiarGame* g;
-	int i = 0;
+	int i = 0,j=0;
 	g = (SPFiarGame *)malloc(sizeof(SPFiarGame));
 	if (g == NULL) {
 		printf("Error: malloc has failed\n");
 		return NULL;
 	}	
+	for (i = 0; i < SP_FIAR_GAME_N_ROWS; i++) {
+		for (j = 0; j < SP_FIAR_GAME_N_COLUMNS; j++) {
+			(g->gameBoard)[i][j] = '\0';
+		}
+	}
 	for (i = 0; i < SP_FIAR_GAME_N_COLUMNS; i++)
 		g->tops[i] = 0;
 	g->currentPlayer = SP_FIAR_GAME_PLAYER_1_SYMBOL;
