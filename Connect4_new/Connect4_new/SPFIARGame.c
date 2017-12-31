@@ -1,5 +1,6 @@
 #include "SPFIARGame.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 void spFiarGameSwitchPlayer(SPFiarGame* src) {
 	if (src != NULL) {
@@ -46,6 +47,7 @@ SPFiarGame* spFiarGameCopy(SPFiarGame* src) {
 	for (k = 0; k < SP_FIAR_GAME_N_COLUMNS; k++) {
 		(g->tops)[k] = (src->tops)[k];
 	}
+	free(g->history);
 	g->history = p;
 	return g;
 }
@@ -81,7 +83,7 @@ bool spFiarGameIsValidMove(SPFiarGame* src, int col) {
 }
 
 SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
-	int lastCol = 0, lastRow = 0;
+	int lastCol = 0;
 	if (src == NULL)
 		return SP_ARRAY_LIST_INVALID_ARGUMENT;
 	if (src->history->actualSize == 0) {
@@ -89,11 +91,11 @@ SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
 		return SP_FIAR_GAME_NO_HISTORY;
 	}
 	lastCol = spArrayListGetLast(src->history);
-	if (src->currentPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
-		printf("Remove disc: remove user's disc at column %d\n", lastCol+1);
-	else
-		printf("Remove disc: remove computer's disc at column %d\n", lastCol+1);
 	spFiarGameSwitchPlayer(src);
+	if (src->currentPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
+		printf("Remove disc: remove user's disc at column %d\n", lastCol + 1);
+	else
+		printf("Remove disc: remove computer's disc at column %d\n", lastCol + 1);
 	(src->tops)[lastCol]--;
 	spArrayListRemoveLast(src->history);
 	return SP_FIAR_GAME_SUCCESS;
@@ -129,7 +131,7 @@ char spFiarGameGetCurrentPlayer(SPFiarGame* src) {
 }
 
 bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
-	int i = 0, curChecked = lastRow - 1, curRow = lastRow;
+	int curRow = lastRow;
 	if (lastRow < SP_FIAR_GAME_SPAN - 1)
 		return false;
 	while (curRow > lastRow - SP_FIAR_GAME_SPAN && curRow >= 0) {

@@ -6,6 +6,11 @@
 #include <stdio.h>
 #include "SPMinimax.h"
 extern bool parserMemError;
-//put auxiliary functions and constants used by the main function here.
-
+void printWinner(SPFiarGame* curGame);
+void endGame(SPFiarGame * game, bool isMemError);
+char *my_strdup_main(const char *s);
+int doUserCommand(SPFiarGame* curGame, int maxDepth);
+SPCommand readCommand(SPFiarGame *curGame);
+int getMaxDepth();
+void computerTurn(SPFiarGame* curGame, int maxDepth);
 #endif

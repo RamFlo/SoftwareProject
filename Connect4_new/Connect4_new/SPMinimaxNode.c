@@ -12,7 +12,7 @@ char getOtherPlayer(char player) {
 }
 
 Node* createRoot() {
-	Node *newNode, *children;
+	Node *newNode;
 	bool isLeaf = false;
 	newNode = (Node*)calloc(1, sizeof(Node));
 	if (newNode == NULL) {
@@ -34,7 +34,7 @@ int discValue(Node* node, int colNum, int rowNum, char player) {
 }
 
 int col4score(Node* node, int col, int row, char player) {
-	int curRow = row, sum = 0, index = 0, i = 0;
+	int curRow = row, sum = 0, i = 0;
 	for (i = 0; i < SP_FIAR_GAME_SPAN; i++) {
 		if (node->gameStatus->gameBoard[curRow][col] == player && node->gameStatus->tops[col] > curRow)
 			sum++;
@@ -47,9 +47,8 @@ int col4score(Node* node, int col, int row, char player) {
 
 int colsScoring(Node* node, char player) {
 	int weight = 0, lastRow = SP_FIAR_GAME_N_ROWS - SP_FIAR_GAME_SPAN + 1, curRow = 0, curCol = 0, lastCol = SP_FIAR_GAME_N_COLUMNS;
-	for (curCol; curCol < lastCol; curCol++) {
-		curRow = 0;
-		for (curRow; curRow < lastRow; curRow++) {
+	for (curCol=0; curCol < lastCol; curCol++) {
+		for (curRow=0; curRow < lastRow; curRow++) {
 			weight += col4score(node, curCol, curRow, player);
 		}
 	}
@@ -114,15 +113,13 @@ int diagDownScoring(Node* node, char player) {
 }
 
 int scoringFunction(Node* node, char player) {
-	//int a = colsScoring(node, player), b = rowScoring(node, player), c = diagUpScoring(node, player), d = diagDownScoring(node, player);
-	//printf("colScore:%d, rowScore:%d, diagUpScore:%d, diagDownScore:%d\n", a, b, c, d);
 	return colsScoring(node, player) + rowScoring(node, player) + diagUpScoring(node, player) + diagDownScoring(node, player);
 }
 
 void printChildrenValues(Node* root) {
 	int i = 0;
 	Node* point = root->children;
-	for (i; i < CHILDREN; i++) {
+	for (i=0; i < CHILDREN; i++) {
 		printf("	col: %d value: %d\n", i + 1, point->value);
 		point++;
 	}
@@ -130,12 +127,9 @@ void printChildrenValues(Node* root) {
 
 Node* calcChildrenMax(Node* node,char actualPlayer) {
 	int maxIndex = -1, maxValue = INT_MIN, i = 0;
-	//char player = node->gameStatus->currentPlayer;
 	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS-1;
 	Node* curNode = NULL;
 	node->childIndex = -1;
-
-
 	if (node->type != REGULAR) {
 		if (node->type == TIE) {
 			node->value = 0;
@@ -182,12 +176,9 @@ Node* calcChildrenMax(Node* node,char actualPlayer) {
 
 Node* calcChildrenMin(Node* node,char actualPlayer) {
 	int minIndex = -1, minValue = INT_MAX, i = 0;
-	//char player = node->gameStatus->currentPlayer;
 	Node* point = node->children + SP_FIAR_GAME_N_COLUMNS-1;
 	Node* curNode = NULL;
 	node->childIndex = -1;
-
-
 	if (node->type != REGULAR) {
 		if (node->type == TIE) {
 			node->value = 0;

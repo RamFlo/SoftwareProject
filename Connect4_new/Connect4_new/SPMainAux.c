@@ -38,10 +38,7 @@ int doUserCommand(SPFiarGame* curGame,int maxDepth) {
 	SPCommand curCommand;
 	SP_FIAR_GAME_MESSAGE curGameMsg;
 	char command[SP_MAX_LINE_LENGTH];
-	char *p = command;
-	const char *cp;
 	fgets(command, SP_MAX_LINE_LENGTH, stdin);
-	cp = p;
 	curCommand = spParserPraseLine(command);
 	if (parserMemError)
 		endGame(curGame, true);
@@ -86,20 +83,19 @@ int doUserCommand(SPFiarGame* curGame,int maxDepth) {
 }
 
 
-SPCommand readCommand() {
+SPCommand readCommand(SPFiarGame *curGame) {
 	SPCommand cmd;
 	char command[SP_MAX_LINE_LENGTH];
-	char *p = command;
-	const char *cp;
 	fgets(command, SP_MAX_LINE_LENGTH, stdin);
-	cp = p;
 	cmd = spParserPraseLine(command);
+	if (parserMemError)
+		endGame(curGame, true);
 	return cmd;
 }
 
 
 int getMaxDepth() {
-	int maxDepth = 0, curNum = 0;
+	int curNum = 0;
 	char usr_in[SP_MAX_LINE_LENGTH];
 	const char delimiter[5] = " \t\r\n";
 	const char * const_pointer = usr_in;
@@ -143,63 +139,4 @@ void computerTurn(SPFiarGame* curGame,int maxDepth) {
 		endGame(curGame,true);
 	spFiarGameSetMove(curGame, moveSuggestion);
 	printf("Computer move: add disc to column %d\n", moveSuggestion + 1);
-}
-
-int main() {
-	SPFiarGame * curGame = NULL;
-	SPCommand curCommand;
-	int maxDepth = 0;
-	while (true) {
-		curGame = spFiarGameCreate(HISTORY_SIZE);
-		if (curGame == NULL)
-			endGame(curGame,true);
-		maxDepth = getMaxDepth();
-		if (maxDepth == -1)
-			endGame(curGame,false);
-		else if (maxDepth == -2)
-			endGame(curGame, true);
-		while (true) {
-			if (spFiarCheckWinner(curGame) != NULL) {
-				spFiarGamePrintBoard(curGame);
-				printWinner(curGame);
-				curCommand = readCommand();
-				if (parserMemError)
-					endGame(curGame, true);
-				while (curCommand.cmd != SP_RESTART && curCommand.cmd != SP_QUIT && curCommand.cmd != SP_UNDO_MOVE) {
-					if (curCommand.cmd == SP_INVALID_LINE)
-						printf("Error: invalid command\n");
-					else
-						printf("Error: the game is over\n");
-					curCommand = readCommand();
-					if (parserMemError)
-						endGame(curGame, true);
-				}
-				if (curCommand.cmd == SP_QUIT)
-					endGame(curGame,false);
-				else if (curCommand.cmd == SP_RESTART) {
-					spFiarGameDestroy(curGame);
-					break;
-				}
-				else {
-					spFiarGameUndoPrevMove(curGame);
-					if (spFiarCheckWinner(curGame) != SP_FIAR_GAME_PLAYER_1_SYMBOL)
-						spFiarGameUndoPrevMove(curGame);
-					continue;
-				}
-			}
-			if (spFiarGameGetCurrentPlayer(curGame) == SP_FIAR_GAME_PLAYER_2_SYMBOL) {
-				computerTurn(curGame, maxDepth);
-				continue;
-			}
-			else {
-				spFiarGamePrintBoard(curGame);
-				printf("Please make the next move:\n");
-				if (doUserCommand(curGame, maxDepth) == -1)
-					break;
-				else
-					continue;
-			}
-		}
-		printf("Game restarted!\n");
-	}
 }

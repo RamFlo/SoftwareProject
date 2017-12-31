@@ -49,6 +49,8 @@ SPCommand spParserPraseLine(const char* str) {
 	char *token;
 	char* strCopy = my_strdup(str);
 	token = strtok(strCopy, delimiter);
+	if (token == NULL)
+		return result;
 	if (strcmp(token, "suggest_move") == 0)
 		result.cmd = SP_SUGGEST_MOVE;
 	else if (strcmp(token, "undo_move") == 0)

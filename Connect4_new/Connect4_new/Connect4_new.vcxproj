@@ -122,6 +122,7 @@
     <ClInclude Include="unit_test_util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.c" />
     <ClCompile Include="SPArrayList.c" />
     <ClCompile Include="SPArrayListUnitTest.c" />
     <ClCompile Include="SPFIARGame.c" />

@@ -1,4 +1,5 @@
 #include "SPMinimax.h"
+#include <stdio.h>
 
 bool delTree = false;
 void createTree(SPFiarGame* currentGame, unsigned int maxDepth,Node* root) {
@@ -32,7 +33,7 @@ void createTree(SPFiarGame* currentGame, unsigned int maxDepth,Node* root) {
 		return;
 	}
 	point = root->children;
-	for (i; i < CHILDREN; i++) {
+	for (i=0; i < CHILDREN; i++) {
 		if (!delTree &&	spFiarGameIsValidMove(currentGame, i)) {
 			gameCpy = spFiarGameCopy(currentGame);
 			if (gameCpy == NULL) {
@@ -55,7 +56,9 @@ void destroyGamesInTree(Node* root) {
 		return;
 	if (!root->isLeaf && root->isValidMove) {
 		point = root->children;
-		for (i; i < CHILDREN; i++) {
+		if (point == NULL)
+			return;
+		for (i=0; i < CHILDREN; i++) {
 			destroyGamesInTree(point);
 			point++;
 		}
@@ -72,7 +75,9 @@ void destroyChildren(Node* root) {
 		return;
 	if (!root->isLeaf && root->isValidMove) {
 		point = root->children;
-		for (i; i < CHILDREN; i++) {
+		if (point == NULL)
+			return;
+		for (i=0; i < CHILDREN; i++) {
 			destroyChildren(point);
 			point++;
 		}
@@ -88,11 +93,11 @@ void destroyTree(Node* root) {
 }
 
 
-void printRootChildrenValues(Node* root) {
+/*void printRootChildrenValues(Node* root) {
 	int i = 0;
 	Node* point = root->children;
 	if (point != NULL) {
-		for (i; i < CHILDREN; i++) {
+		for (i=0; i < CHILDREN; i++) {
 			if(point->isValidMove)
 				printf("col: %d value: %d\n", i + 1, point->value);
 			point++;
@@ -110,7 +115,7 @@ void printTree(Node* root) {
 		printTree(point);
 	}
 		
-}
+}*/
 
 /**
 * Given a game state, this function evaluates the best move according to
@@ -138,8 +143,8 @@ int spMinimaxSuggestMove(SPFiarGame* currentGame, unsigned int maxDepth) {
 		return -1;
 	}
 	res = calcChildrenMax(root, currentGame->currentPlayer)->childIndex;
-	printRootChildrenValues(root);
-	printTree(root);
+	//printRootChildrenValues(root);
+	//printTree(root);
 	destroyTree(root);
 	return res;
 }

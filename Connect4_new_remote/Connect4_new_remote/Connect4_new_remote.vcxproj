@@ -56,19 +56,57 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <ConfigurationType>Makefile</ConfigurationType>
+    <RemoteRootDir>~</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <ConfigurationType>Makefile</ConfigurationType>
+    <RemoteRootDir>~</RemoteRootDir>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <RemoteProjectDir>$(RemoteRootDir)</RemoteProjectDir>
+    <RemoteBuildCommandLine>make</RemoteBuildCommandLine>
+    <RemoteReBuildCommandLine>make clean all</RemoteReBuildCommandLine>
+    <RemoteCleanCommandLine>make clean</RemoteCleanCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <RemoteProjectDir>$(RemoteRootDir)</RemoteProjectDir>
+    <RemoteBuildCommandLine>make</RemoteBuildCommandLine>
+    <RemoteReBuildCommandLine>make clean all</RemoteReBuildCommandLine>
+    <RemoteCleanCommandLine>make clean</RemoteCleanCommandLine>
+  </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Connect4_new\Connect4_new\SPArrayList.c" />
+    <ClCompile Include="..\..\Connect4_new\Connect4_new\SPFIARGame.c" />
+    <ClCompile Include="..\..\Connect4_new\Connect4_new\SPFIARParser.c" />
+    <ClCompile Include="..\..\Connect4_new\Connect4_new\SPMainAux.c" />
+    <ClCompile Include="..\..\Connect4_new\Connect4_new\SPMinimax.c" />
+    <ClCompile Include="..\..\Connect4_new\Connect4_new\SPMinimaxNode.c" />
+    <ClCompile Include="makefile" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemGroup>
+    <ClInclude Include="..\..\Connect4_new\Connect4_new\SPArrayList.h" />
+    <ClInclude Include="..\..\Connect4_new\Connect4_new\SPFIARGame.h" />
+    <ClInclude Include="..\..\Connect4_new\Connect4_new\SPFIARParser.h" />
+    <ClInclude Include="..\..\Connect4_new\Connect4_new\SPMainAux.h" />
+    <ClInclude Include="..\..\Connect4_new\Connect4_new\SPMinimax.h" />
+    <ClInclude Include="..\..\Connect4_new\Connect4_new\SPMinimaxNode.h" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <RemotePostBuildEvent>
+      <Command>SPFIAR</Command>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <RemotePostBuildEvent>
+      <Command>SPFIAR</Command>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
