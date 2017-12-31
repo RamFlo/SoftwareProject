@@ -49,8 +49,10 @@ SPCommand spParserPraseLine(const char* str) {
 	char *token;
 	char* strCopy = my_strdup(str);
 	token = strtok(strCopy, delimiter);
-	if (token == NULL)
+	if (token == NULL) {
+		free(strCopy);
 		return result;
+	}
 	if (strcmp(token, "suggest_move") == 0)
 		result.cmd = SP_SUGGEST_MOVE;
 	else if (strcmp(token, "undo_move") == 0)
@@ -62,6 +64,10 @@ SPCommand spParserPraseLine(const char* str) {
 	else if (strcmp(token, "add_disc") == 0) {
 		result.cmd = SP_ADD_DISC;
 		token = strtok(NULL, delimiter);
+		if (token == NULL) {
+			free(strCopy);
+			return result;
+		}
 		if (spParserIsInt(token)) {
 			result.arg = atoi(token);
 			result.validArg = true;

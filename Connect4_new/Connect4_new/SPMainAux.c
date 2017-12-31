@@ -61,8 +61,10 @@ int doUserCommand(SPFiarGame* curGame,int maxDepth) {
 		}	
 	}
 	else if (curCommand.cmd == SP_ADD_DISC) {
-		if (!curCommand.validArg)
+		if (!curCommand.validArg) {
 			printf("Error: column number must be in range 1-7\n");
+			return doUserCommand(curGame, maxDepth);
+		}
 		curGameMsg = spFiarGameSetMove(curGame, curCommand.arg - 1);
 		if (curGameMsg==SP_FIAR_GAME_INVALID_ARGUMENT)
 			printf("Error: column number must be in range 1-7\n");
@@ -70,7 +72,6 @@ int doUserCommand(SPFiarGame* curGame,int maxDepth) {
 			printf("Error: column %d is full\n", curCommand.arg);
 		if (curGameMsg == SP_FIAR_GAME_SUCCESS)
 			return 0;
-		return doUserCommand(curGame,maxDepth);
 	}
 	else {
 		suggestedMove = spMinimaxSuggestMove(curGame, maxDepth);
