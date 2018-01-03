@@ -1,15 +1,18 @@
 #include "SPMinimaxNode.h"
 #include <stdio.h>
+
 int getWeight(int index) {
 	int w[] = { -5,-2,-1,0,1,2,5 };
 	return w[index];
 }
+
 
 char getOtherPlayer(char player) {
 	if (player == SP_FIAR_GAME_PLAYER_1_SYMBOL)
 		return SP_FIAR_GAME_PLAYER_2_SYMBOL;
 	return SP_FIAR_GAME_PLAYER_1_SYMBOL;
 }
+
 
 Node* createRoot() {
 	Node *newNode;
@@ -32,6 +35,7 @@ int discValue(Node* node, int colNum, int rowNum, char player) {
 	}
 	return 0;
 }
+
 
 int col4score(Node* node, int col, int row, char player) {
 	int curRow = row, sum = 0, i = 0;
@@ -83,6 +87,7 @@ int diagUpSpanValue(Node* node, int colNum, int rowNum, char player) {
 	return sum;
 }
 
+
 int diagUpScoring(Node* node, char player) {
 	int diagsInCol = SP_FIAR_GAME_N_ROWS / SP_FIAR_GAME_SPAN + SP_FIAR_GAME_N_ROWS % SP_FIAR_GAME_SPAN;
 	int diagsInRow = SP_FIAR_GAME_N_COLUMNS / SP_FIAR_GAME_SPAN + SP_FIAR_GAME_N_COLUMNS % SP_FIAR_GAME_SPAN;
@@ -101,6 +106,7 @@ int diagDownSpanValue(Node* node, int colNum, int rowNum, char player) {
 	return sum;
 }
 
+
 int diagDownScoring(Node* node, char player) {
 	int diagsInCol = SP_FIAR_GAME_N_ROWS / SP_FIAR_GAME_SPAN + SP_FIAR_GAME_N_ROWS % SP_FIAR_GAME_SPAN;
 	int diagsInRow = SP_FIAR_GAME_N_COLUMNS / SP_FIAR_GAME_SPAN + SP_FIAR_GAME_N_COLUMNS % SP_FIAR_GAME_SPAN;
@@ -112,18 +118,11 @@ int diagDownScoring(Node* node, char player) {
 	return weight;
 }
 
+
 int scoringFunction(Node* node, char player) {
 	return colsScoring(node, player) + rowScoring(node, player) + diagUpScoring(node, player) + diagDownScoring(node, player);
 }
 
-void printChildrenValues(Node* root) {
-	int i = 0;
-	Node* point = root->children;
-	for (i=0; i < CHILDREN; i++) {
-		printf("	col: %d value: %d\n", i + 1, point->value);
-		point++;
-	}
-}
 
 Node* calcChildrenMax(Node* node,char actualPlayer) {
 	int maxIndex = -1, maxValue = INT_MIN, i = 0;
@@ -222,23 +221,3 @@ Node* calcChildrenMin(Node* node,char actualPlayer) {
 	return node;
 }
 
-
-/*int main() {
-SPFiarGame* g = spFiarGameCreate(20);
-spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 1);
-spFiarGameSetMove(g, 2);
-spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 3);
-spFiarGameSetMove(g, 5);
-spFiarGameSetMove(g, 2);
-spFiarGamePrintBoard(g);
-Node* n = createRoot();
-n->gameStatus = g;
-printf("\n\n%d", scoringFunction(n, SP_FIAR_GAME_PLAYER_2_SYMBOL));
-printf("winner: %c\n", spFiarCheckWinner(g));
-return 0;
-}*/

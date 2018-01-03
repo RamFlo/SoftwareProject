@@ -2,6 +2,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/**
+* Given a game state, this function evaluates the best move according to
+* the current player. The function initiates a Minimax algorithm up to a
+* specified length given by maxDepth. The current game state doesn't change
+* by this function including the history of previous moves.
+*
+* @param currentGame - The current game state
+* @param maxDepth - The maximum depth of the miniMax algorithm
+* @return
+* -1 if either currentGame is NULL or maxDepth <= 0.
+* On success the function returns a number between [0,SP_FIAR_GAME_N_COLUMNS -1]
+* which is the best move for the current player.
+*/
+
+/*
+* Given an SPFiarGame object, this function switches the object's current player to the other player.
+* @param src - A SPFiarGame object.
+*/
 void spFiarGameSwitchPlayer(SPFiarGame* src) {
 	if (src != NULL) {
 		if (src->currentPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
@@ -136,6 +154,18 @@ char spFiarGameGetCurrentPlayer(SPFiarGame* src) {
 	return src->currentPlayer;
 }
 
+/*
+* Given the previous player, the col and row of it's move and the current game status
+* this function determines whether the last move created a "Column win situation".
+* Namely, whether the last added disc completed a 4 in a column sequence.
+* @param src - the current game status
+* @param lastCol - the index of the last move's column, 0 based
+* @param lastRow - the index of the last move's row, 0 based
+* @param lastMove - the symbol of the player who played the last move
+* @return
+* a boolean representing whether there was a "Column Win" or not.
+* Namely, True if the last move created 4 in a column, False otherwise.
+*/
 bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
 	int curRow = lastRow;
 	if (lastRow < SP_FIAR_GAME_SPAN - 1)
@@ -147,7 +177,18 @@ bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
 	}
 	return true;
 }
-
+/*
+* Given the previous player, the col and row of it's move and the current game status
+* this function determines whether the last move created a "Row win situation".
+* Namely, whether the last added disc completed a 4 in a row sequence.
+* @param src - the current game status
+* @param lastCol - the index of the last move's column, 0 based
+* @param lastRow - the index of the last move's row, 0 based
+* @param lastMove - the symbol of the player who played the last move
+* @return
+* a boolean representing whether there was a "Row Win" or not.
+* Namely, True if the last move created 4 in a row, False otherwise.
+*/
 bool checkRowWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
 	int i = 0, counter = 1;
 	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
@@ -164,7 +205,19 @@ bool checkRowWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
 	}
 	return counter >= SP_FIAR_GAME_SPAN;
 }
-
+/*
+* Given the previous player, the col and row of it's move and the current game status
+* this function determines whether the last move created a "Upword sloping diagonal win situation".
+* Namely, whether the last added disc completed a 4 in a diagonal sequence, in which the diagonal is upword sloping.
+* An example for an upword sloping diagonal - /.
+* @param src - the current game status
+* @param lastCol - the index of the last move's column, 0 based
+* @param lastRow - the index of the last move's row, 0 based
+* @param lastMove - the symbol of the player who played the last move
+* @return
+* a boolean representing whether there was a "Upword sloping diagonal win" or not.
+* Namely, True if the last move created 4 in a Upword sloping diagonal, False otherwise.
+*/
 bool checkDiagUpWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
 	int i = 0, lastRowCopy = lastRow, counter = 1;
 	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
@@ -183,6 +236,19 @@ bool checkDiagUpWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove)
 	return counter >= SP_FIAR_GAME_SPAN;
 }
 
+/*
+* Given the previous player, the col and row of it's move and the current game status
+* this function determines whether the last move created a "Downward sloping diagonal win situation".
+* Namely, whether the last added disc completed a 4 in a diagonal sequence, in which the diagonal is downward sloping.
+* An example for an downward sloping diagonal - \.
+* @param src - the current game status
+* @param lastCol - the index of the last move's column, 0 based
+* @param lastRow - the index of the last move's row, 0 based
+* @param lastMove - the symbol of the player who played the last move
+* @return
+* a boolean representing whether there was a "Downward sloping diagonal win" or not.
+* Namely, True if the last move created 4 in a Downward sloping diagonal, False otherwise.
+*/
 bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
 	int i = 0, lastRowCopy = lastRow, counter = 1;
 	for (i = lastCol - 1; i >= 0; i--) {
@@ -200,7 +266,13 @@ bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMov
 	}
 	return counter >= SP_FIAR_GAME_SPAN;
 }
-
+/*
+* Given a game status, this function checks whether the game board is full or not.
+*@param src - current game status.
+*@return
+*True if the game board is full (no more moves can be made and all columns are full).
+*False otherwise.
+*/
 bool isGameBoardFull(SPFiarGame* src) {
 	int colNum = SP_FIAR_GAME_N_COLUMNS, rowNum = SP_FIAR_GAME_N_ROWS, i = 0;
 	for (i = 0; i < colNum; i++) {
