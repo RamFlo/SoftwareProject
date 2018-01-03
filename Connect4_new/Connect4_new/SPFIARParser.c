@@ -5,6 +5,17 @@
 #include <stdlib.h>
 #include "SPMainAux.h"
 
+/*
+* Given a const char sequence's address, this function allocates a non-const char space of the same
+* size and copies the given const char sequence into the non-const char space.
+* In case of memory allocation error, parserMemError is set to true.
+*
+* @param s - The address of a const char sequence to copy
+* @return
+* NULL if a memory allocation error occurred
+* On success, the function returns a pointer to the non-const char sequence which is
+* a copy of the char sequence residing at address s.
+*/
 char *my_strdup(const char *s) {
 	size_t size = strlen(s) + 1;
 	char *p = malloc(size);
@@ -39,8 +50,6 @@ bool spParserIsInt(const char* str) {
 	return true;
 }
 
-
-//subject to change: validarg and cmd in case of invalid add_disc 
 SPCommand spParserPraseLine(const char* str) {
 	SPCommand result;
 	result.validArg = false;

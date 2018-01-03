@@ -3,7 +3,6 @@
 
 #include "SPFIARGame.h"
 #include "SPMinimaxNode.h"
-//extern bool delTree = false;
 
 /**
 * Given a game state, this function evaluates the best move according to

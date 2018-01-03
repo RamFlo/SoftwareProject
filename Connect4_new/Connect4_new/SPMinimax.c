@@ -2,6 +2,23 @@
 #include <stdio.h>
 
 bool delTree = false;
+
+/**
+* Given a game state,maxDepth and root's address, this function creates a tree structure 
+* using the root's address as the tree's root. The tree's depth is set to maxDepth.
+* Each node contains it's own copy of the base game, with the corresponding move to the
+* node's child index. If the node doesn't contain a valid move, it's created anyway with
+* isValidMove=false.
+* While creating the tree, each node is marked with type:PLAYER_1_WIN, PLAYER_2_WIN, TIE or 
+* REGULAR. if the node's type isn't REGULAR, or if maxDepth was reached, the node is marked as
+* lead (isLeaf=true).
+* In case of a memory error, the boolean delTree is set to true, so that we can destroy the tree in 
+* another function.
+
+* @param currentGame - The current game state
+* @param maxDepth - The maximum depth of the miniMax algorithm
+* @param root - The address of the tree's root (created elsewhere)
+*/
 void createTree(SPFiarGame* currentGame, unsigned int maxDepth,Node* root) {
 	SPFiarGame* gameCpy = NULL;
 	Node* point;
@@ -48,7 +65,13 @@ void createTree(SPFiarGame* currentGame, unsigned int maxDepth,Node* root) {
 	return;
 }
 
+/*
+* Given an address of a tree's root, this function scans the entire tree 
+* and destroys the game state residing in each node: first, it does so for the node's
+* children, and then for the node itself.
 
+* @param root - Address of tree in which the game states should be destroyed
+*/
 void destroyGamesInTree(Node* root) {
 	int i = 0;
 	Node* point = NULL;
@@ -67,7 +90,13 @@ void destroyGamesInTree(Node* root) {
 		spFiarGameDestroy(root->gameStatus);
 }
 
+/*
+* Given an address of a tree's root, this function scans the entire tree
+* and destroys the child array of each node: first, it does so for the node's
+* children, and then for the node itself. (The root is destroyed seperately).
 
+* @param root - Address of tree in which the child arrays should be destroyed
+*/
 void destroyChildren(Node* root) {
 	int i = 0;
 	Node* point = NULL;
@@ -86,50 +115,19 @@ void destroyChildren(Node* root) {
 		free(root->children);
 }
 
+
+/*
+* Given an address of a tree's root, this function calls destroyGamesInTree and 
+* destroyChildren to destroy the entire tree. Finally, it destroys the root.
+
+* @param root - Address of a tree to be destroyed.
+*/
 void destroyTree(Node* root) {
 	destroyGamesInTree(root);
 	destroyChildren(root);
 	free(root);
 }
 
-
-/*void printRootChildrenValues(Node* root) {
-	int i = 0;
-	Node* point = root->children;
-	if (point != NULL) {
-		for (i=0; i < CHILDREN; i++) {
-			if(point->isValidMove)
-				printf("col: %d value: %d\n", i + 1, point->value);
-			point++;
-		}
-	}
-}
-
-void printTree(Node* root) {
-	Node* point;
-	if (root!=NULL &&!root->isLeaf && root->isValidMove) {
-		//spFiarGamePrintBoard(root->gameStatus);
-		point = root->children + root->childIndex;
-		printf("chose col: %d\n\n", root->childIndex + 1);
-		printRootChildrenValues(point);
-		printTree(point);
-	}
-		
-}*/
-
-/**
-* Given a game state, this function evaluates the best move according to
-* the current player. The function initiates a Minimax algorithm up to a
-* specified length given by maxDepth. The current game state doesn't change
-* by this function including the history of previous moves.
-*
-* @param currentGame - The current game state
-* @param maxDepth - The maximum depth of the miniMax algorithm
-* @return
-* -1 if either currentGame is NULL or maxDepth <= 0.
-* On success the function returns a number between [0,SP_FIAR_GAME_N_COLUMNS -1]
-* which is the best move for the current player.
-*/
 int spMinimaxSuggestMove(SPFiarGame* currentGame, unsigned int maxDepth) {
 	Node* root;
 	int res;
@@ -143,8 +141,6 @@ int spMinimaxSuggestMove(SPFiarGame* currentGame, unsigned int maxDepth) {
 		return -1;
 	}
 	res = calcChildrenMax(root, currentGame->currentPlayer)->childIndex;
-	//printRootChildrenValues(root);
-	//printTree(root);
 	destroyTree(root);
 	return res;
 }

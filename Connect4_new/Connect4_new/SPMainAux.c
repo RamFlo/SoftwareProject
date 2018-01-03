@@ -4,7 +4,6 @@
 #include <ctype.h>
 bool parserMemError = false;
 
-
 void printWinner(SPFiarGame* curGame) {
 	if (spFiarCheckWinner(curGame) == SP_FIAR_GAME_PLAYER_1_SYMBOL)
 		printf("Game over: you win\nPlease enter 'quit' to exit or 'restart' to start a new game!\n");
@@ -13,7 +12,6 @@ void printWinner(SPFiarGame* curGame) {
 	if (spFiarCheckWinner(curGame) == SP_FIAR_GAME_TIE_SYMBOL)
 		printf("Game over: it’s a tie\nPlease enter 'quit' to exit or 'restart' to start a new game!\n");
 }
-
 
 void endGame(SPFiarGame * game, bool isMemError) {
 	spFiarGameDestroy(game);
@@ -87,7 +85,6 @@ int doUserCommand(SPFiarGame* curGame,int maxDepth) {
 	return 0;
 }
 
-
 SPCommand readCommand(SPFiarGame *curGame) {
 	SPCommand cmd;
 	char command[SP_MAX_LINE_LENGTH];
@@ -97,7 +94,6 @@ SPCommand readCommand(SPFiarGame *curGame) {
 		endGame(curGame, true);
 	return cmd;
 }
-
 
 int getMaxDepth() {
 	int curNum = 0;
@@ -136,7 +132,6 @@ int getMaxDepth() {
 	free(strCopy);
 	return curNum;
 }
-
 
 void computerTurn(SPFiarGame* curGame,int maxDepth) {
 	int moveSuggestion = spMinimaxSuggestMove(curGame, maxDepth);
