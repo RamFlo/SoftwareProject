@@ -10,7 +10,7 @@ void printWinner(SPFiarGame* curGame) {
 	if (spFiarCheckWinner(curGame) == SP_FIAR_GAME_PLAYER_2_SYMBOL)
 		printf("Game over: computer wins\nPlease enter 'quit' to exit or 'restart' to start a new game!\n");
 	if (spFiarCheckWinner(curGame) == SP_FIAR_GAME_TIE_SYMBOL)
-		printf("Game over: it’s a tie\nPlease enter 'quit' to exit or 'restart' to start a new game!\n");
+		printf("Game over: it's a tie\nPlease enter 'quit' to exit or 'restart' to start a new game!\n");
 }
 
 void endGame(SPFiarGame * game, bool isMemError) {
