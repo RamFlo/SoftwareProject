@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 //specify the maximum line length
-#define SP_MAX_LINE_LENGTH 1024
+#define SP_MAX_LINE_LENGTH 2048
 
 //a type used to represent a command
 typedef enum {
@@ -21,17 +21,17 @@ typedef enum {
 	UNDO,
 	RESET,
 	INVALID_LINE,
-} SP_COMMAND;
+} CHESS_COMMAND;
 
 //a new type that is used to encapsulate a parsed line
 typedef struct command_t {
-	SP_COMMAND cmd;
+	CHESS_COMMAND cmd;
 	bool validArg; //is set to true if the line contains a valid argument
 	int arg;
 	char* path;
 	char r1, c1, r2, c2;
 	int type;
-} SPCommand;
+} ChessCommand;
 
 /**
 * Checks if a specified string represents a valid integer. It is recommended
