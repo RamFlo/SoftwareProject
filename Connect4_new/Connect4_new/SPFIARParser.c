@@ -85,6 +85,7 @@ SPCommand spParserPraseLine(const char* str) {
 			result.validArg = false;
 		free(strCopy);
 		return result;
+		//2
 	}
 	if (strtok(NULL, delimiter) != NULL)
 		result.cmd = SP_INVALID_LINE;
