@@ -467,32 +467,32 @@ char spFiarCheckWinner(SPFiarGame* src) {
 
 bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	int i = 0, j = 0, lower_r = 0, left_c = 0, upper_r = 0, right_c = 0, diag_type = 0, uppercase = 0;
-	lower_r = (r1_n < r2_n) ? r1_n : r2_n;
+	lower_r = (r1_n > r2_n) ? r1_n : r2_n;
 	upper_r = (r1_n < r2_n) ? r2_n : r1_n;
 	left_c = (c1_n < c2_n) ? c1_n : c2_n;
 	right_c = (c1_n < c2_n) ? c2_n : c1_n;
 	diag_type = ((r1_n > r2_n &&c1_n < c2_n) || (r1_n < r2_n &&c1_n > c2_n)) ? 1 : -1;
 	if (c1_n == c2_n) {		//forward
-		for (i = lower_r + 1; i <= upper_r - 1; i++) {
+		for (i = lower_r - 1; i >= upper_r + 1; i--) {
 			if (src->gameBoard[i][c1_n] != '\0')
 				return true;
 		}
 	}
 	else if (r1_n == r2_n) {		//sideways
-		for (i = left_c + 1; i <= right_c + 1; i++) {
+		for (i = left_c + 1; i <= right_c - 1; i++) {
 			if (src->gameBoard[r1_n][i] != '\0')
 				return true;
 		}
 	}
 	else if (diag_type == 1) {		//diag: '/'
-		for (i = 1; i <= upper_r - lower_r - 1; i++) {
-			if (src->gameBoard[lower_r + i][left_c + i] != '\0')
+		for (i = 1; i <= lower_r - upper_r - 1; i++) {
+			if (src->gameBoard[lower_r - i][left_c + i] != '\0')
 				return true;
 		}
 	}
 	else if (diag_type == -1) {		//diag: '\'
-		for (i = 1; i <= upper_r - lower_r - 1; i++) {
-			if (src->gameBoard[lower_r + i][right_c - i] != '\0')
+		for (i = 1; i <= lower_r - upper_r - 1; i++) {
+			if (src->gameBoard[lower_r - i][right_c - i] != '\0')
 				return true;
 		}
 	}
