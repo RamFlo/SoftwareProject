@@ -128,7 +128,31 @@ bool isCurPlayerPiece(int r1_n, int c1_n, ChessGame* src) {
 	return false;
 }
 
-bool isLegalKnightMove(ChessGame* src, int r1_n, int r2_n, int c1_n, int c2_n) {
+bool isOtherPlayerPiece(ChessGame* src, int r1_n, int c1_n) {
+	if (src->gameBoard[r1_n][c1_n] == '\0' || isCurPlayerPiece(r1_n, c1_n, src))
+		return false;
+	return true;
+}
+
+char getOtherPlayer(ChessGame* src) {
+	if (src->currentPlayer == WHITE_PLAYER)
+		return BLACK_PLAYER;
+	return WHITE_PLAYER;
+}
+
+bool isDiagonal(int r1_n, int c1_n, int r2_n, int c2_n) {
+	if (abs(r1_n - r2_n) == abs(c1_n - c2_n))
+		return true;
+	return false;
+}
+
+bool isStraightLine(int r1_n, int c1_n, int r2_n, int c2_n) {
+	if (r1_n - r2_n == 0 || c1_n - c2_n == 0)
+		return true;
+	return false;
+}
+
+bool isLegalKnightMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	bool isFriendlyPiece = false;
 	if (!src->gameBoard[r2_n][c2_n] == '\0') {
 		if (src->currentPlayer == BLACK_PLAYER) {
@@ -153,9 +177,62 @@ bool isLegalKnightMove(ChessGame* src, int r1_n, int r2_n, int c1_n, int c2_n) {
 	return false;
 }
 
-bool isLegalKingMove(ChessGame* src, int r1_n, int r2_n, int c1_n, int c2_n) {
-
+bool isLegalKingMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	if (abs(r1_n - r2_n) > 1)
+		return false;
+	if (abs(c1_n - c2_n) > 1)
+		return false;
+	return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
 }
+
+bool isLegalQueenMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	if (!isStraightLine(r1_n, c1_n, r2_n, c2_n) && !isDiagonal(r1_n, c1_n, r2_n, c2_n))
+		return false;
+	return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
+}
+
+bool isLegalBishopMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	if (!isDiagonal(r1_n, c1_n, r2_n, c2_n))
+		return false;
+	return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
+}
+
+bool isLegalRookMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	if (!isStraightLine(r1_n, c1_n, r2_n, c2_n))
+		return false;
+	return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
+}
+
+bool isLegalWhitePawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	if (r2_n == r1_n - 1 && c2_n == c1_n) //minus 1 because white pawns start in row 6 and move towards row 0
+		return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
+	else if (r2_n == r1_n - 2 && c2_n == c1_n) {
+		if (r1_n != 6)
+			return false;
+		return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
+	}
+	else if (r2_n == r1_n - 1 && abs(c1_n - c2_n) == 1) {
+		if (isOtherPlayerPiece(src, r2_n, c2_n))
+			return true;
+	}
+	return false;
+}
+
+bool isLegalBlackPawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	if (r2_n == r1_n + 1 && c2_n == c1_n) //plus 1 because black pawns start in row 1 and move towards row 7
+		return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
+	else if (r2_n == r1_n + 2 && c2_n == c1_n) {
+		if (r1_n != 1)
+			return false;
+		return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
+	}
+	else if (r2_n == r1_n + 1 && abs(c1_n - c2_n) == 1) {
+		if (isOtherPlayerPiece(src, r2_n, c2_n))
+			return true;
+	}
+	return false;
+}
+
 CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, char c2) {
 	int r1_n = r1 - '0', r2_n = r2 - '0', c1_n = c1 - 'A', c2_n = c2 - 'A';
 	if (src == NULL || !isValidSquare(r1_n, c1_n) || !isValidSquare(r2_n, c2_n))
