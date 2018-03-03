@@ -496,12 +496,7 @@ bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 				return true;
 		}
 	}
-	if (src->gameBoard[r2_n][c2_n] != '\0') { //check current player obstacle at destination
-		uppercase = isupper(src->gameBoard[r2_n][c2_n]);
-		if (src->currentPlayer == WHITE_PLAYER)
-			return (!uppercase);
-		else
-			return uppercase;
-	}
+	if (isCurPlayerPiece(r2_n, c2_n, src))
+		return true;
 	return false;
 }
