@@ -3,24 +3,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-/**
-* Given a game state, this function evaluates the best move according to
-* the current player. The function initiates a Minimax algorithm up to a
-* specified length given by maxDepth. The current game state doesn't change
-* by this function including the history of previous moves.
-*
-* @param currentGame - The current game state
-* @param maxDepth - The maximum depth of the miniMax algorithm
-* @return
-* -1 if either currentGame is NULL or maxDepth <= 0.
-* On success the function returns a number between [0,SP_FIAR_GAME_N_COLUMNS -1]
-* which is the best move for the current player.
-*/
 
-/*
-* Given an SPFiarGame object, this function switches the object's current player to the other player.
-* @param src - A SPFiarGame object.
-*/
 void ChessGameSwitchPlayer(ChessGame* src) {
 	if (src != NULL) {
 		if (src->currentPlayer == WHITE_PLAYER)
@@ -76,6 +59,8 @@ ChessGame* ChessGameCreate(int historySize) {
 	addWhitePieces(g);
 	addBlackPieces(g);
 	g->checked = '\0';
+	g->checkmated = '\0';
+	g->draw = false;
 	g->currentPlayer = WHITE_PLAYER;
 	g->history = spArrayListCreate(historySize);
 	if (g->history == NULL)
@@ -126,6 +111,12 @@ bool isCurPlayerPiece(int r1_n, int c1_n, ChessGame* src) {
 	if ((src->currentPlayer == BLACK_PLAYER && blackPiece) || (src->currentPlayer == WHITE_PLAYER && !blackPiece))
 		return true;
 	return false;
+}
+
+bool isOtherPlayerPiece(int r1_n, int c1_n, ChessGame* src) {
+	if (src->gameBoard[r1_n][c1_n] == '\0' || isCurPlayerPiece(r1_n, c1_n, src))
+		return false;
+	return true;
 }
 
 bool isOtherPlayerPiece(ChessGame* src, int r1_n, int c1_n) {
@@ -273,20 +264,16 @@ bool isLegalMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	}
 	return isLegalMove;
 }
-
-bool isCurKingThreatened(ChessGame* src) {
-	int kingCol = 0, kingRow = 0, i, j, res;
+bool isSquareThreatened(ChessGame* src, int r1_n, int c1_n) {
+	int i = 0, j = 0;
 	bool upperSquare = false, shouldCheck = false;
 	char curSquare = '\0';
-	res = findCurPlayerKing(src);
-	kingCol = res % 10;
-	kingRow = res / 10;
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
 			curSquare = src->gameBoard[i][j];
 			if (curSquare != '\0') {
 				shouldCheck = (src->currentPlayer == WHITE_PLAYER) ? isupper(curSquare) : !isupper(curSquare);
-				if (shouldCheck && isLegalMove(src, i, j, kingRow, kingCol))
+				if (shouldCheck && isLegalMove(src, i, j, r1_n, c1_n))
 					return true;
 			}
 		}
@@ -294,14 +281,69 @@ bool isCurKingThreatened(ChessGame* src) {
 	return false;
 }
 
+bool isCurKingThreatened(ChessGame* src) {
+	int kingCol = 0, kingRow = 0, res;
+	res = findCurPlayerKing(src);
+	kingCol = res % 10;
+	kingRow = res / 10;
+	return isSquareThreatened(src, kingRow, kingCol);
+}
+
+
+
 void executeMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	src->gameBoard[r2_n][c2_n] = src->gameBoard[r1_n][c1_n];
 	src->gameBoard[r1_n][c1_n] = '\0';
 }
 
+bool isKingStillChecked(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	bool KingStillChecked = false;
+	ChessGame* gameCopy= ChessGameCopy(src);
+	executeMove(gameCopy, r1_n, c1_n, r2_n, c2_n);
+	KingStillChecked = isCurKingThreatened(gameCopy);
+	ChessGameDestroy(gameCopy);
+	return KingStillChecked;
+}
+
+bool isCheckmate(ChessGame* src) {
+	int i, j, k, l, res;
+	bool upperSquare = false, shouldCheck = false;
+	char curSquare = '\0';
+	res = findCurPlayerKing(src);
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			curSquare = src->gameBoard[i][j];
+			if (curSquare != '\0') {
+				shouldCheck = (src->currentPlayer == WHITE_PLAYER) ? !isupper(curSquare) : isupper(curSquare);
+				if (shouldCheck) {
+					for (k = 0; j < 8; j++) {
+						for (l = 0; l < 8; l++) {
+							if (isLegalMove(src, i, j, k, l) && !isKingStillChecked(src, i, j, k, l))
+								return false;
+						}
+					}
+				}
+			}
+		}
+	}
+	return true;
+}
+
+void addMoveToHistory(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	int i = 0;
+	if (spArrayListAddLast(src->history, r1_n) != SP_ARRAY_LIST_SUCCESS) {
+		for(i=0;i<5;i++)
+			spArrayListRemoveFirst(src->history);
+		spArrayListAddLast(src->history, r1_n);
+	}
+	spArrayListAddLast(src->history, c1_n);
+	spArrayListAddLast(src->history, r2_n);
+	spArrayListAddLast(src->history, c2_n);
+	spArrayListAddLast(src->history, src->gameBoard[r2_n][c2_n]);
+}
+
 CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, char c2) {
-	int r1_n = r1 - '0', r2_n = r2 - '0', c1_n = c1 - 'A', c2_n = c2 - 'A';
-	ChessGame* gameCopy;
+	int r1_n = 8-(r1 - '0'), r2_n = 8 - (r2 - '0'), c1_n = c1 - 'A', c2_n = c2 - 'A';
 	if (src == NULL || !isValidSquare(r1_n, c1_n) || !isValidSquare(r2_n, c2_n))
 		return INVALID_POSITION;
 	if (!isCurPlayerPiece(r1_n,c1_n,src))
@@ -310,47 +352,70 @@ CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, c
 		return ILLEGAL_MOVE;
 	if (!isLegalMove(src, r1_n, c1_n, r2_n, c2_n))
 		return ILLEGAL_MOVE;
-	gameCopy = ChessGameCopy(src);
-	executeMove(gameCopy, r1_n, c1_n, r2_n, c2_n);
-	if (isCurKingThreatened(gameCopy)) {
-		ChessGameDestroy(gameCopy);
+	if (isKingStillChecked(src, r1_n, c1_n, r2_n, c2_n)) {
 		if (src->checked == src->currentPlayer)
 			return KING_STILL_THREATENED;
 		else
 			return KING_NOW_THREATENED;
 	}
+	addMoveToHistory(src, r1_n, c1_n, r2_n, c2_n);
 	executeMove(src, r1_n, c1_n, r2_n, c2_n);
 	ChessGameSwitchPlayer(src);
 	if (isCurKingThreatened(src)) {
 		src->checked = src->currentPlayer;
+		if (isCheckmate(src))
+			src->checkmated = src->currentPlayer;
 	}
+	else {
+		if (isCheckmate(src))
+			src->draw = true;
+	}
+	return SUCCESS;
 }
 
-bool spFiarGameIsValidMove(SPFiarGame* src, int col) {
-	if (col < 0 || col > SP_FIAR_GAME_N_COLUMNS - 1 || src == NULL)
-		return false;
-	if ((src->tops)[col] == SP_FIAR_GAME_N_ROWS)
-		return false;
-	return true;
+CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1) {
+	int i = 0, j = 0, r1_n = 8 - (r1 - '0'), c1_n = c1 - 'A';
+	if (src == NULL || !isValidSquare(r1_n, c1_n))
+		return INVALID_POSITION;
+	if (src->gameBoard[r1_n][c1_n] == '\0')
+		return NO_PIECE_IN_SQUARE;
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			if (isLegalMove(src, r1_n, c1_n, i, j) && !isKingStillChecked(src, r1_n, c1_n, i, j)) {
+				printf("<%c,%c>", '8' - i, 'A' + j);
+				if (isSquareThreatened(src, i, j))
+					printf("*");
+				if (isOtherPlayerPiece(i, j, src))
+					printf("^");
+				printf("\n");
+			}
+		}
+	}
+	return SUCCESS;
 }
 
-SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src) {
-	int lastCol = 0;
-	if (src == NULL)
-		return SP_ARRAY_LIST_INVALID_ARGUMENT;
-	if (src->history->actualSize == 0) {
-		printf("Error: cannot undo previous move!\n");
-		return SP_FIAR_GAME_NO_HISTORY;
+
+CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src) {
+	char lastPiece = spArrayListGetLast(src->history);
+	int i=0,size = src->history->actualSize, dstCol = 0, dstRow = 0, srcCol = 0, srcRow = 0;
+	if (size == 0) {
+		printf("Empty history, no move to undo\n");
+		return NO_HISTORY;
 	}
-	lastCol = spArrayListGetLast(src->history);
-	spFiarGameSwitchPlayer(src);
-	if (src->currentPlayer == SP_FIAR_GAME_PLAYER_1_SYMBOL)
-		printf("Remove disc: remove user's disc at column %d\n", lastCol + 1);
+	dstCol = spArrayListGetAt(src->history, size - 2);
+	dstRow = spArrayListGetAt(src->history, size - 3);
+	srcCol = spArrayListGetAt(src->history, size - 4);
+	srcRow = spArrayListGetAt(src->history, size - 5);
+	src->gameBoard[srcRow][srcCol] = src->gameBoard[dstRow][dstCol];
+	src->gameBoard[dstRow][dstCol] = lastPiece;
+	ChessGameSwitchPlayer(src);
+	if (src->currentPlayer == WHITE_PLAYER)
+		printf("Undo move for black player: <%c,%c> -> <%c,%c>\n", '8'-dstRow, 'A' + dstCol, '8'-srcRow, 'A'+srcCol);
 	else
-		printf("Remove disc: remove computer's disc at column %d\n", lastCol + 1);
-	(src->tops)[lastCol]--;
-	spArrayListRemoveLast(src->history);
-	return SP_FIAR_GAME_SUCCESS;
+		printf("Undo move for white player: <%c,%c> -> <%c,%c>\n", '8' - dstRow, 'A' + dstCol, '8' - srcRow, 'A' + srcCol);
+	for (i = 0; i < 5; i++)
+		spArrayListRemoveLast(src->history);
+	return SUCCESS;
 }
 
 SP_FIAR_GAME_MESSAGE spFiarGamePrintBoard(SPFiarGame* src) {
