@@ -75,7 +75,7 @@ ChessGame* ChessGameCreate(int historySize) {
 	}
 	addWhitePieces(g);
 	addBlackPieces(g);
-	g->checked = 2;
+	g->checked = '\0';
 	g->currentPlayer = WHITE_PLAYER;
 	g->history = spArrayListCreate(historySize);
 	if (g->history == NULL)
@@ -233,31 +233,97 @@ bool isLegalBlackPawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n
 	return false;
 }
 
+int findCurPlayerKing(ChessGame* src) {
+	int i = 0, j = 0, rc_index = 0;
+	char king = (src->currentPlayer == WHITE_PLAYER) ? WHITE_KING : BLACK_KING;
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			if (src->gameBoard[i][j] == king)
+				rc_index=10 * i + j;
+		}
+	}
+	return rc_index;
+}
+
+bool isLegalMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	bool isLegalMove = false;
+	switch (src->gameBoard[r1_n][c1_n]) {
+	case WHITE_PAWN:
+		isLegalMove = isLegalWhitePawnMove(src, r1_n, c1_n, r2_n, c2_n);
+		break;
+	case BLACK_PAWN:
+		isLegalMove = isLegalBlackPawnMove(src, r1_n, c1_n, r2_n, c2_n);
+		break;
+	case WHITE_KNIGHT:
+	case BLACK_KNIGHT:
+		isLegalMove = isLegalKnightMove(src, r1_n, c1_n, r2_n, c2_n);
+		break;
+	case WHITE_BISHOP:
+	case BLACK_BISHOP:
+		isLegalMove = isLegalBishopMove(src, r1_n, c1_n, r2_n, c2_n);
+		break;
+	case WHITE_QUEEN:
+	case BLACK_QUEEN:
+		isLegalMove = isLegalQueenMove(src, r1_n, c1_n, r2_n, c2_n);
+		break;
+	case WHITE_KING:
+	case BLACK_KING:
+		isLegalMove = isLegalKingMove(src, r1_n, c1_n, r2_n, c2_n);
+		break;
+	}
+	return isLegalMove;
+}
+
+bool isCurKingThreatened(ChessGame* src) {
+	int kingCol = 0, kingRow = 0, i, j, res;
+	bool upperSquare = false, shouldCheck = false;
+	char curSquare = '\0';
+	res = findCurPlayerKing(src);
+	kingCol = res % 10;
+	kingRow = res / 10;
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			curSquare = src->gameBoard[i][j];
+			if (curSquare != '\0') {
+				shouldCheck = (src->currentPlayer == WHITE_PLAYER) ? isupper(curSquare) : !isupper(curSquare);
+				if (shouldCheck && isLegalMove(src, i, j, kingRow, kingCol))
+					return true;
+			}
+		}
+	}
+	return false;
+}
+
+void executeMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	src->gameBoard[r2_n][c2_n] = src->gameBoard[r1_n][c1_n];
+	src->gameBoard[r1_n][c1_n] = '\0';
+}
+
 CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, char c2) {
 	int r1_n = r1 - '0', r2_n = r2 - '0', c1_n = c1 - 'A', c2_n = c2 - 'A';
+	ChessGame* gameCopy;
 	if (src == NULL || !isValidSquare(r1_n, c1_n) || !isValidSquare(r2_n, c2_n))
 		return INVALID_POSITION;
 	if (!isCurPlayerPiece(r1_n,c1_n,src))
 		return NOT_PLAYER_PIECE;
-	if (r1_n == r2_n && c1_n == c2_n) {
-		return 
+	if (r1_n == r2_n && c1_n == c2_n)
+		return ILLEGAL_MOVE;
+	if (!isLegalMove(src, r1_n, c1_n, r2_n, c2_n))
+		return ILLEGAL_MOVE;
+	gameCopy = ChessGameCopy(src);
+	executeMove(gameCopy, r1_n, c1_n, r2_n, c2_n);
+	if (isCurKingThreatened(gameCopy)) {
+		ChessGameDestroy(gameCopy);
+		if (src->checked == src->currentPlayer)
+			return KING_STILL_THREATENED;
+		else
+			return KING_NOW_THREATENED;
 	}
-
-
-
-
-
-
-
-
-	src->gameBoard[src->tops[col]][col] = src->currentPlayer;
-	src->tops[col]++;
-	spFiarGameSwitchPlayer(src);
-	if (spArrayListAddLast(src->history, col) != SP_ARRAY_LIST_SUCCESS) {
-		spArrayListRemoveFirst(src->history);
-		spArrayListAddLast(src->history, col);
+	executeMove(src, r1_n, c1_n, r2_n, c2_n);
+	ChessGameSwitchPlayer(src);
+	if (isCurKingThreatened(src)) {
+		src->checked = src->currentPlayer;
 	}
-	return SP_FIAR_GAME_SUCCESS;
 }
 
 bool spFiarGameIsValidMove(SPFiarGame* src, int col) {

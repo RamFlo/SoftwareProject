@@ -41,7 +41,7 @@ typedef struct chess_game_t {
 	char gameBoard[8][8];
 	char currentPlayer;
 	SPArrayList* history;
-	int checked;	//0-black is checked, 1-white is checked, 2-no check
+	char checked;	//0-black is checked, 1-white is checked, 2-no check
 } ChessGame;
 
 /**
@@ -53,6 +53,8 @@ typedef enum chess_game_message_t {
 	NOT_PLAYER_PIECE,
 	NO_HISTORY,
 	SUCCESS,
+	KING_STILL_THREATENED,
+	KING_NOW_THREATENED,
 	//You may add any message you like
 } CHESS_GAME_MESSAGE;
 
