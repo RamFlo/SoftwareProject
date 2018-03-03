@@ -154,13 +154,13 @@ bool isStraightLine(int r1_n, int c1_n, int r2_n, int c2_n) {
 
 bool isLegalKnightMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	bool isFriendlyPiece = false;
-	if (!src->gameBoard[r2_n][c2_n] == '\0') {
+	if (src->gameBoard[r2_n][c2_n] != '\0') {
 		if (src->currentPlayer == BLACK_PLAYER) {
-			if (isupper(src->gameBoard[r2_n][c2_n] == '\0'))
+			if (isupper(src->gameBoard[r2_n][c2_n]))
 				isFriendlyPiece = true;
 		}
 		else {
-			if (!isupper(src->gameBoard[r2_n][c2_n] == '\0'))
+			if (!isupper(src->gameBoard[r2_n][c2_n]))
 				isFriendlyPiece = true;
 		}
 	}
@@ -471,7 +471,7 @@ bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	upper_r = (r1_n < r2_n) ? r2_n : r1_n;
 	left_c = (c1_n < c2_n) ? c1_n : c2_n;
 	right_c = (c1_n < c2_n) ? c2_n : c1_n;
-	diag_type = ((r1_n < r2_n &&c1_n < c2_n) || (r1_n > r2_n &&c1_n > c2_n)) ? 1 : -1;
+	diag_type = ((r1_n > r2_n &&c1_n < c2_n) || (r1_n < r2_n &&c1_n > c2_n)) ? 1 : -1;
 	if (c1_n == c2_n) {		//forward
 		for (i = lower_r + 1; i <= upper_r - 1; i++) {
 			if (src->gameBoard[i][c1_n] != '\0')
