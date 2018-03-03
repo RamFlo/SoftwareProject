@@ -470,14 +470,14 @@ bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	lower_r = (r1_n > r2_n) ? r1_n : r2_n;
 	upper_r = (r1_n > r2_n) ? r2_n : r1_n;
 	left_c = (c1_n < c2_n) ? c1_n : c2_n;
-	right_c = (c1_n < c2_n) ? c2_n : c1_n;
-	diag_type = ((r1_n > r2_n &&c1_n < c2_n) || (r1_n < r2_n &&c1_n > c2_n)) ? 1 : -1;
+	right_c = (c1_n < c2_n) ? c2_n : c1_n; 
+	diag_type = ((r1_n > r2_n &&c1_n < c2_n) || (r1_n < r2_n &&c1_n > c2_n)) ? 1 : -1; 
 	if (c1_n == c2_n) {		//forward
 		for (i = lower_r - 1; i >= upper_r + 1; i--) {
 			if (src->gameBoard[i][c1_n] != '\0')
 				return true;
 		}
-	}
+	} 
 	else if (r1_n == r2_n) {		//sideways
 		for (i = left_c + 1; i <= right_c - 1; i++) {
 			if (src->gameBoard[r1_n][i] != '\0')
