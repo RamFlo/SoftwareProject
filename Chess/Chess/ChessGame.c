@@ -386,3 +386,27 @@ char spFiarCheckWinner(SPFiarGame* src) {
 		return SP_FIAR_GAME_TIE_SYMBOL;
 	return '\0';
 }
+
+
+bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	int start = 0, end = 0, i = 0;
+	if (c1_n == c2_n) {		//forward
+		start = (r1_n < r2_n) ? (r1_n + 1) : (r2_n + 1);
+		end = (r1_n < r2_n) ? (r2_n - 1) : (r1_n - 1);
+		for (i = start; i <= end; i++) {
+			if (src->gameBoard[i][c1_n] != '\0')
+				return true;
+		}
+	}
+	else if (r1_n == r2_n) {		//sideways
+		start = (c1_n < c2_n) ? (c1_n + 1) : (c2_n + 1);
+		end = (c1_n < c2_n) ? (c2_n - 1) : (c1_n - 1);
+		for (i = start; i <= end; i++) {
+			if (src->gameBoard[r1_n][i] != '\0')
+				return true;
+		}
+	}
+	else {
+
+	}
+}
