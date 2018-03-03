@@ -128,6 +128,26 @@ bool isCurPlayerPiece(int r1_n, int c1_n, ChessGame* src) {
 	return false;
 }
 
+bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	int start = 0, end = 0,i=0;
+	if (c1_n == c2_n) {		//straight forward
+		start = (r1_n < r2_n) ? (r1_n+1) : (r2_n+1);
+		end = (r1_n < r2_n) ? (r2_n-1) : (r1_n-1);
+		for (i = start; i <= end; i++) {
+			if (src->gameBoard[i][c1_n] != '\0')
+				return true;
+		}
+	}
+	else if (r1_n == r2_n) {		//straight sideways
+		start = (c1_n < c2_n) ? (c1_n + 1) : (c2_n + 1);
+		end = (c1_n < c2_n) ? (c2_n - 1) : (c1_n - 1);
+		for (i = start; i <= end; i++) {
+			if (src->gameBoard[r1_n][i] != '\0')
+				return true;
+		}
+	}
+}
+
 CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, char c2) {
 	int r1_n = r1 - '0', r2_n = r2 - '0', c1_n = c1 - 'A', c2_n = c2 - 'A';
 	if (src == NULL || !isValidSquare(r1_n, c1_n) || !isValidSquare(r2_n, c2_n))
