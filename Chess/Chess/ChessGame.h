@@ -48,7 +48,7 @@ typedef struct chess_game_t {
 * Type used for returning error codes from game functions
 */
 typedef enum chess_game_message_t {
-	INVALID_MOVE,
+	ILLEGAL_MOVE,
 	INVALID_POSITION,
 	NOT_PLAYER_PIECE,
 	NO_HISTORY,
