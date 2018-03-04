@@ -118,11 +118,13 @@
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="ChessGame.h" />
     <ClInclude Include="ChessParser.h" />
+    <ClInclude Include="Minimax.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayList.c" />
     <ClCompile Include="ChessGame.c" />
     <ClCompile Include="ChessParser.c" />
+    <ClCompile Include="Minimax.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
