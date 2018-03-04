@@ -522,28 +522,30 @@ void printDifficulty(ChessGame* src) {
 	switch (src->difficulty)
 	{
 	case 1:
-		printf("DIFFICULTY: amateur\n");
+		printf("amateur");
 		break;
 	case 2:
-		printf("DIFFICULTY: easy\n");
+		printf("easy");
 		break;
 	case 3:
-		printf("DIFFICULTY: moderate\n");
+		printf("moderate");
 		break;
 	case 4:
-		printf("DIFFICULTY: hard\n");
+		printf("hard");
 		break;
 	case 5:
-		printf("DIFFICULTY: expert\n");
+		printf("expert");
 		break;
 	}
 }
 
-void printSettings(ChessGame* src) {
+void chessGamePrintSettings(ChessGame* src) {
 	printf("SETTINGS:\n");
 	printf("GAME_MODE: %d-player\n", src->gameMode);
 	if (src->gameMode == 1) {
+		printf("DIFFICULTY: ");
 		printDifficulty(src);
+		printf("\n");
 		if (src->userColor == 0)
 			printf("USER_COLOR: black\n");
 		else
@@ -558,7 +560,7 @@ void quit(ChessGame* src) {
 }
 
 
-void default(ChessGame* g) {
+void chessGameDefault(ChessGame* g) {
 	int i = 0, j = 0,size= g->history->actualSize;
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {

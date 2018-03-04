@@ -30,7 +30,7 @@ typedef struct command_t {
 	int arg;
 	char* path;
 	char r1, c1, r2, c2;
-	int type;
+	int type; //0 - settings command, 1 - game command, 2 - command that belongs to both
 } ChessCommand;
 
 /**
@@ -56,6 +56,6 @@ bool spParserIsInt(const char* str);
 *              is valid
 *   arg      - the integer argument in case validArg is set to true
 */
-SPCommand spParserPraseLine(const char* str);
+ChessCommand spParserPraseLine(char* str);
 
 #endif

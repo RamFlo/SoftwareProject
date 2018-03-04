@@ -69,54 +69,74 @@ ChessCommand spParserPraseLine(char* str) {
 	token = strtok(str, delimiter);
 	if (token == NULL)
 		return result;
-	if (strcmp(token, "start") == 0)
+	if (strcmp(token, "start") == 0) {
+		result.type = 0;
 		result.cmd = START;
-	else if (strcmp(token, "quit") == 0)
+	}
+	else if (strcmp(token, "quit") == 0) {
+		result.type = 2;
 		result.cmd = QUIT;
-	else if (strcmp(token, "reset") == 0)
+	}
+	else if (strcmp(token, "reset") == 0) {
+		result.type = 1;
 		result.cmd = RESET;
-	else if (strcmp(token, "default") == 0)
+	}
+	else if (strcmp(token, "default") == 0) {
+		result.type = 0;
 		result.cmd = DEFAULT;
-	else if (strcmp(token, "undo") == 0)
+	}
+	else if (strcmp(token, "undo") == 0) {
+		result.type = 1; 
 		result.cmd = UNDO;
-	else if (strcmp(token, "print_settings") == 0)
+	}
+		
+	else if (strcmp(token, "print_settings") == 0) {
+		result.type = 0;
 		result.cmd = PRINT_SETTINGS;
+	}
 	else if (strcmp(token, "game_mode") == 0) {
 		result.cmd = GAME_MODE;
+		result.type = 0; 
 		token = strtok(NULL, delimiter);
 		if ((result.validArg = isValidNumArg(token)) == true)
 			result.arg = atoi(token);
 	}
 	else if (strcmp(token, "difficulty") == 0) {
 		result.cmd = DIFFICULTY;
+		result.type = 0;
 		token = strtok(NULL, delimiter);
 		if ((result.validArg = isValidNumArg(token)) == true)
 			result.arg = atoi(token);
 	}
 	else if (strcmp(token, "user_color") == 0) {
+		result.type = 0;
 		result.cmd = USER_COLOR;
 		token = strtok(NULL, delimiter);
 		if ((result.validArg = isValidNumArg(token)) == true)
 			result.arg = atoi(token);
 	}
 	else if (strcmp(token, "save") == 0) {
+		result.type = 1;
 		result.cmd = SAVE;
 		token = strtok(NULL, delimiter);
 		if (token != NULL)
 			result.path = token;
 	}
 	else if (strcmp(token, "load") == 0) {
+		result.type = 0;
 		result.cmd = LOAD;
 		token = strtok(NULL, delimiter);
 		if (token != NULL)
 			result.path = token;
 	}
 	else if (strcmp(token, "get_moves") == 0) {
+		result.type = 1;
 		result.cmd = GET_MOVES;
 		token = strtok(NULL, delimiter);
 		result.validArg = isValidSquareArg(token, &result,1);
 	}
 	else if (strcmp(token, "move") == 0) {
+		result.type = 1;
 		result.cmd = MOVE;
 		token = strtok(NULL, delimiter);
 		result.validArg = isValidSquareArg(token, &result,1);

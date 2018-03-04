@@ -85,16 +85,6 @@ int doUserCommand(SPFiarGame* curGame, int maxDepth) {
 	return 0;
 }
 
-SPCommand readCommand(SPFiarGame *curGame) {
-	SPCommand cmd;
-	char command[SP_MAX_LINE_LENGTH];
-	fgets(command, SP_MAX_LINE_LENGTH, stdin);
-	cmd = spParserPraseLine(command);
-	if (parserMemError)
-		endGame(curGame, true);
-	return cmd;
-}
-
 int getMaxDepth() {
 	int curNum = 0;
 	char usr_in[SP_MAX_LINE_LENGTH];
@@ -139,4 +129,84 @@ void computerTurn(SPFiarGame* curGame, int maxDepth) {
 		endGame(curGame, true);
 	spFiarGameSetMove(curGame, moveSuggestion);
 	printf("Computer move: add disc to column %d\n", moveSuggestion + 1);
+}
+
+//Chess code starts here
+
+
+void quitGame(ChessGame* g) {
+	ChessGameDestroy(g);
+	printf("Exiting...\n");
+	exit(0);
+}
+
+void settingsState(ChessGame* g) {
+	ChessCommand curCmd;
+	printf("Specify game settings or type 'start' to begin a game with the current settings:\n");
+	while (true) {
+		curCmd = readCommand(g);
+		if (curCmd.cmd == START)
+			return;
+		if (curCmd.type == 1 || curCmd.cmd == INVALID_LINE || (curCmd.cmd == USER_COLOR && g->gameMode == 2) || (curCmd.cmd == DIFFICULTY && g->gameMode == 2) || (curCmd.cmd == LOAD && curCmd.path == NULL)) {
+			printf("ERROR: invalid command\n");
+			continue;
+		}
+		switch (curCmd.cmd)
+		{
+		case GAME_MODE:
+			if (curCmd.validArg && (curCmd.arg == 1 || curCmd.arg == 2)) {
+				g->gameMode = curCmd.arg;
+				printf("Game mode is set to %d-player\n", curCmd.arg);
+			}
+			else
+				printf("Wrong game mode\n");
+			break;
+		case DIFFICULTY:
+			if (curCmd.validArg && curCmd.arg >= 1 && curCmd.arg <= 5) {
+				g->difficulty = curCmd.arg;
+				printf("Difficulty is set to ");
+				printDifficulty(g);
+				printf("\n");
+			}
+			else
+				printf("Wrong difficulty level. The value should be between 1 to 5\n");
+			break;
+		case USER_COLOR:
+			if (curCmd.validArg && (curCmd.arg == 0 || curCmd.arg == 1)) {
+				g->userColor = curCmd.arg;
+				if (curCmd.arg == 0)
+					printf("User color is set to black\n");
+				else
+					printf("User color is set to white\n");
+			}
+			else
+				printf("Wrong user color. The value should be 0 or 1\n");
+			break;
+		case LOAD:
+			if (ChessGameLoad(g, curCmd.path) != SUCCESS)
+				printf("Error: File doesn't exist or cannot be opened\n");
+			break;
+		case DEFAULT:
+			chessGameDefault(g);
+			printf("All settings reset to default\n");
+			break;
+		case PRINT_SETTINGS:
+			chessGamePrintSettings(g);
+			break;
+		case QUIT:
+			quitGame(g);
+			break;
+		}
+		
+
+	}
+}
+
+
+ChessCommand readCommand(ChessGame* curGame) {
+	ChessCommand cmd;
+	char command[SP_MAX_LINE_LENGTH];
+	fgets(command, SP_MAX_LINE_LENGTH, stdin);
+	cmd = spParserPraseLine(command);
+	return cmd;
 }

@@ -83,5 +83,13 @@ ChessGame* ChessGameCopy(ChessGame* src);
 
 CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, char c2);
 
+void printDifficulty(ChessGame* src);
+
+CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path);
+
 void ChessGameDestroy(ChessGame* src);
+
+void chessGameDefault(ChessGame* g);
+
+void chessGamePrintSettings(ChessGame* src);
 #endif
