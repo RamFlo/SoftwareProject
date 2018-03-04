@@ -256,6 +256,10 @@ bool isLegalMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	case BLACK_BISHOP:
 		isLegalMove = isLegalBishopMove(src, r1_n, c1_n, r2_n, c2_n);
 		break;
+	case WHITE_ROOK:
+	case BLACK_ROOK:
+		isLegalMove = isLegalRookMove(src, r1_n, c1_n, r2_n, c2_n);
+		break;
 	case WHITE_QUEEN:
 	case BLACK_QUEEN:
 		isLegalMove = isLegalQueenMove(src, r1_n, c1_n, r2_n, c2_n);

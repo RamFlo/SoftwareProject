@@ -57,6 +57,56 @@ int MinimaxSuggestMove(ChessGame* g, int maxDepth) {
 
 
 
-int calcChildrenMax(ChessGame* g, int maxDepth) {
-
+int scoringFunction(ChessGame* src) {
+	int i = 0, j = 0, score = 0;
+	if (src->checkmated == WHITE_PLAYER)
+		return -1000;
+	if (src->checkmated == BLACK_PLAYER)
+		return 1000;
+	if (src->draw)
+		return 0;
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			switch (src->gameBoard[i][j])
+			{
+			case WHITE_PAWN:
+				score += 1;
+				break;
+			case BLACK_PAWN:
+				score -= 1;
+				break;
+			case WHITE_KNIGHT:
+				score += 3;
+				break;
+			case BLACK_KNIGHT:
+				score -= 3;
+				break;
+			case WHITE_BISHOP:
+				score += 3;
+				break;
+			case BLACK_BISHOP:
+				score -= 3;
+				break;
+			case WHITE_ROOK:
+				score += 5;
+				break;
+			case BLACK_ROOK:
+				score -= 5;
+				break;
+			case WHITE_QUEEN:
+				score += 9;
+				break;
+			case BLACK_QUEEN:
+				score -= 9;
+				break;
+			case WHITE_KING:
+				score += 100;
+				break;
+			case BLACK_KING:
+				score -= 100;
+				break;
+			}
+		}
+	}
+	return score;
 }
