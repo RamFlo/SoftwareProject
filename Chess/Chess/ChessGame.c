@@ -63,6 +63,9 @@ ChessGame* ChessGameCreate(int historySize) {
 	g->draw = false;
 	g->currentPlayer = WHITE_PLAYER;
 	g->history = spArrayListCreate(historySize);
+	g->gameMode = 1;
+	g->difficulty = 2;
+	g->userColor = 1;
 	if (g->history == NULL)
 		return NULL;
 	return g;
@@ -418,28 +421,105 @@ CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src) {
 	return SUCCESS;
 }
 
-SP_FIAR_GAME_MESSAGE spFiarGamePrintBoard(SPFiarGame* src) {
+CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src) {
 	int i = 0, j = 0;
 	if (src == NULL)
-		return SP_FIAR_GAME_INVALID_ARGUMENT;
-	for (i = SP_FIAR_GAME_N_ROWS - 1; i >= 0; i--) {
-		printf("|");
-		for (j = 0; j < SP_FIAR_GAME_N_COLUMNS; j++) {
-			if (src->tops[j] > i)
+		return NULL_SRC;
+	for (i = 0; i < 8; i++) {
+		printf("%d|", 8 - i);
+		for (j = 0; j < 8; j++) {
+			if (src->gameBoard[i][j] != '\0')
 				printf(" %c", src->gameBoard[i][j]);
 			else
-				printf("  ");
+				printf(" _");
 		}
 		printf(" |\n");
 	}
-	for (i = 0; i < 2 * SP_FIAR_GAME_N_COLUMNS + 3; i++)
-		printf("-");
-	printf("\n  ");
-	for (i = 1; i <= SP_FIAR_GAME_N_COLUMNS; i++)
-		printf("%d ", i);
-	printf(" \n");
-	return SP_FIAR_GAME_SUCCESS;
+	printf("  -----------------\n   A B C D E F G H\n");
+	return SUCCESS;
 }
+
+CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
+	int i = 0, j = 0;
+	FILE* myFile = fopen(path, "r+");
+	if (src == NULL) {
+		fclose(myFile);
+		return NULL_SRC;
+	}
+	if (myFile == NULL) {
+		fclose(myFile);
+		return FILE_CREATE_FAILED;
+	}
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			if (putc(src->gameBoard[i][j], myFile) == -1)
+			{
+				printf("ERROR: writing to file failed.");
+				ChessGameDestroy(src);
+				fclose(myFile);
+				exit(0);
+			}
+		}
+	}
+	putc(src->gameMode, myFile);
+	putc(src->difficulty, myFile);
+	putc(src->userColor, myFile);
+	putc(src->currentPlayer, myFile);
+	putc(src->checked, myFile);
+	putc(src->checkmated, myFile);
+	putc(src->draw, myFile);
+	putc(src->history->actualSize, myFile);
+	for (i = 0; i < src->history->actualSize; i++)
+		putc(spArrayListGetAt(src->history, i), myFile);
+	fclose(myFile);
+	return SUCCESS;
+}
+
+
+CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path) {
+	int i = 0, j = 0, size=0;
+	char c = '\0';
+	FILE* myFile = fopen(path, "r+");
+	if (src == NULL) {
+		fclose(myFile);
+		return NULL_SRC;
+	}
+	if (myFile == NULL) {
+		fclose(myFile);
+		return FILE_CREATE_FAILED;
+	}
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			if ((c=getc(myFile)) == -1)
+			{
+				printf("ERROR: writing to file failed.");
+				ChessGameDestroy(src);
+				fclose(myFile);
+				exit(0);
+			}
+			src->gameBoard[i][j] = c;
+		}
+	}
+	src->gameMode = getc(myFile);
+	src->difficulty = getc(myFile);
+	src->userColor = getc(myFile);
+	src->currentPlayer = getc(myFile);
+	src->checked = getc(myFile);
+	src->checkmated = getc(myFile);
+	src->draw = getc(myFile);
+	size = getc(myFile);
+	for (i = 0; i < size; i++)
+		spArrayListAddLast(src->history, getc(myFile));
+	fclose(myFile);
+	return SUCCESS;
+}
+
+
+
+
+
+
+
 
 char spFiarGameGetCurrentPlayer(SPFiarGame* src) {
 	if (src == NULL)

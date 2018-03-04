@@ -44,6 +44,7 @@ typedef struct chess_game_t {
 	char checked;
 	char checkmated;
 	bool draw;
+	int gameMode, difficulty, userColor;
 } ChessGame;
 
 /**
@@ -58,7 +59,8 @@ typedef enum chess_game_message_t {
 	SUCCESS,
 	KING_STILL_THREATENED,
 	KING_NOW_THREATENED,
-	//You may add any message you like
+	NULL_SRC,
+	FILE_CREATE_FAILED,
 } CHESS_GAME_MESSAGE;
 
 /**
