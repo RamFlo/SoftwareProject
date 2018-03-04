@@ -440,7 +440,7 @@ CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src) {
 }
 
 CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
-	int i = 0, j = 0;
+	int i = 0, j = 0,size= src->history->actualSize;
 	FILE* myFile = fopen(path, "r+");
 	if (src == NULL) {
 		fclose(myFile);
@@ -468,8 +468,8 @@ CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
 	putc(src->checked, myFile);
 	putc(src->checkmated, myFile);
 	putc(src->draw, myFile);
-	putc(src->history->actualSize, myFile);
-	for (i = 0; i < src->history->actualSize; i++)
+	putc(size, myFile);
+	for (i = 0; i < size; i++)
 		putc(spArrayListGetAt(src->history, i), myFile);
 	fclose(myFile);
 	return SUCCESS;
@@ -514,11 +514,66 @@ CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path) {
 	return SUCCESS;
 }
 
+void printDifficulty(ChessGame* src) {
+	switch (src->difficulty)
+	{
+	case 1:
+		printf("DIFFICULTY: amateur\n");
+		break;
+	case 2:
+		printf("DIFFICULTY: easy\n");
+		break;
+	case 3:
+		printf("DIFFICULTY: moderate\n");
+		break;
+	case 4:
+		printf("DIFFICULTY: hard\n");
+		break;
+	case 5:
+		printf("DIFFICULTY: expert\n");
+		break;
+	}
+}
+
+void printSettings(ChessGame* src) {
+	printf("SETTINGS:\n");
+	printf("GAME_MODE: %d-player\n", src->gameMode);
+	if (src->gameMode == 1) {
+		printDifficulty(src);
+		if (src->userColor == 0)
+			printf("USER_COLOR: black\n");
+		else
+			printf("USER_COLOR: white\n");
+	}
+}
+
+void quit(ChessGame* src) {
+	ChessGameDestroy(src);
+	printf("Exiting...\n");
+	exit(0);
+}
 
 
-
-
-
+void default(ChessGame* g) {
+	int i = 0, j = 0,size= g->history->actualSize;
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			(g->gameBoard)[i][j] = '\0';
+		}
+	}
+	addWhitePieces(g);
+	addBlackPieces(g);
+	g->checked = '\0';
+	g->checkmated = '\0';
+	g->draw = false;
+	g->currentPlayer = WHITE_PLAYER;
+	g->gameMode = 1;
+	g->difficulty = 2;
+	g->userColor = 1;
+	for (i = 0; i < size; i++) {
+		spArrayListRemoveLast(g->history);
+	}
+}
 
 
 char spFiarGameGetCurrentPlayer(SPFiarGame* src) {
