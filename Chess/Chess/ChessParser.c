@@ -9,7 +9,7 @@ bool spParserIsInt(const char* str) {
 	int size = 0;
 	if (sizeof(str) == 0)
 		return false;
-	size = strlen(str);
+	size = (int)strlen(str);
 	if (str[0] - 45 != 0) {
 		if (!isdigit(str[0]))
 			return false;
@@ -35,7 +35,7 @@ bool isValidNumArg(char* token) {
 }
 
 bool isValidSquareArg(char* token, ChessCommand* result, int squareNum) {
-	int i = 0, commaIndex = 0, length = strlen(token);
+	int i = 0, commaIndex = 0, length = (int)strlen(token);
 	if (token == NULL || token[0] != '<' || token[length - 1] != '>')
 		return false;
 	for (i = 1; i < length - 1; i++) {
@@ -46,7 +46,7 @@ bool isValidSquareArg(char* token, ChessCommand* result, int squareNum) {
 	}
 	if (commaIndex == 0)
 		return false;
-	if (commaIndex != 2 || length - commaIndex != 2)
+	if (commaIndex != 2 || length-1 - commaIndex != 2)
 		return true;
 	if (squareNum == 1) {
 		result->r1 = token[1];

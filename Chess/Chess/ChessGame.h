@@ -47,35 +47,11 @@ typedef enum chess_game_message_t {
 	KING_NOW_THREATENED,
 	NULL_SRC,
 	FILE_CREATE_FAILED,
+	NULL_PATH,
 } CHESS_GAME_MESSAGE;
 
 
 ChessGame* ChessGameCreate(int historySize);
-
-
-SPFiarGame* spFiarGameCopy(SPFiarGame* src);
-
-
-void spFiarGameDestroy(SPFiarGame* src);
-
-
-SP_FIAR_GAME_MESSAGE spFiarGameSetMove(SPFiarGame* src, int col);
-
-
-bool spFiarGameIsValidMove(SPFiarGame* src, int col);
-
-
-SP_FIAR_GAME_MESSAGE spFiarGameUndoPrevMove(SPFiarGame* src);
-
-
-SP_FIAR_GAME_MESSAGE spFiarGamePrintBoard(SPFiarGame* src);
-
-
-char spFiarGameGetCurrentPlayer(SPFiarGame* src);
-
-
-char spFiarCheckWinner(SPFiarGame* src);
-
 
 bool isCurPlayerPiece(int r1_n, int c1_n, ChessGame* src);
 
@@ -92,4 +68,16 @@ void ChessGameDestroy(ChessGame* src);
 void chessGameDefault(ChessGame* g);
 
 void chessGamePrintSettings(ChessGame* src);
+
+CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1);
+
+void printPieceName(char p);
+
+CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src);
+
+CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path);
+
+CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src);
+
+void chessGameReset(ChessGame* g);
 #endif

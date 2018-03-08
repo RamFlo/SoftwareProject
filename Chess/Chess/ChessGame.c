@@ -4,6 +4,35 @@
 #include <ctype.h>
 
 
+void printPieceName(char p) {
+	switch (p) {
+	case WHITE_PAWN:
+	case BLACK_PAWN:
+		printf("pawn");
+		break;
+	case WHITE_KNIGHT:
+	case BLACK_KNIGHT:
+		printf("knight");
+		break;
+	case WHITE_BISHOP:
+	case BLACK_BISHOP:
+		printf("bishop");
+		break;
+	case WHITE_ROOK:
+	case BLACK_ROOK:
+		printf("rook");
+		break;
+	case WHITE_QUEEN:
+	case BLACK_QUEEN:
+		printf("queen");
+		break;
+	case WHITE_KING:
+	case BLACK_KING:
+		printf("king");
+		break;
+	}
+}
+
 void ChessGameSwitchPlayer(ChessGame* src) {
 	if (src != NULL) {
 		if (src->currentPlayer == WHITE_PLAYER)
@@ -100,6 +129,42 @@ void ChessGameDestroy(ChessGame* src) {
 	}
 }
 
+bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
+	int i = 0, j = 0, lower_r = 0, left_c = 0, upper_r = 0, right_c = 0, diag_type = 0, uppercase = 0;
+	lower_r = (r1_n > r2_n) ? r1_n : r2_n;
+	upper_r = (r1_n > r2_n) ? r2_n : r1_n;
+	left_c = (c1_n < c2_n) ? c1_n : c2_n;
+	right_c = (c1_n < c2_n) ? c2_n : c1_n;
+	diag_type = ((r1_n > r2_n &&c1_n < c2_n) || (r1_n < r2_n &&c1_n > c2_n)) ? 1 : -1;
+	if (c1_n == c2_n) {		//forward
+		for (i = lower_r - 1; i >= upper_r + 1; i--) {
+			if (src->gameBoard[i][c1_n] != '\0')
+				return true;
+		}
+	}
+	else if (r1_n == r2_n) {		//sideways
+		for (i = left_c + 1; i <= right_c - 1; i++) {
+			if (src->gameBoard[r1_n][i] != '\0')
+				return true;
+		}
+	}
+	else if (diag_type == 1) {		//diag: '/'
+		for (i = 1; i <= lower_r - upper_r - 1; i++) {
+			if (src->gameBoard[lower_r - i][left_c + i] != '\0')
+				return true;
+		}
+	}
+	else if (diag_type == -1) {		//diag: '\'
+		for (i = 1; i <= lower_r - upper_r - 1; i++) {
+			if (src->gameBoard[lower_r - i][right_c - i] != '\0')
+				return true;
+		}
+	}
+	if (isCurPlayerPiece(r2_n, c2_n, src))
+		return true;
+	return false;
+}
+
 bool isValidSquare(int r1_n, int c1_n) {
 	if (r1_n < 1 || r1_n>8 || c1_n < 1 || c1_n>8)
 		return false;
@@ -114,12 +179,6 @@ bool isCurPlayerPiece(int r1_n, int c1_n, ChessGame* src) {
 	if ((src->currentPlayer == BLACK_PLAYER && blackPiece) || (src->currentPlayer == WHITE_PLAYER && !blackPiece))
 		return true;
 	return false;
-}
-
-bool isOtherPlayerPiece(int r1_n, int c1_n, ChessGame* src) {
-	if (src->gameBoard[r1_n][c1_n] == '\0' || isCurPlayerPiece(r1_n, c1_n, src))
-		return false;
-	return true;
 }
 
 bool isOtherPlayerPiece(ChessGame* src, int r1_n, int c1_n) {
@@ -392,7 +451,7 @@ CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1) {
 				printf("<%c,%c>", '8' - i, 'A' + j);
 				if (isSquareThreatened(src, i, j))
 					printf("*");
-				if (isOtherPlayerPiece(i, j, src))
+				if (isOtherPlayerPiece(src,i, j))
 					printf("^");
 				printf("\n");
 			}
@@ -405,10 +464,8 @@ CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1) {
 CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src) {
 	char lastPiece = spArrayListGetLast(src->history);
 	int i=0,size = src->history->actualSize, dstCol = 0, dstRow = 0, srcCol = 0, srcRow = 0;
-	if (size == 0) {
-		printf("Empty history, no move to undo\n");
+	if (size == 0)
 		return NO_HISTORY;
-	}
 	dstCol = spArrayListGetAt(src->history, size - 2);
 	dstRow = spArrayListGetAt(src->history, size - 3);
 	srcCol = spArrayListGetAt(src->history, size - 4);
@@ -446,6 +503,10 @@ CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src) {
 CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
 	int i = 0, j = 0,size= src->history->actualSize;
 	FILE* myFile = fopen(path, "r+");
+	if (path == NULL) {
+		fclose(myFile);
+		return NULL_PATH;
+	}
 	if (src == NULL) {
 		fclose(myFile);
 		return NULL_SRC;
@@ -559,9 +620,8 @@ void quit(ChessGame* src) {
 	exit(0);
 }
 
-
-void chessGameDefault(ChessGame* g) {
-	int i = 0, j = 0,size= g->history->actualSize;
+void chessGameReset(ChessGame* g) {
+	int i = 0, j = 0, size = g->history->actualSize;
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
 			(g->gameBoard)[i][j] = '\0';
@@ -573,202 +633,18 @@ void chessGameDefault(ChessGame* g) {
 	g->checkmated = '\0';
 	g->draw = false;
 	g->currentPlayer = WHITE_PLAYER;
-	g->gameMode = 1;
-	g->difficulty = 2;
-	g->userColor = 1;
 	for (i = 0; i < size; i++) {
 		spArrayListRemoveLast(g->history);
 	}
 }
 
-
-char spFiarGameGetCurrentPlayer(SPFiarGame* src) {
-	if (src == NULL)
-		return SP_FIAR_GAME_EMPTY_ENTRY;
-	return src->currentPlayer;
-}
-
-/*
-* Given the previous player, the col and row of it's move and the current game status
-* this function determines whether the last move created a "Column win situation".
-* Namely, whether the last added disc completed a 4 in a column sequence.
-* @param src - the current game status
-* @param lastCol - the index of the last move's column, 0 based
-* @param lastRow - the index of the last move's row, 0 based
-* @param lastMove - the symbol of the player who played the last move
-* @return
-* a boolean representing whether there was a "Column Win" or not.
-* Namely, True if the last move created 4 in a column, False otherwise.
-*/
-bool checkColWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
-	int curRow = lastRow;
-	if (lastRow < SP_FIAR_GAME_SPAN - 1)
-		return false;
-	while (curRow > lastRow - SP_FIAR_GAME_SPAN && curRow >= 0) {
-		if ((src->gameBoard)[curRow][lastCol] != lastMove)
-			return false;
-		curRow--;
-	}
-	return true;
-}
-/*
-* Given the previous player, the col and row of it's move and the current game status
-* this function determines whether the last move created a "Row win situation".
-* Namely, whether the last added disc completed a 4 in a row sequence.
-* @param src - the current game status
-* @param lastCol - the index of the last move's column, 0 based
-* @param lastRow - the index of the last move's row, 0 based
-* @param lastMove - the symbol of the player who played the last move
-* @return
-* a boolean representing whether there was a "Row Win" or not.
-* Namely, True if the last move created 4 in a row, False otherwise.
-*/
-bool checkRowWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
-	int i = 0, counter = 1;
-	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
-		if (lastRow < src->tops[i] && src->gameBoard[lastRow][i] == lastMove)
-			counter++;
-		else
-			break;
-	}
-	for (i = lastCol - 1; i >= 0; i--) {
-		if (lastRow < src->tops[i] && src->gameBoard[lastRow][i] == lastMove)
-			counter++;
-		else
-			break;
-	}
-	return counter >= SP_FIAR_GAME_SPAN;
-}
-/*
-* Given the previous player, the col and row of it's move and the current game status
-* this function determines whether the last move created a "Upword sloping diagonal win situation".
-* Namely, whether the last added disc completed a 4 in a diagonal sequence, in which the diagonal is upword sloping.
-* An example for an upword sloping diagonal - /.
-* @param src - the current game status
-* @param lastCol - the index of the last move's column, 0 based
-* @param lastRow - the index of the last move's row, 0 based
-* @param lastMove - the symbol of the player who played the last move
-* @return
-* a boolean representing whether there was a "Upword sloping diagonal win" or not.
-* Namely, True if the last move created 4 in a Upword sloping diagonal, False otherwise.
-*/
-bool checkDiagUpWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
-	int i = 0, lastRowCopy = lastRow, counter = 1;
-	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
-		if (++lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
-			counter++;
-		else
-			break;
-	}
-	lastRowCopy = lastRow;
-	for (i = lastCol - 1; i >= 0; i--) {
-		if (--lastRowCopy >= 0 && lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
-			counter++;
-		else
-			break;
-	}
-	return counter >= SP_FIAR_GAME_SPAN;
-}
-
-/*
-* Given the previous player, the col and row of it's move and the current game status
-* this function determines whether the last move created a "Downward sloping diagonal win situation".
-* Namely, whether the last added disc completed a 4 in a diagonal sequence, in which the diagonal is downward sloping.
-* An example for an downward sloping diagonal - \.
-* @param src - the current game status
-* @param lastCol - the index of the last move's column, 0 based
-* @param lastRow - the index of the last move's row, 0 based
-* @param lastMove - the symbol of the player who played the last move
-* @return
-* a boolean representing whether there was a "Downward sloping diagonal win" or not.
-* Namely, True if the last move created 4 in a Downward sloping diagonal, False otherwise.
-*/
-bool checkDiagDownWinner(SPFiarGame* src, int lastCol, int lastRow, char lastMove) {
-	int i = 0, lastRowCopy = lastRow, counter = 1;
-	for (i = lastCol - 1; i >= 0; i--) {
-		if (++lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
-			counter++;
-		else
-			break;
-	}
-	lastRowCopy = lastRow;
-	for (i = lastCol + 1; i < SP_FIAR_GAME_N_COLUMNS; i++) {
-		if (--lastRowCopy >= 0 && lastRowCopy < src->tops[i] && src->gameBoard[lastRowCopy][i] == lastMove)
-			counter++;
-		else
-			break;
-	}
-	return counter >= SP_FIAR_GAME_SPAN;
-}
-/*
-* Given a game status, this function checks whether the game board is full or not.
-*@param src - current game status.
-*@return
-*True if the game board is full (no more moves can be made and all columns are full).
-*False otherwise.
-*/
-bool isGameBoardFull(SPFiarGame* src) {
-	int colNum = SP_FIAR_GAME_N_COLUMNS, rowNum = SP_FIAR_GAME_N_ROWS, i = 0;
-	for (i = 0; i < colNum; i++) {
-		if (src->tops[i] != rowNum)
-			return false;
-	}
-	return true;
-}
-char spFiarCheckWinner(SPFiarGame* src) {
-	int lastCol = 0, lastRow = 0;
-	char lastMove = 'a';
-	bool rowWinner = true, colWinner = true, diagWinner = true;
-	if (src == NULL)
-		return '\0';
-	if (src->history->actualSize == 0)
-		return '\0';
-	lastCol = spArrayListGetLast(src->history);
-	lastRow = (src->tops)[lastCol] - 1;
-	lastMove = (src->gameBoard)[lastRow][lastCol];
-	rowWinner = checkRowWinner(src, lastCol, lastRow, lastMove);
-	colWinner = checkColWinner(src, lastCol, lastRow, lastMove);
-	diagWinner = checkDiagUpWinner(src, lastCol, lastRow, lastMove) || checkDiagDownWinner(src, lastCol, lastRow, lastMove);
-	if (rowWinner || colWinner || diagWinner)
-		return lastMove;
-	else if (isGameBoardFull(src))
-		return SP_FIAR_GAME_TIE_SYMBOL;
-	return '\0';
+void chessGameDefault(ChessGame* g) {
+	g->gameMode = 1;
+	g->difficulty = 2;
+	g->userColor = 1;
+	chessGameReset(g); //maybe
 }
 
 
-bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
-	int i = 0, j = 0, lower_r = 0, left_c = 0, upper_r = 0, right_c = 0, diag_type = 0, uppercase = 0;
-	lower_r = (r1_n > r2_n) ? r1_n : r2_n;
-	upper_r = (r1_n > r2_n) ? r2_n : r1_n;
-	left_c = (c1_n < c2_n) ? c1_n : c2_n;
-	right_c = (c1_n < c2_n) ? c2_n : c1_n; 
-	diag_type = ((r1_n > r2_n &&c1_n < c2_n) || (r1_n < r2_n &&c1_n > c2_n)) ? 1 : -1; 
-	if (c1_n == c2_n) {		//forward
-		for (i = lower_r - 1; i >= upper_r + 1; i--) {
-			if (src->gameBoard[i][c1_n] != '\0')
-				return true;
-		}
-	} 
-	else if (r1_n == r2_n) {		//sideways
-		for (i = left_c + 1; i <= right_c - 1; i++) {
-			if (src->gameBoard[r1_n][i] != '\0')
-				return true;
-		}
-	}
-	else if (diag_type == 1) {		//diag: '/'
-		for (i = 1; i <= lower_r - upper_r - 1; i++) {
-			if (src->gameBoard[lower_r - i][left_c + i] != '\0')
-				return true;
-		}
-	}
-	else if (diag_type == -1) {		//diag: '\'
-		for (i = 1; i <= lower_r - upper_r - 1; i++) {
-			if (src->gameBoard[lower_r - i][right_c - i] != '\0')
-				return true;
-		}
-	}
-	if (isCurPlayerPiece(r2_n, c2_n, src))
-		return true;
-	return false;
-}
+
+
