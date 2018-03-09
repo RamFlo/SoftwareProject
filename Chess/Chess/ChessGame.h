@@ -53,7 +53,7 @@ typedef enum chess_game_message_t {
 
 ChessGame* ChessGameCreate(int historySize);
 
-bool isCurPlayerPiece(int r1_n, int c1_n, ChessGame* src);
+bool isCurPlayerPiece(ChessGame* src,int r1_n, int c1_n);
 
 ChessGame* ChessGameCopy(ChessGame* src);
 
@@ -71,6 +71,8 @@ void chessGamePrintSettings(ChessGame* src);
 
 CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1);
 
+bool isSquareThreatenedByColor(ChessGame* src, int r1_n, int c1_n, char threateningPlayer);
+
 void printPieceName(char p);
 
 CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src);
@@ -80,4 +82,6 @@ CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path);
 CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src);
 
 void chessGameReset(ChessGame* g);
+
+bool isOppositeColorsSquares(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n);
 #endif

@@ -40,4 +40,5 @@ int main() {
 		}
 		gameState(g);
 	}
+	return 0;
 }

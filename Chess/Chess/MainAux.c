@@ -160,6 +160,7 @@ void playerTurn(ChessGame* g) {
 			ChessGameUndoPrevMove(g);
 			if (curMsg == SUCCESS)
 				return;
+			break;
 		case RESET:
 			printf("Restarting...\n");
 			chessGameReset(g);
