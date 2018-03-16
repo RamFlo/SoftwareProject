@@ -59,10 +59,10 @@ bool isValidSquareArg(char* token, ChessCommand* result, int squareNum) {
 	return true;
 }
 
-void initiateEmptyPath(ChessCommand cmd) {
+void initiateEmptyPath(ChessCommand *cmd) {
 	int i = 0;
 	for (i = 0; i < 2048; i++)
-		cmd.path[i] = '\0';
+		cmd->path[i] = '\0';
 }
 
 ChessCommand spParserPraseLine(char* str) {
@@ -71,7 +71,7 @@ ChessCommand spParserPraseLine(char* str) {
 	result.cmd = INVALID_LINE;
 	const char delimiter[5] = " \t\r\n";
 	char *token;
-	initiateEmptyPath(result);
+	initiateEmptyPath(&result);
 	token = strtok(str, delimiter);
 	if (token == NULL)
 		return result;

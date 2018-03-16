@@ -29,6 +29,7 @@ void quitGame(ChessGame* g) {
 
 void settingsState(ChessGame* g) {
 	ChessCommand curCmd;
+	CHESS_GAME_MESSAGE curMsg;
 	printf("Specify game settings or type 'start' to begin a game with the current settings:\n");
 	while (true) {
 		curCmd = readCommand(g);
@@ -70,8 +71,12 @@ void settingsState(ChessGame* g) {
 				printf("Wrong user color. The value should be 0 or 1\n");
 			break;
 		case LOAD:
-			if (ChessGameLoad(g, curCmd.path) != SUCCESS)
-				printf("Error: File doesn't exist or cannot be opened\n");
+			if ((curMsg = ChessGameLoad(g, curCmd.path)) != SUCCESS) {
+				if (curMsg == FILE_CREATE_FAILED)
+					printf("Error: File doesn't exist or cannot be opened\n");
+				else
+					printf("ERROR: invalid command\n");
+			}	
 			break;
 		case DEFAULT:
 			chessGameDefault(g);

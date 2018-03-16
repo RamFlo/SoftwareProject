@@ -620,13 +620,10 @@ CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
 	int i = 0, j = 0,size= src->history->actualSize;
 	FILE* myFile;
 	char* curPlayerColor;
-	//const char * cPath = &path;
-	if (path == NULL)
+	if (path[0] == '\0')
 		return NULL_PATH;
 	if (src == NULL)
 		return NULL_SRC;
-
-
 	myFile = fopen(path, "w+");
 	if (myFile == NULL)
 		return FILE_CREATE_FAILED;
@@ -662,8 +659,8 @@ CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path) {
 	FILE* myFile;
 	if (src == NULL)
 		return NULL_SRC;
-	if (path[0]=='\0')
-		return FILE_CREATE_FAILED;
+	if (path[0] == '\0')
+		return NULL_PATH;
 	myFile = fopen(path, "r+");
 	if (myFile == NULL)
 		return FILE_CREATE_FAILED;
@@ -681,7 +678,10 @@ CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path) {
 	for (i = 0; i < 8; i++) {
 		fgets(curLine, 100, myFile);
 		for (j = 0; j < 8; j++) {
-			src->gameBoard[i][j] = curLine[3+2*j];
+			if (curLine[3 + 2 * j] != '_')
+				src->gameBoard[i][j] = curLine[3 + 2 * j];
+			else
+				src->gameBoard[i][j] = '\0';
 		}
 	}
 	CheckCheckmateDrawTest(src);
