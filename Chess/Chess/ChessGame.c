@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-
+#include <string.h>
 
 bool isOppositeColorsSquares(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	char s1 = src->gameBoard[r1_n][c1_n], s2 = src->gameBoard[r2_n][c2_n];
@@ -399,7 +399,7 @@ bool isKingCheckedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2
 }
 
 bool isCheckmate(ChessGame* src) {
-	int i, j, k, l, res;
+	int i, j, k, l;
 	bool shouldCheck = false;
 	char curSquare = '\0';
 	//res = findCurPlayerKing(src);
@@ -435,6 +435,19 @@ void addMoveToHistory(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	spArrayListAddLast(src->history, src->gameBoard[r2_n][c2_n]);
 }
 
+void CheckCheckmateDrawTest(ChessGame* src) {
+	src->checked = '\0';
+	if (isCurKingThreatened(src)) {
+		src->checked = src->currentPlayer;
+		if (isCheckmate(src))
+			src->checkmated = src->currentPlayer;
+	}
+	else {
+		if (isCheckmate(src))
+			src->draw = true;
+	}
+}
+
 CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, char c2) {
 	int r1_n = 8-(r1 - '0'), r2_n = 8 - (r2 - '0'), c1_n = c1 - 'A', c2_n = c2 - 'A';
 	if (src == NULL || !isValidSquare(r1_n, c1_n) || !isValidSquare(r2_n, c2_n))
@@ -456,19 +469,7 @@ CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, c
 	addMoveToHistory(src, r1_n, c1_n, r2_n, c2_n);
 	executeMove(src, r1_n, c1_n, r2_n, c2_n);
 	ChessGameSwitchPlayer(src);
-	src->checked = '\0';
-	if (isCurKingThreatened(src)) {
-		//printf(" move: <%d,%d> -> <%d,%d>\n", r1_n, c1_n, r2_n, c2_n);
-		src->checked = src->currentPlayer;
-		if (isCheckmate(src)) {
-			src->checkmated = src->currentPlayer;
-			//printf(" move: <%d,%d> -> <%d,%d>", r1_n, c1_n, r2_n, c2_n);
-		}
-	}
-	else {
-		if (isCheckmate(src))
-			src->draw = true;
-	}
+	CheckCheckmateDrawTest(src);
 	return SUCCESS;
 }
 
@@ -561,78 +562,37 @@ CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src) {
 	return SUCCESS;
 }
 
-CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
-	int i = 0, j = 0,size= src->history->actualSize;
-	FILE* myFile;
-	if (path == NULL)
-		return NULL_PATH;
-	if (src == NULL)
-		return NULL_SRC;
-	myFile = fopen(path, "w+");
-	if (myFile == NULL)
-		return FILE_CREATE_FAILED;
-	for (i = 0; i < 8; i++) {
-		for (j = 0; j < 8; j++) {
-			if (putc(src->gameBoard[i][j], myFile) == -1)
-			{
-				printf("ERROR: writing to file failed.");
-				ChessGameDestroy(src);
-				fclose(myFile);
-				exit(0);
-			}
-		}
+char* getDifficultyString(ChessGame* src) {
+	switch (src->difficulty)
+	{
+	case 1:
+		return "amateur";
+		break;
+	case 2:
+		return "easy";
+		break;
+	case 3:
+		return "moderate";
+		break;
+	case 4:
+		return "hard";
+		break;
+	case 5:
+		return "expert";
+		break;
 	}
-	putc(src->gameMode, myFile);
-	putc(src->difficulty, myFile);
-	putc(src->userColor, myFile);
-	putc(src->currentPlayer, myFile);
-	putc(src->checked, myFile);
-	putc(src->checkmated, myFile);
-	putc(src->draw, myFile);
-	putc(size, myFile);
-	for (i = 0; i < size; i++)
-		putc(spArrayListGetAt(src->history, i), myFile);
-	fclose(myFile);
-	return SUCCESS;
 }
 
-
-CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path) {
-	int i = 0, j = 0, size=0;
-	char c = '\0';
-	FILE* myFile = fopen(path, "r+");
-	if (src == NULL) {
-		fclose(myFile);
-		return NULL_SRC;
-	}
-	if (myFile == NULL) {
-		fclose(myFile);
-		return FILE_CREATE_FAILED;
-	}
-	for (i = 0; i < 8; i++) {
-		for (j = 0; j < 8; j++) {
-			if ((c=getc(myFile)) == -1)
-			{
-				printf("ERROR: writing to file failed.");
-				ChessGameDestroy(src);
-				fclose(myFile);
-				exit(0);
-			}
-			src->gameBoard[i][j] = c;
-		}
-	}
-	src->gameMode = getc(myFile);
-	src->difficulty = getc(myFile);
-	src->userColor = getc(myFile);
-	src->currentPlayer = getc(myFile);
-	src->checked = getc(myFile);
-	src->checkmated = getc(myFile);
-	src->draw = getc(myFile);
-	size = getc(myFile);
-	for (i = 0; i < size; i++)
-		spArrayListAddLast(src->history, getc(myFile));
-	fclose(myFile);
-	return SUCCESS;
+int getDifficultyNum(char* diff) {
+	if (strcmp(diff, "DIFFICULTY: amateur\n") == 0)
+		return 1;
+	if (strcmp(diff, "DIFFICULTY: easy\n") == 0)
+		return 2;
+	if (strcmp(diff, "DIFFICULTY: moderate\n") == 0)
+		return 3;
+	if (strcmp(diff, "DIFFICULTY: hard\n") == 0)
+		return 4;
+	return 5;
 }
 
 void printDifficulty(ChessGame* src) {
@@ -654,6 +614,79 @@ void printDifficulty(ChessGame* src) {
 		printf("expert");
 		break;
 	}
+}
+
+CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
+	int i = 0, j = 0,size= src->history->actualSize;
+	FILE* myFile;
+	char* curPlayerColor;
+	//const char * cPath = &path;
+	if (path == NULL)
+		return NULL_PATH;
+	if (src == NULL)
+		return NULL_SRC;
+
+
+	myFile = fopen(path, "w+");
+	if (myFile == NULL)
+		return FILE_CREATE_FAILED;
+	curPlayerColor = src->currentPlayer == WHITE_PLAYER ? "white" : "black";
+	fprintf(myFile, "%s\nSETTINGS:\nGAME_MODE: %d-player\n", curPlayerColor, src->gameMode);
+	if (src->gameMode == 1) {
+		fprintf(myFile, "DIFFICULTY: %s\n", getDifficultyString(src));
+		if (src->userColor == 0)
+			fprintf(myFile, "USER_COLOR: black\n");
+		else
+			fprintf(myFile, "USER_COLOR: white\n");
+	}
+	for (i = 0; i < 8; i++) {
+		fprintf(myFile, "%d|", 8 - i);
+		for (j = 0; j < 8; j++) {
+			if (src->gameBoard[i][j] != '\0')
+				fprintf(myFile, " %c", src->gameBoard[i][j]);
+			else
+				fprintf(myFile, " _");
+		}
+		fprintf(myFile, " |\n");
+	}
+	fprintf(myFile, "  -----------------\n   A B C D E F G H\n");
+	fclose(myFile);
+	return SUCCESS;
+}
+
+
+CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path) {
+	int i = 0, j = 0, size=0;
+	char c = '\0';
+	char curLine[100];
+	FILE* myFile;
+	if (src == NULL)
+		return NULL_SRC;
+	if (path[0]=='\0')
+		return FILE_CREATE_FAILED;
+	myFile = fopen(path, "r+");
+	if (myFile == NULL)
+		return FILE_CREATE_FAILED;
+	fgets(curLine, 100, myFile);
+	src->currentPlayer = (strcmp(curLine, "white\n") == 0) ? WHITE_PLAYER : BLACK_PLAYER;
+	fgets(curLine, 100, myFile);
+	fgets(curLine, 100, myFile);
+	src->gameMode = (strcmp(curLine, "GAME_MODE: 1-player\n") == 0) ? 1 : 2;
+	if (src->gameMode == 1) {
+		fgets(curLine, 100, myFile);
+		src->difficulty = getDifficultyNum(curLine);
+		fgets(curLine, 100, myFile);
+		src->userColor = (strcmp(curLine, "USER_COLOR: white\n") == 0) ? 1 : 0;
+	}
+	for (i = 0; i < 8; i++) {
+		fgets(curLine, 100, myFile);
+		for (j = 0; j < 8; j++) {
+			src->gameBoard[i][j] = curLine[3+2*j];
+		}
+	}
+	CheckCheckmateDrawTest(src);
+	fclose(myFile);
+	return SUCCESS;
 }
 
 void chessGamePrintSettings(ChessGame* src) {

@@ -28,7 +28,7 @@ typedef struct command_t {
 	CHESS_COMMAND cmd;
 	bool validArg; //is set to true if the line contains a valid argument
 	int arg;
-	char* path;
+	char path[2048];
 	char r1, c1, r2, c2;
 	int type; //0 - settings command, 1 - game command, 2 - command that belongs to both
 } ChessCommand;
