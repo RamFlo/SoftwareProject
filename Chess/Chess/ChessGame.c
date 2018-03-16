@@ -563,19 +563,14 @@ CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src) {
 
 CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
 	int i = 0, j = 0,size= src->history->actualSize;
-	FILE* myFile = fopen(path, "r+");
-	if (path == NULL) {
-		fclose(myFile);
+	FILE* myFile;
+	if (path == NULL)
 		return NULL_PATH;
-	}
-	if (src == NULL) {
-		fclose(myFile);
+	if (src == NULL)
 		return NULL_SRC;
-	}
-	if (myFile == NULL) {
-		fclose(myFile);
+	myFile = fopen(path, "w+");
+	if (myFile == NULL)
 		return FILE_CREATE_FAILED;
-	}
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
 			if (putc(src->gameBoard[i][j], myFile) == -1)
