@@ -30,6 +30,12 @@
     <ClInclude Include="MainAux.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Widget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChessParser.c">
@@ -48,6 +54,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDL_main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

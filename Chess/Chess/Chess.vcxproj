@@ -124,18 +124,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArrayList.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="ChessGame.h" />
     <ClInclude Include="ChessParser.h" />
     <ClInclude Include="MainAux.h" />
     <ClInclude Include="Minimax.h" />
+    <ClInclude Include="Widget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayList.c" />
+    <ClCompile Include="Button.c" />
     <ClCompile Include="ChessGame.c" />
     <ClCompile Include="ChessParser.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="MainAux.c" />
     <ClCompile Include="Minimax.c" />
+    <ClCompile Include="SDL_main.c" />
+    <ClCompile Include="Widget.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
