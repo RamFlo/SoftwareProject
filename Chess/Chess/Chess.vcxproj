@@ -140,6 +140,7 @@
     <ClCompile Include="MainAux.c" />
     <ClCompile Include="Minimax.c" />
     <ClCompile Include="SDL_main.c" />
+    <ClCompile Include="SDL_MainAux.c" />
     <ClCompile Include="Widget.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

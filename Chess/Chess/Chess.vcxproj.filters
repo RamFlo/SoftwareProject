@@ -65,5 +65,8 @@
     <ClCompile Include="SDL_main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SDL_MainAux.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
