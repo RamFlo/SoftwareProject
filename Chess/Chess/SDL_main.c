@@ -16,7 +16,9 @@ int SDL_main() {
 			SDL_RenderClear(chessWindowsArray[curScreen]->renderer);
 			SDL_RenderPresent(chessWindowsArray[curScreen]->renderer);
 			lastHandledScreen = curScreen;
+			//break;
 		}
 	}
+	SDL_Delay(10000);
 	return 0;
 }

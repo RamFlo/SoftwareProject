@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{D4A59160-D72D-4474-94BC-20EFCF4AF004}</ProjectGuid>
-    <RootNamespace>Chess</RootNamespace>
+    <ProjectGuid>{66F61EDA-C45F-4E98-B6F3-4E1094570434}</ProjectGuid>
+    <RootNamespace>TrySDL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,14 +76,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\SDL\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>C:\SDL\SDL2-2.0.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Console</SubSystem>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -91,14 +85,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\SDL\SDL2-2.0.5\include;C:\SDL\SDL2-2.0.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>C:\SDL\SDL2-2.0.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Console</SubSystem>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -129,29 +116,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ArrayList.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="ChessGame.h" />
-    <ClInclude Include="ChessParser.h" />
-    <ClInclude Include="ChessWindow.h" />
-    <ClInclude Include="MainAux.h" />
-    <ClInclude Include="Minimax.h" />
-    <ClInclude Include="SDL_main.h" />
-    <ClInclude Include="SDL_MainAux.h" />
-    <ClInclude Include="Widget.h" />
+    <Image Include="..\..\..\..\..\Desktop\SDL-20180329\braid.bmp" />
+    <Image Include="..\..\..\..\..\Desktop\SDL-20180329\Chess.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayList.c" />
-    <ClCompile Include="Button.c" />
-    <ClCompile Include="ChessGame.c" />
-    <ClCompile Include="ChessParser.c" />
-    <ClCompile Include="ChessWindow.c" />
-    <ClCompile Include="main.c" />
-    <ClCompile Include="MainAux.c" />
-    <ClCompile Include="Minimax.c" />
-    <ClCompile Include="SDL_main.c" />
-    <ClCompile Include="SDL_MainAux.c" />
-    <ClCompile Include="Widget.c" />
+    <ClCompile Include="main_5.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

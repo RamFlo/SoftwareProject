@@ -7,7 +7,7 @@
 #include "SDL_MainAux.h"
 
 
-
+chessWindow* chessWindowsArray[NUM_OF_WINDOWS];
 SDL_Window* settingsWindow = NULL;
 SDL_Window* loadWindow = NULL;
 SDL_Window* gameWindow = NULL;
