@@ -127,8 +127,11 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="ChessGame.h" />
     <ClInclude Include="ChessParser.h" />
+    <ClInclude Include="ChessWindow.h" />
     <ClInclude Include="MainAux.h" />
     <ClInclude Include="Minimax.h" />
+    <ClInclude Include="SDL_main.h" />
+    <ClInclude Include="SDL_MainAux.h" />
     <ClInclude Include="Widget.h" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +139,7 @@
     <ClCompile Include="Button.c" />
     <ClCompile Include="ChessGame.c" />
     <ClCompile Include="ChessParser.c" />
+    <ClCompile Include="ChessWindow.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="MainAux.c" />
     <ClCompile Include="Minimax.c" />

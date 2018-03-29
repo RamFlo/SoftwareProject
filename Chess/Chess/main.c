@@ -1,4 +1,5 @@
 #include "MainAux.h"
+#include "SDL_main.h"
 #include <stdlib.h>
 /*
 * This function is the main game's function. It operates using an outer 'while' loop
@@ -16,8 +17,19 @@
 * @return
 * Undefined value
 */
-int main() {
+int main(int argc, char* argv[]) {
 	ChessGame* g;
+	if (argc > 2){
+		printf("Too many arguments");
+		exit(0);
+	}
+	if (argc == 2 && strcmp(argv[1], "-g") == 0) {
+		return SDL_main();
+	}
+	if (argc == 2 && strcmp(argv[1], "-c") != 0) {
+		printf("wrong argument");
+		exit(0);
+	}
 	printf(" Chess\n-------\n");
 	g = ChessGameCreate(HISTORY_SIZE);
 	if (g == NULL)

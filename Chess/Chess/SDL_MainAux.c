@@ -1,18 +1,93 @@
 #include <SDL.h>
 #include <SDL_video.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "Button.h"
+#include "ChessWindow.h"
+#include "SDL_MainAux.h"
 
 
-SDL_Window* mainWindow = NULL;
+
 SDL_Window* settingsWindow = NULL;
 SDL_Window* loadWindow = NULL;
 SDL_Window* gameWindow = NULL;
 SDL_Window* saveWindow = NULL;
 
+
+
+void newGameButtonClick(void) {
+	//SDL_HideWindow(mainWindow);
+	//showSettingsWindow();
+}
+
+void loadGameButtonClick(void) {
+	//SDL_HideWindow(mainWindow);
+	//showLoadWindow();
+}
+
+void quitGameButtonClick(void) {
+
+}
+
+chessWindow* createMainWindow() {
+	SDL_Window* mainWindow = SDL_CreateWindow("Main Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+	if (mainWindow == NULL)
+		return NULL;
+	SDL_Renderer* rend = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_SOFTWARE);
+	if (rend == NULL) {
+		free(mainWindow);
+		return NULL;
+	}
+	chessWindowsArray[MAIN_WINDOW_INDEX] = createChessWindow(mainWindow, rend);
+	
+	SDL_Rect newGameButtonRect = { .x = 200,.y = 100,.w = 400,.h = 100 };
+	SDL_Rect loadGameButtonRect = { .x = 200,.y = 250,.w = 400,.h = 100 };
+	SDL_Rect quitGameButtonRect = { .x = 200,.y = 400,.w = 400,.h = 100 };
+
+	chessWindowsArray[MAIN_WINDOW_INDEX]->rectangles[0] = newGameButtonRect;
+	chessWindowsArray[MAIN_WINDOW_INDEX]->rectangles[1] = loadGameButtonRect;
+	chessWindowsArray[MAIN_WINDOW_INDEX]->rectangles[2] = quitGameButtonRect;
+
+	Widget* newGameButton = createButton(rend, "assets\\mainWindow_newGameButton.bmp", newGameButtonRect, newGameButtonClick);
+	Widget* loadGameButton = createButton(rend, "assets\\mainWindow_loadGameButton.bmp", loadGameButtonRect, loadGameButtonClick);
+	Widget* quitGameButton = createButton(rend, "assets\\mainWindow_quitGameButton.bmp", quitGameButtonRect, quitGameButtonClick);
+
+	chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[0] = newGameButton;
+	chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1] = loadGameButton;
+	chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[2] = quitGameButton;
+
+	SDL_HideWindow(chessWindowsArray[MAIN_WINDOW_INDEX]->window);
+
+	return chessWindowsArray[MAIN_WINDOW_INDEX];
+}
+
+bool initializeAllWindows() {
+	createMainWindow();
+	return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void destroyAllWindows() {
-	if (mainWindow != NULL)
-		SDL_DestroyWindow(mainWindow);
 	if (settingsWindow != NULL)
 		SDL_DestroyWindow(settingsWindow);
 	if (loadWindow != NULL)
@@ -31,38 +106,8 @@ void exitOnNullObject(char* nullObjectType) {
 }
 
 
-void newGameButtonClick(void) {
-	SDL_HideWindow(mainWindow);
-	showSettingsWindow();
-}
 
-void loadGameButtonClick(void) {
-	SDL_HideWindow(mainWindow);
-	showLoadWindow();
-}
 
-void quitGameButtonClick(void) {
-
-}
-
-void showMainWindow() {
-	if (mainWindow != NULL) {
-		SDL_ShowWindow(mainWindow);
-		return;
-	}
-	mainWindow = SDL_CreateWindow("Main Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (mainWindow == NULL)
-		exitOnNullObject("window");
-	SDL_Renderer* rend = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_SOFTWARE);
-	if (rend == NULL)
-		exitOnNullObject("renderer");
-	SDL_Rect newGameButtonRect = { .x = 200,.y = 100,.w = 400,.h = 100 };
-	SDL_Rect loadGameButtonRect = { .x = 200,.y = 250,.w = 400,.h = 100 };
-	SDL_Rect quitGameButtonRect = { .x = 200,.y = 400,.w = 400,.h = 100 };
-	Widget* newGameButton = createButton(rend, "assets\mainWindow_newGameButton.bmp", newGameButtonRect, newGameButtonClick);
-	Widget* loadGameButton = createButton(rend, "assets\mainWindow_loadGameButton.bmp", loadGameButtonRect, loadGameButtonClick);
-	Widget* quitGameButton = createButton(rend, "assets\mainWindow_quitGameButton.bmp", quitGameButtonRect, quitGameButtonClick);
-}
 
 void showSettingsWindow() {
 
