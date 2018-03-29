@@ -8,7 +8,6 @@
 typedef struct sdl_window_t {
 	Widget* buttons[MAX_BUTTON_AMOUNT];
 	SDL_Renderer* renderer;
-	SDL_Rect rectangles[MAX_BUTTON_AMOUNT];
 	SDL_Window* window;
 	//int curSize;
 } chessWindow;

@@ -1,6 +1,7 @@
 #include "Button.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "SDL_MainAux.h"
 
 Widget* createButton(
 	SDL_Renderer* renderer,
@@ -62,7 +63,8 @@ void handleButtonEvent(Widget* src, SDL_Event* e)
 	if (e->type == SDL_MOUSEBUTTONUP) {
 		Button* button = (Button*)src->data;
 		SDL_Point point = { .x = e->button.x,.y = e->button.y };
-
+		lastClickPoint.x = e->button.x;
+		lastClickPoint.y = e->button.y;
 		if (SDL_PointInRect(&point, &button->location)) {
 			button->action();
 		}
