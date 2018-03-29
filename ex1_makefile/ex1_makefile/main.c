@@ -84,14 +84,15 @@ int main() {
 	int curIndex = 0;
 	unsigned int decimalNum = 0;
 	int newLength = 0;
-	char number[100] = "";
-	char newBaseNum[100] = "";
+	char number[1024] = "";
+	char newBaseNum[1024] = "";
 	printf("Please enter the number's base:\n");
 	check = scanf("%d", &a);
 	if (check == 0) {
 		printf("An error occurred!\n");
 		exit(1);
 	}
+	while ((c = getchar()) != '\n' && c != EOF) {}
 	if (isBaseLegal(a) == 0) {
 		printf("Invalid input base\n");
 		exit(1);
@@ -102,6 +103,7 @@ int main() {
 		printf("An error occurred!\n");
 		exit(1);
 	}
+	while ((c = getchar()) != '\n' && c != EOF) {}
 	if (isBaseLegal(b) == 0) {
 		printf("Invalid desired base\n");
 		exit(2);
@@ -109,8 +111,8 @@ int main() {
 	a2 = a;
 	b2 = b;
 	printf("Please enter a number in base %d:\n", a);
-	c = getchar();
-	c = getchar();
+	//c = getchar();
+	//c = getchar();
 	while (c != EOF && c != '\n') {
 		if (isLegalDigit(c, a) == 0) {
 			printf("Invalid number!\n");
