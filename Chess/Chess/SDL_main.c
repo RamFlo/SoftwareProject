@@ -8,6 +8,7 @@ int SDL_main() {
 	shouldRenderSameScreenAgain = true;
 	SDL_Event e;
 	int lastHandledScreen = 0;
+	curGameSaved = true;
 	g = ChessGameCreate(HISTORY_SIZE);
 	if (g == NULL)
 		exit(0);
@@ -26,16 +27,11 @@ int SDL_main() {
 			sendEventToButtons(&e, curScreen);
 			if (curScreen != lastHandledScreen || shouldRenderSameScreenAgain)
 				break;
-			//button->handleEvent(button, &e);
-			//switch (e.type) {
-			//case SDL_QUIT:
-			//	done = 1;
-			//	break;
-			//case SDL_KEYDOWN:
-			//	if (e.key.keysym.sym == SDLK_ESCAPE)
-			//		done = 1;
-			//	break;
+			if (e.type == SDL_QUIT) {
+				quitGameButtonClick();
+				break;
 			}
+		}
 		if (curScreen != lastHandledScreen || shouldRenderSameScreenAgain) {//check if needed
 			SwitchOrRenderScreen(lastHandledScreen);
 			shouldRenderSameScreenAgain = false;

@@ -16,6 +16,8 @@ extern chessWindow* chessWindowsArray[NUM_OF_WINDOWS];
 extern int curScreen;
 extern int curFirstSlotOnScreen;
 extern int previousScreen;
+extern bool curGameSaved;
+extern bool shouldQuit;
 extern ChessGame* g;
 extern SDL_Point lastClickPoint;
 extern bool shouldRenderSameScreenAgain;
@@ -24,4 +26,5 @@ void destroySDL();
 void drawWindowButtons(int windowIndex);
 void SwitchOrRenderScreen(int lastHandledScreen);
 void sendEventToButtons(SDL_Event* e, int windowIndex);
+void quitGameButtonClick();
 #endif

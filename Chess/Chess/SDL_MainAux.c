@@ -9,6 +9,8 @@ int curScreen;
 int curFirstSlotOnScreen;
 int previousScreen;
 bool shouldRenderSameScreenAgain;
+bool curGameSaved;
+bool shouldQuit;
 ChessGame* g;
 chessWindow* chessWindowsArray[NUM_OF_WINDOWS];
 SDL_Window* settingsWindow = NULL;
@@ -26,6 +28,7 @@ void destroySDL() {
 			destroyChessWindow(chessWindowsArray[i]);
 	}
 	SDL_Quit();
+	exit(0);
 }
 
 void drawAllWindowButtons(int windowIndex) {
@@ -104,8 +107,42 @@ void loadGameButtonClick(void) {//subject to renaming
 	curScreen = LOAD_WINDOW_INDEX;
 }
 
-void quitGameButtonClick(void) {
+int unsavedGameBeforeLeaving() {
+	const SDL_MessageBoxButtonData buttons[] = {
+		{ 0, 0, "no" },
+	{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "yes" },
+	{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "cancel" },
+	};
+	const SDL_MessageBoxData messageboxdata = {
+		SDL_MESSAGEBOX_INFORMATION,
+		NULL,
+		"Would you like to save your game first?",
+		"The current game is unsaved. Would you like to save it?",
+		SDL_arraysize(buttons),
+		buttons,
+	};
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		printf("ERROR: unable to display message box: %s\n", SDL_GetError());
+		destroySDL();
+	}
+	return buttonid;
+}
 
+void quitGameButtonClick() {
+	int chosenButtonID = 0;
+	if (!curGameSaved) {
+		chosenButtonID = unsavedGameBeforeLeaving();
+		if (chosenButtonID == 0)
+			destroySDL();
+		else if (chosenButtonID == 1) {
+			shouldQuit = true;
+			curScreen = SAVE_WINDOW_INDEX;
+		}
+		//else if (buttonid == -1 || buttonid == 2) {closed window or canceled}
+	}
+	else 
+		destroySDL();
 }
 
 
