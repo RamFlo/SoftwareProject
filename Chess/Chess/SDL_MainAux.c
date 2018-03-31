@@ -7,6 +7,8 @@
 
 int curScreen;
 int curFirstSlotOnScreen;
+int previousScreen;
+bool shouldRenderSameScreenAgain;
 ChessGame* g;
 chessWindow* chessWindowsArray[NUM_OF_WINDOWS];
 SDL_Window* settingsWindow = NULL;
@@ -35,12 +37,47 @@ void drawAllWindowButtons(int windowIndex) {
 	}
 }
 
-void saveOrLoadDrawWindowsButton(int windowIndex) {
-	int i = 0;
+void sendEventToButtons(SDL_Event* e, int windowIndex) {
+	Widget* curButton;
+	int i = 0,lastIndex=0;
 	chessWindow* curWindow = chessWindowsArray[windowIndex];
+	lastIndex = (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS) < NUM_OF_SAVE_SLOTS ? (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS) : NUM_OF_SAVE_SLOTS;
+	if (windowIndex == LOAD_WINDOW_INDEX || windowIndex == SAVE_WINDOW_INDEX) {
+		curWindow->buttons[0]->handleEvent(curWindow->buttons[0], e);
+		curWindow->buttons[1]->handleEvent(curWindow->buttons[1], e);
+		curWindow->buttons[2]->handleEvent(curWindow->buttons[2], e);
+		for (i = curFirstSlotOnScreen + 3; i < lastIndex + 3; i++)
+			curWindow->buttons[i]->handleEvent(curWindow->buttons[i], e);
+	}
+	else {
+		while ((curButton = curWindow->buttons[i]) != NULL) {
+			curButton->handleEvent(curButton, e);
+			i++;
+		}
+	}
+}
+
+void SwitchOrRenderScreen(int lastHandledScreen) {
+	if (curScreen != lastHandledScreen) {
+		previousScreen = lastHandledScreen;
+		curFirstSlotOnScreen = 0;
+		SDL_HideWindow(chessWindowsArray[lastHandledScreen]->window);
+	}
+	SDL_ShowWindow(chessWindowsArray[curScreen]->window);
+	SDL_SetRenderDrawColor(chessWindowsArray[curScreen]->renderer, 255, 255, 255, 0);
+	SDL_RenderClear(chessWindowsArray[curScreen]->renderer);
+	drawWindowButtons(curScreen);
+	SDL_RenderPresent(chessWindowsArray[curScreen]->renderer);
+}
+
+void saveOrLoadDrawWindowsButton(int windowIndex) {
+	int i = 0,lastIndex=0;
+	chessWindow* curWindow = chessWindowsArray[windowIndex];
+	lastIndex = (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS) < NUM_OF_SAVE_SLOTS ? (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS) : NUM_OF_SAVE_SLOTS;
 	curWindow->buttons[0]->draw(curWindow->buttons[0], curWindow->renderer);
 	curWindow->buttons[1]->draw(curWindow->buttons[1], curWindow->renderer);
-	for (i = curFirstSlotOnScreen + 2; i < curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS + 2; i++)
+	curWindow->buttons[2]->draw(curWindow->buttons[2], curWindow->renderer);
+	for (i = curFirstSlotOnScreen + 3; i < lastIndex + 3; i++)
 		curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
 }
 
@@ -97,14 +134,22 @@ chessWindow* createMainWindow() {
 	return chessWindowsArray[MAIN_WINDOW_INDEX];
 }
 
+void backButtonClick() {
+	curScreen = previousScreen;
+}
+
 void leftArrowButtonClick() {
-	if (curFirstSlotOnScreen>0)
+	if (curFirstSlotOnScreen > 0) {
+		shouldRenderSameScreenAgain = true;
 		curFirstSlotOnScreen -= NUM_OF_SCREEN_SLOTS;
+	}
 }
 
 void rightArrowButtonClick() {
-	if (curFirstSlotOnScreen+ NUM_OF_SCREEN_SLOTS<NUM_OF_SAVE_SLOTS)
+	if (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS < NUM_OF_SAVE_SLOTS) {
+		shouldRenderSameScreenAgain = true;
 		curFirstSlotOnScreen += NUM_OF_SCREEN_SLOTS;
+	}	
 }
 
 //1-Indexed
@@ -137,8 +182,9 @@ chessWindow* createLoadWindow() {
 		return NULL;
 	}
 	chessWindowsArray[LOAD_WINDOW_INDEX] = createChessWindow(loadWindow, rend);
-	SDL_Rect leftArrowRect = { .x = 125,.y = 375,.w = 50,.h = 50 };
-	SDL_Rect rightArrowRect = { .x = 625,.y = 375,.w = 50,.h = 50 };
+	SDL_Rect leftArrowRect = { .x = 125,.y = 275,.w = 50,.h = 50 };
+	SDL_Rect rightArrowRect = { .x = 625,.y = 275,.w = 50,.h = 50 };
+	SDL_Rect backButtonRect = { .x = 20,.y = 20,.w = 80,.h = 20 };
 	SDL_Rect slotRect1 = { .x = 300,.y = 75,.w = 200,.h = 50 };
 	SDL_Rect slotRect2 = { .x = 300,.y = 175,.w = 200,.h = 50 };
 	SDL_Rect slotRect3 = { .x = 300,.y = 275,.w = 200,.h = 50 };
@@ -151,14 +197,16 @@ chessWindow* createLoadWindow() {
 	slotsRects[4] = slotRect5;
 	Widget* leftArrowButton = createButton(rend, "assets/load_saveWindow_leftArrow.bmp", leftArrowRect, leftArrowButtonClick);
 	Widget* rightArrowButton = createButton(rend, "assets/load_saveWindow_rightArrow.bmp", rightArrowRect, rightArrowButtonClick);
+	Widget* backButton = createButton(rend, "assets/backButton.bmp", backButtonRect, backButtonClick);
 	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[0] = leftArrowButton;
 	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[1] = rightArrowButton;
-	for (i = 2; i < 2 + NUM_OF_SAVE_SLOTS; i++) {
-		curPos = (i - 2) % NUM_OF_SCREEN_SLOTS;
-		sprintf(curSlotImagePath, "assets/load_saveWindowSlot%d.bmp", i - 1);
+	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[2] = backButton;
+	for (i = 3; i < 3 + NUM_OF_SAVE_SLOTS; i++) {
+		curPos = (i - 3) % NUM_OF_SCREEN_SLOTS;
+		sprintf(curSlotImagePath, "assets/load_saveWindowSlot%d.bmp", i - 2);
 		chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[i]= createButton(rend, curSlotImagePath, slotsRects[curPos], loadSlotButtonClick);
 	}
-	for (i = 0; i < 2 + NUM_OF_SAVE_SLOTS; i++) {
+	for (i = 0; i < 3 + NUM_OF_SAVE_SLOTS; i++) {
 		if (chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[i] == NULL)
 			return NULL;
 	}
@@ -167,47 +215,7 @@ chessWindow* createLoadWindow() {
 }
 
 bool initializeAllWindows() {
-	if (createMainWindow() == NULL)
+	if (createMainWindow() == NULL || createLoadWindow()==NULL)
 		return false;
 	return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*void exitOnNullObject(char* nullObjectType) {
-	printf("ERROR: unable to create %s: %s\n", nullObjectType,SDL_GetError());
-	destroyAllWindows();
-	SDL_Quit();
-	exit(0);
-}
-
-
-
-
-
-void showSettingsWindow() {
-
-}
-
-void showLoadWindow() {
-
-}*/

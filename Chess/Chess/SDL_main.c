@@ -5,7 +5,9 @@
 
 
 int SDL_main() {
-	int lastHandledScreen = -1;
+	shouldRenderSameScreenAgain = true;
+	SDL_Event e;
+	int lastHandledScreen = 0;
 	g = ChessGameCreate(HISTORY_SIZE);
 	if (g == NULL)
 		exit(0);
@@ -20,14 +22,23 @@ int SDL_main() {
 		exit(0);
 	}
 	while (true) {
-		if (curScreen != lastHandledScreen) {
-			if (lastHandledScreen != -1)
-				SDL_HideWindow(chessWindowsArray[lastHandledScreen]->window);
-			SDL_ShowWindow(chessWindowsArray[curScreen]->window);
-			SDL_SetRenderDrawColor(chessWindowsArray[curScreen]->renderer, 255, 255, 255, 0);
-			SDL_RenderClear(chessWindowsArray[curScreen]->renderer);
-			drawWindowButtons(curScreen);
-			SDL_RenderPresent(chessWindowsArray[curScreen]->renderer);
+		while (SDL_PollEvent(&e)) {
+			sendEventToButtons(&e, curScreen);
+			if (curScreen != lastHandledScreen || shouldRenderSameScreenAgain)
+				break;
+			//button->handleEvent(button, &e);
+			//switch (e.type) {
+			//case SDL_QUIT:
+			//	done = 1;
+			//	break;
+			//case SDL_KEYDOWN:
+			//	if (e.key.keysym.sym == SDLK_ESCAPE)
+			//		done = 1;
+			//	break;
+			}
+		if (curScreen != lastHandledScreen || shouldRenderSameScreenAgain) {//check if needed
+			SwitchOrRenderScreen(lastHandledScreen);
+			shouldRenderSameScreenAgain = false;
 			lastHandledScreen = curScreen;
 		}
 	}

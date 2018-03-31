@@ -5,7 +5,7 @@
 #define SPRT_W 7
 #define SPRT_LEN 27
 
-int main(int argc, char *argv[]) {
+int main2(int argc, char *argv[]) {
 	// initialize SDL2 for video
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("ERROR: unable to init SDL: %s\n", SDL_GetError());
@@ -19,7 +19,8 @@ int main(int argc, char *argv[]) {
 		SDL_WINDOWPOS_CENTERED,
 		600,
 		600,
-		SDL_WINDOW_OPENGL);
+		SDL_WINDOW_SHOWN);
+	//SDL_WINDOW_OPENGL
 
 	// make sure window was created successfully
 	if (window == NULL) {
@@ -29,7 +30,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// create a renderer for the window
-	SDL_Renderer* rend = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	SDL_Renderer* rend = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+	//SDL_RENDERER_ACCELERATED
 	if (rend == NULL) {
 		printf("ERROR: unable to create renderer: %s\n", SDL_GetError());
 		SDL_DestroyWindow(window);
@@ -131,6 +133,9 @@ int main(int argc, char *argv[]) {
 			sprt.y = (sprtCurr / SPRT_W) * sprt.h;
 		}
 
+
+		//SDL_HideWindow(window);
+		//SDL_ShowWindow(window);
 		// clear window to color red (r,g,b,a)
 		SDL_SetRenderDrawColor(rend, 255, 0, 0, 0);
 		SDL_RenderClear(rend);
