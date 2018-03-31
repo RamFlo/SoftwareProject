@@ -27,7 +27,7 @@ int SDL_main() {
 			sendEventToButtons(&e, curScreen);
 			if (curScreen != lastHandledScreen || shouldRenderSameScreenAgain)
 				break;
-			if (e.type == SDL_QUIT) {
+			if (e.type == SDL_QUIT) {//DOESN'T WORK!
 				quitGameButtonClick();
 				break;
 			}
