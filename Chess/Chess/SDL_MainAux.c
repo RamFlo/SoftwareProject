@@ -349,16 +349,16 @@ void createBoardSquaresRectsAndButtons() { //finish after pieces
 				switch (i) //i changes the path of the picture
 				{
 				case 0:
-					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "path", boardSquareRects[curRectIndex], buttonThatDoesNothing);
+					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "assets/boardWindow_standardSquare.bmp", boardSquareRects[curRectIndex], buttonThatDoesNothing);
 					break;
 				case 1:
-					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "path", boardSquareRects[curRectIndex], buttonThatDoesNothing);
+					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "assets/boardWindow_threatenedSquare.bmp", boardSquareRects[curRectIndex], buttonThatDoesNothing);
 					break;
 				case 2:
-					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "path", boardSquareRects[curRectIndex], buttonThatDoesNothing);
+					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "assets/boardWindow_captureSquare.bmp", boardSquareRects[curRectIndex], buttonThatDoesNothing);
 					break;
 				case 3:
-					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "path", boardSquareRects[curRectIndex], buttonThatDoesNothing);
+					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "assets/boardWindow_captureAndThreatenedSquare.bmp", boardSquareRects[curRectIndex], buttonThatDoesNothing);
 					break;
 				}
 			}
@@ -366,9 +366,31 @@ void createBoardSquaresRectsAndButtons() { //finish after pieces
 	}
 }
 
+SDL_Point calculatePointOfBoardPosition(int row, int col) {
+	SDL_Point res;
+	res.x = 140 + col * 65;
+	res.y = 45 + row * 65;
+	return res;
+}
+
+void updatePiecesRects  //CONTINUEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+
 void createPiecesRectsAndButtons() { //currently with functions that do nothing
-	SDL_Rect boardSquareRects[256], curRect = { .x = 140,.y = 45,.w = 65,.h = 65 };
+	SDL_Rect boardPiecesRects[32], curRect = { .x = 140,.y = 45,.w = 65,.h = 65 };
 	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
+	int i = 0, j = 0;
+	
+	SDL_Rect WhiteRookRect = { .x = 140,.y = 500,.w = 65,.h = 65 };
+	SDL_Rect WhiteKnightRect = { .x = 205,.y = 500,.w = 65,.h = 65 };
+	SDL_Rect WhiteBishopRect = { .x = 270,.y = 500,.w = 65,.h = 65 };
+	SDL_Rect WhiteQueenRect = { .x = 270,.y = 500,.w = 65,.h = 65 };
+	
+	for (i = 0; i < 8; i++) {
+		boardPiecesRects[i+8]=
+
+	}
+
 }
 
 chessWindow* createBoardWindow() {
@@ -400,6 +422,10 @@ chessWindow* createBoardWindow() {
 	//numbers column and letters row
 	SDL_Rect lettersRowRect = { .x = 140,.y = 565,.w = 520,.h = 25 };
 	SDL_Rect numbersColumnRect = { .x = 115,.y = 45,.w = 25,.h = 520 }; //waiting for Ram's approval
+
+
+	//square colors rects
+	createBoardSquaresRectsAndButtons();
 
 	//pieces button rects
 
