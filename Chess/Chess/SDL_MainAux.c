@@ -323,6 +323,138 @@ void loadSlotButtonClick() {
 	}
 }
 
+
+
+
+void createBoardSquaresRectsAndButtons() { //finish after pieces
+	SDL_Rect boardSquareRects[256], curRect= { .x = 140,.y = 45,.w = 65,.h = 65 };
+	Widget* curButton;
+	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
+	int i = 0, row = 0, column = 0, curRectIndex, curButtonIndex;
+	for (row = 0; row < 8; row++) {
+		for (column = 0; column < 8; column++) {
+			for (i = 0; i < 4; i++) {
+				curRectIndex = (8 * row + column)*4 + i;
+				curRect.y = 45 + 65 * row;
+				curRect.x = 140 + 65 * column;
+				boardSquareRects[curRectIndex] = curRect;
+			}
+		}
+	}
+	for (row = 0; row < 8; row++) {
+		for (column = 0; column < 8; column++) {
+			for (i = 0; i < 4; i++) {
+				curRectIndex = (8 * row + column)*4 + i;
+				curButtonIndex = curRectIndex + 43;
+				switch (i) //i changes the path of the picture
+				{
+				case 0:
+					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "path", boardSquareRects[curRectIndex], buttonThatDoesNothing);
+					break;
+				case 1:
+					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "path", boardSquareRects[curRectIndex], buttonThatDoesNothing);
+					break;
+				case 2:
+					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "path", boardSquareRects[curRectIndex], buttonThatDoesNothing);
+					break;
+				case 3:
+					chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "path", boardSquareRects[curRectIndex], buttonThatDoesNothing);
+					break;
+				}
+			}
+		}
+	}
+}
+
+void createPiecesRectsAndButtons() { //currently with functions that do nothing
+	SDL_Rect boardSquareRects[256], curRect = { .x = 140,.y = 45,.w = 65,.h = 65 };
+	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
+}
+
+chessWindow* createBoardWindow() {
+	SDL_Window* boardWindow = SDL_CreateWindow("Board Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+	if (loadWindow == NULL)
+		return NULL;
+	SDL_Renderer* rend = SDL_CreateRenderer(boardWindow, -1, SDL_RENDERER_SOFTWARE);
+	if (rend == NULL) {
+		free(loadWindow);
+		return NULL;
+	}
+	
+	//upper menu button rects - done
+	SDL_Rect RestartButtonRect = { .x = 20,.y = 10,.w = 100,.h = 25 };
+	SDL_Rect SaveButtonRect = { .x = 130,.y = 10,.w = 100,.h = 25 };
+	SDL_Rect loadButtonRect = { .x = 240,.y = 10,.w = 100,.h = 25 };
+	SDL_Rect undoButtonRect = { .x = 350,.y = 10,.w = 100,.h = 25 };
+	SDL_Rect mainMenuButtonRect = { .x = 460,.y = 10,.w = 100,.h = 25 };
+	SDL_Rect quitButtonRect = { .x = 570,.y = 10,.w = 100,.h = 25 };
+
+	//saved or unsaved game rects - done
+	SDL_Rect gameIsSavedRect = { .x = 680,.y = 10,.w = 100,.h = 25 };
+	SDL_Rect gameIsUnsavedRect = { .x = 680,.y = 10,.w = 100,.h = 25 };
+	
+	//board rect - done
+	SDL_Rect gameboardRect = { .x = 140,.y = 45,.w = 520,.h = 520 };
+	
+	
+	//numbers column and letters row
+	SDL_Rect lettersRowRect = { .x = 140,.y = 565,.w = 520,.h = 25 };
+	SDL_Rect numbersColumnRect = { .x = 115,.y = 45,.w = 25,.h = 520 }; //waiting for Ram's approval
+
+	//pieces button rects
+
+
+
+
+
+	
+	
+	SDL_Rect slotsRects[5];
+	char curSlotImagePath[50];
+	int i = 0, curPos = 0;
+	for (i = 0; i < 50; i++)
+		curSlotImagePath[i] = '\0';
+	SDL_Window* loadWindow = SDL_CreateWindow("Load Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+	if (loadWindow == NULL)
+		return NULL;
+	SDL_Renderer* rend = SDL_CreateRenderer(loadWindow, -1, SDL_RENDERER_SOFTWARE);
+	if (rend == NULL) {
+		free(loadWindow);
+		return NULL;
+	}
+	chessWindowsArray[LOAD_WINDOW_INDEX] = createChessWindow(loadWindow, rend);
+	SDL_Rect leftArrowRect = { .x = 125,.y = 275,.w = 50,.h = 50 };
+	SDL_Rect rightArrowRect = { .x = 625,.y = 275,.w = 50,.h = 50 };
+	SDL_Rect backButtonRect = { .x = 20,.y = 20,.w = 80,.h = 20 };
+	SDL_Rect slotRect1 = { .x = 300,.y = 75,.w = 200,.h = 50 };
+	SDL_Rect slotRect2 = { .x = 300,.y = 175,.w = 200,.h = 50 };
+	SDL_Rect slotRect3 = { .x = 300,.y = 275,.w = 200,.h = 50 };
+	SDL_Rect slotRect4 = { .x = 300,.y = 375,.w = 200,.h = 50 };
+	SDL_Rect slotRect5 = { .x = 300,.y = 475,.w = 200,.h = 50 };
+	slotsRects[0] = slotRect1;
+	slotsRects[1] = slotRect2;
+	slotsRects[2] = slotRect3;
+	slotsRects[3] = slotRect4;
+	slotsRects[4] = slotRect5;
+	Widget* leftArrowButton = createButton(rend, "assets/load_saveWindow_leftArrow.bmp", leftArrowRect, leftArrowButtonClick);
+	Widget* rightArrowButton = createButton(rend, "assets/load_saveWindow_rightArrow.bmp", rightArrowRect, rightArrowButtonClick);
+	Widget* backButton = createButton(rend, "assets/backButton.bmp", backButtonRect, backButtonClick);
+	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[0] = leftArrowButton;
+	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[1] = rightArrowButton;
+	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[2] = backButton;
+	for (i = 3; i < 3 + NUM_OF_SAVE_SLOTS; i++) {
+		curPos = (i - 3) % NUM_OF_SCREEN_SLOTS;
+		sprintf(curSlotImagePath, "assets/load_saveWindowSlot%d.bmp", i - 2);
+		chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[i] = createButton(rend, curSlotImagePath, slotsRects[curPos], loadSlotButtonClick);
+	}
+	for (i = 0; i < 3 + NUM_OF_SAVE_SLOTS; i++) {
+		if (chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[i] == NULL)
+			return NULL;
+	}
+	SDL_HideWindow(chessWindowsArray[LOAD_WINDOW_INDEX]->window);
+	return chessWindowsArray[LOAD_WINDOW_INDEX];
+}
+
 chessWindow* createLoadWindow() {
 	SDL_Rect slotsRects[5];
 	char curSlotImagePath[50];
