@@ -40,23 +40,51 @@ void drawAllWindowButtons(int windowIndex) {
 	}
 }
 
-void sendEventToButtons(SDL_Event* e, int windowIndex) {
-	Widget* curButton;
-	int i = 0,lastIndex=0;
+void settingsSendEventToButtons(SDL_Event* e) {
+	int i = 0, lastIndex = 0, curIndex = 0;
+	int buttonIndexArray[] = { 0,3,4,7,8,16,1,2,5,6,9,10,11,12,13,14,15 };
+	chessWindow* curWindow = chessWindowsArray[SETTINGS_WINDOW_INDEX];
+	lastIndex = (g->gameMode == 1) ? 17 : 6;
+	for (i = 0; i < lastIndex; i++) {
+		curIndex = buttonIndexArray[i];
+		curWindow->buttons[curIndex]->handleEvent(curWindow->buttons[curIndex], e);
+	}
+}
+
+void saveOrLoadSendEventToButtons(SDL_Event* e, int windowIndex) {
+	int i = 0, lastIndex = 0;
 	chessWindow* curWindow = chessWindowsArray[windowIndex];
 	lastIndex = (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS) < NUM_OF_SAVE_SLOTS ? (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS) : NUM_OF_SAVE_SLOTS;
-	if (windowIndex == LOAD_WINDOW_INDEX || windowIndex == SAVE_WINDOW_INDEX) {
-		curWindow->buttons[0]->handleEvent(curWindow->buttons[0], e);
-		curWindow->buttons[1]->handleEvent(curWindow->buttons[1], e);
-		curWindow->buttons[2]->handleEvent(curWindow->buttons[2], e);
-		for (i = curFirstSlotOnScreen + 3; i < lastIndex + 3; i++)
-			curWindow->buttons[i]->handleEvent(curWindow->buttons[i], e);
+	curWindow->buttons[0]->handleEvent(curWindow->buttons[0], e);
+	curWindow->buttons[1]->handleEvent(curWindow->buttons[1], e);
+	curWindow->buttons[2]->handleEvent(curWindow->buttons[2], e);
+	for (i = curFirstSlotOnScreen + 3; i < lastIndex + 3; i++)
+		curWindow->buttons[i]->handleEvent(curWindow->buttons[i], e);
+}
+
+void mainSendEventToButtons(SDL_Event* e) {
+	Widget* curButton;
+	int i = 0;
+	chessWindow* curWindow = chessWindowsArray[MAIN_WINDOW_INDEX];
+	while ((curButton = curWindow->buttons[i]) != NULL) {
+		curButton->handleEvent(curButton, e);
+		i++;
 	}
-	else {
-		while ((curButton = curWindow->buttons[i]) != NULL) {
-			curButton->handleEvent(curButton, e);
-			i++;
-		}
+}
+
+void sendEventToButtons(SDL_Event* e, int windowIndex) {
+	switch (windowIndex) {
+	case MAIN_WINDOW_INDEX:
+	//case BOARD_WINDOW_INDEX:
+		mainSendEventToButtons(e);
+		break;
+	case LOAD_WINDOW_INDEX:
+	case SAVE_WINDOW_INDEX:
+		saveOrLoadSendEventToButtons(e,windowIndex);
+		break;
+	case SETTINGS_WINDOW_INDEX:
+		settingsSendEventToButtons(e);
+		break;
 	}
 }
 
@@ -87,10 +115,20 @@ void saveOrLoadDrawWindowsButton(int windowIndex) {
 		curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
 }
 
+void settingsDrawWindowButtons() {
+	int i = 0, lastIndex = 0,curIndex=0;
+	int buttonIndexArray[] = { 0,3,4,7,8,16,1,2,5,6,9,10,11,12,13,14,15 };
+	chessWindow* curWindow = chessWindowsArray[SETTINGS_WINDOW_INDEX];
+	lastIndex = (g->gameMode==1) ? 17 : 6;
+	for (i = 0; i < lastIndex; i++) {
+		curIndex = buttonIndexArray[i];
+		curWindow->buttons[curIndex]->draw(curWindow->buttons[curIndex], curWindow->renderer);
+	}
+}
+
 void drawWindowButtons(int windowIndex) {
 	switch (windowIndex) {
 	case MAIN_WINDOW_INDEX:
-	case SETTINGS_WINDOW_INDEX:
 	case BOARD_WINDOW_INDEX:
 		drawAllWindowButtons(windowIndex);
 		break;
@@ -98,12 +136,14 @@ void drawWindowButtons(int windowIndex) {
 	case SAVE_WINDOW_INDEX:
 		saveOrLoadDrawWindowsButton(windowIndex);
 		break;
+	case SETTINGS_WINDOW_INDEX:
+		settingsDrawWindowButtons();
+		break;
 	}
 }
 
 void newGameButtonClick(void) {
-	//SDL_HideWindow(mainWindow);
-	//showSettingsWindow();
+	curScreen = SETTINGS_WINDOW_INDEX;
 }
 
 void loadGameButtonClick(void) {//subject to renaming
@@ -192,15 +232,15 @@ void gameModeButtonClick() {
 
 void moveDiffLevelChoiceLine() {
 	if (g->difficulty == 1) 
-		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 240;
+		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1]->data))->location.x = 240;
 	else if (g->difficulty == 2)
-		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 350;
+		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1]->data))->location.x = 350;
 	else if (g->difficulty == 3)
-		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 460;
+		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1]->data))->location.x = 460;
 	else if (g->difficulty == 4)
-		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 570;
+		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1]->data))->location.x = 570;
 	else
-		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 680;
+		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1]->data))->location.x = 680;
 }
 
 void diffLevelButtonClick() {
@@ -222,7 +262,7 @@ void startButtonClick() {
 	curScreen = BOARD_WINDOW_INDEX;
 }
 
-void moveuserColorChoiceLine() {
+void moveUserColorChoiceLine() {
 	if (g->userColor == 1) {
 		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[2]->data))->location.x = 240;
 	}
@@ -236,11 +276,17 @@ void userColorButtonClick() {
 		g->userColor = 1;
 	else 
 		g->userColor = 0;
-	moveuserColorChoiceLine();
+	moveUserColorChoiceLine();
 	shouldRenderSameScreenAgain = true;
 }
 
 void backButtonClick() {
+	if (curScreen == SETTINGS_WINDOW_INDEX) {
+		chessGameDefault(g);
+		moveDiffLevelChoiceLine();
+		moveGameModeChoiceLine();
+		moveUserColorChoiceLine();
+	}
 	curScreen = previousScreen;
 }
 
@@ -325,8 +371,9 @@ chessWindow* createLoadWindow() {
 }
 
 chessWindow* createSettingsWindow() {
+	int i = 0;
 	SDL_Window* settingsWindow = SDL_CreateWindow("Settings Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (loadWindow == NULL)
+	if (settingsWindow == NULL)
 		return NULL;
 	SDL_Renderer* rend = SDL_CreateRenderer(settingsWindow, -1, SDL_RENDERER_SOFTWARE);
 	if (rend == NULL) {
@@ -368,80 +415,48 @@ chessWindow* createSettingsWindow() {
 	SDL_Rect startButtonRect = { .x = 250,.y = 420,.w = 300,.h = 75 };
 	
 	//choice mark buttons
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[0] = createButton(rend, "assets/backButton.bmp", gameModeChoiceRect, buttonThatDoesNothing);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1] = createButton(rend, "assets/backButton.bmp", diffLevelChoiceRect, buttonThatDoesNothing);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[2] = createButton(rend, "assets/backButton.bmp", userColorChoiceRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[0] = createButton(rend, "assets/settingsWindow_choiceMark.bmp", gameModeChoiceRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1] = createButton(rend, "assets/settingsWindow_choiceMark.bmp", diffLevelChoiceRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[2] = createButton(rend, "assets/settingsWindow_choiceMark.bmp", userColorChoiceRect, buttonThatDoesNothing);
 
 
 	//back button-done
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[3] = createButton(rend, "assets/backButton.bmp", backButtonRect, backButtonClick);
 
 	//left side buttons
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[4] = createButton(rend, "assets/backButton.bmp", gameModeRect, buttonThatDoesNothing);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[5] = createButton(rend, "assets/backButton.bmp", diffLevelRect, buttonThatDoesNothing);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[6] = createButton(rend, "assets/backButton.bmp", userColorRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[4] = createButton(rend, "assets/settingsWindow_gameMode.bmp", gameModeRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[5] = createButton(rend, "assets/settingsWindow_diffLevel.bmp", diffLevelRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[6] = createButton(rend, "assets/settingsWindow_userColor.bmp", userColorRect, buttonThatDoesNothing);
 
 	//game mode buttons
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[7] = createButton(rend, "assets/backButton.bmp", onePlayerButtonRect, gameModeButtonClick);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[8] = createButton(rend, "assets/backButton.bmp", twoPlayersButtonRect, gameModeButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[7] = createButton(rend, "assets/settingsWindow_1player.bmp", onePlayerButtonRect, gameModeButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[8] = createButton(rend, "assets/settingsWindow_2player.bmp", twoPlayersButtonRect, gameModeButtonClick);
 
 	//diff level buttons
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[9] = createButton(rend, "assets/backButton.bmp", diffAmateurButtonRect, diffLevelButtonClick);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[10] = createButton(rend, "assets/backButton.bmp", diffeasyButtonRect, diffLevelButtonClick);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[11] = createButton(rend, "assets/backButton.bmp", diffmoderateButtonRect, diffLevelButtonClick);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[12] = createButton(rend, "assets/backButton.bmp", diffhardButtonRect, diffLevelButtonClick);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[13] = createButton(rend, "assets/backButton.bmp", diffExpertButtonRect, diffLevelButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[9] = createButton(rend, "assets/settingsWindow_amateur.bmp", diffAmateurButtonRect, diffLevelButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[10] = createButton(rend, "assets/settingsWindow_easy.bmp", diffeasyButtonRect, diffLevelButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[11] = createButton(rend, "assets/settingsWindow_moderate.bmp", diffmoderateButtonRect, diffLevelButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[12] = createButton(rend, "assets/settingsWindow_hard.bmp", diffhardButtonRect, diffLevelButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[13] = createButton(rend, "assets/settingsWindow_expert.bmp", diffExpertButtonRect, diffLevelButtonClick);
 	
 	//user color buttons
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[14] = createButton(rend, "assets/backButton.bmp", onePlayerButtonRect, userColorButtonClick);
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[15] = createButton(rend, "assets/backButton.bmp", twoPlayersButtonRect, userColorButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[14] = createButton(rend, "assets/settingsWindow_white.bmp", whiteButtonRect, userColorButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[15] = createButton(rend, "assets/settingsWindow_black.bmp", blackButtonRect, userColorButtonClick);
 
 	//start button
-	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[16] = createButton(rend, "assets/backButton.bmp", startButtonRect,startButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[16] = createButton(rend, "assets/settingsWindow_start.bmp", startButtonRect,startButtonClick);
 
 
-	
-	SDL_Rect slotsRects[5];
-	char curSlotImagePath[50];
-	int i = 0, curPos = 0;
-	for (i = 0; i < 50; i++)
-		curSlotImagePath[i] = '\0';
-	SDL_Window* loadWindow = SDL_CreateWindow("Load Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (loadWindow == NULL)
-		return NULL;
-	SDL_Renderer* rend = SDL_CreateRenderer(loadWindow, -1, SDL_RENDERER_SOFTWARE);
-	if (rend == NULL) {
-		free(loadWindow);
-		return NULL;
-	}
-	chessWindowsArray[LOAD_WINDOW_INDEX] = createChessWindow(loadWindow, rend);
-	
-	slotsRects[0] = slotRect1;
-	slotsRects[1] = slotRect2;
-	slotsRects[2] = slotRect3;
-	slotsRects[3] = slotRect4;
-	slotsRects[4] = slotRect5;
-	Widget* leftArrowButton = createButton(rend, "assets/load_saveWindow_leftArrow.bmp", leftArrowRect, leftArrowButtonClick);
-	Widget* rightArrowButton = createButton(rend, "assets/load_saveWindow_rightArrow.bmp", rightArrowRect, rightArrowButtonClick);
-	Widget* backButton = createButton(rend, "assets/backButton.bmp", backButtonRect, backButtonClick);
-	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[0] = leftArrowButton;
-	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[1] = rightArrowButton;
-	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[2] = backButton;
-	for (i = 3; i < 3 + NUM_OF_SAVE_SLOTS; i++) {
-		curPos = (i - 3) % NUM_OF_SCREEN_SLOTS;
-		sprintf(curSlotImagePath, "assets/load_saveWindowSlot%d.bmp", i - 2);
-		chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[i] = createButton(rend, curSlotImagePath, slotsRects[curPos], loadSlotButtonClick);
-	}
-	for (i = 0; i < 3 + NUM_OF_SAVE_SLOTS; i++) {
-		if (chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[i] == NULL)
+	for (i = 0; i < 17; i++) {
+		if (chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[i] == NULL)
 			return NULL;
 	}
-	SDL_HideWindow(chessWindowsArray[LOAD_WINDOW_INDEX]->window);
-	return chessWindowsArray[LOAD_WINDOW_INDEX];
+	SDL_HideWindow(chessWindowsArray[SETTINGS_WINDOW_INDEX]->window);
+	return chessWindowsArray[SETTINGS_WINDOW_INDEX];
 }
 
 bool initializeAllWindows() {
-	if (createMainWindow() == NULL || createLoadWindow()==NULL)
+	if (createMainWindow() == NULL || createLoadWindow()==NULL|| createSettingsWindow() == NULL)
 		return false;
 	return true;
 }
