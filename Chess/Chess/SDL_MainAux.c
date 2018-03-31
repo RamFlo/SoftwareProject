@@ -171,6 +171,15 @@ chessWindow* createMainWindow() {
 	return chessWindowsArray[MAIN_WINDOW_INDEX];
 }
 
+void gameModeButtonClick() {
+	SDL_Rect choice;
+	if (lastClickPoint.x >= 240 && lastClickPoint.x <= 340) {
+		g->gameMode = 1;
+		choice = {.x = 240, .y = }
+		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[0]->data))->location=rect
+	}
+}
+
 void backButtonClick() {
 	curScreen = previousScreen;
 }
@@ -252,6 +261,70 @@ chessWindow* createLoadWindow() {
 }
 
 chessWindow* createSettingsWindow() {
+	SDL_Window* settingsWindow = SDL_CreateWindow("Settings Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+	if (loadWindow == NULL)
+		return NULL;
+	SDL_Renderer* rend = SDL_CreateRenderer(settingsWindow, -1, SDL_RENDERER_SOFTWARE);
+	if (rend == NULL) {
+		free(settingsWindow);
+		return NULL;
+	}
+	chessWindowsArray[SETTINGS_WINDOW_INDEX] = createChessWindow(settingsWindow, rend);
+	
+	//back-done
+	SDL_Rect backButtonRect = { .x = 20,.y = 20,.w = 80,.h = 20 };
+
+	//left buttons-done
+	SDL_Rect gameModeRect = { .x = 20,.y = 60,.w = 200,.h = 50 };
+	SDL_Rect diffLevelRect = { .x = 20,.y = 160,.w = 200,.h = 50 };
+	SDL_Rect userColorRect = { .x = 20,.y =260,.w = 200,.h = 50 };
+
+	//Game Mode Buttons-done
+	SDL_Rect onePlayerButtonRect = { .x = 240 ,.y = 85 ,.w = 100,.h = 25 };
+	SDL_Rect twoPlayersButtonRect = { .x = 350 ,.y = 85 ,.w = 100,.h = 25 };
+
+	//difficulty level buttons-done
+	SDL_Rect diffAmateurButtonRect = { .x = 240,.y = 185,.w = 100,.h = 25 };
+	SDL_Rect diffeasyButtonRect = { .x = 350 ,.y = 185 ,.w = 100,.h = 25 };
+	SDL_Rect diffmoderateButtonRect = { .x = 460 ,.y = 185 ,.w = 100,.h = 25 };
+	SDL_Rect diffhardButtonRect = { .x = 570 ,.y = 185 ,.w = 100,.h = 25 };
+	SDL_Rect diffExpertButtonRect = { .x = 680 ,.y = 185 ,.w = 100,.h = 25 };
+	
+	//User Color Buttons-done
+	SDL_Rect onePlayerButtonRect = { .x = 240 ,.y = 285 ,.w = 100,.h = 25 };
+	SDL_Rect twoPlayersButtonRect = { .x = 350 ,.y = 285 ,.w = 100,.h = 25 };
+
+	//start button-done
+	SDL_Rect startButtonRect = { .x = 250,.y = 420,.w = 300,.h = 75 };
+	
+	//back button-done
+	Widget* backButton = createButton(rend, "assets/backButton.bmp", backButtonRect, backButtonClick);
+
+	//left side buttons
+	Widget* gameModeButton = createButton(rend, "assets/backButton.bmp", gameModeRect, backButtonClick);
+	Widget* diffLevelButton = createButton(rend, "assets/backButton.bmp", diffLevelRect, backButtonClick);
+	Widget* userColorButton = createButton(rend, "assets/backButton.bmp", userColorRect, backButtonClick);
+
+	//game mode buttons
+	Widget* onePlayerButton = createButton(rend, "assets/backButton.bmp", onePlayerButtonRect, backButtonClick);
+	Widget* twoPlayerButton = createButton(rend, "assets/backButton.bmp", twoPlayersButtonRect, backButtonClick);
+
+	//diff level buttons
+	Widget* diffAmateurButton = createButton(rend, "assets/backButton.bmp", diffAmateurButtonRect, backButtonClick);
+	Widget* diffeasyButton = createButton(rend, "assets/backButton.bmp", diffeasyButtonRect, backButtonClick);
+	Widget* diffmoderateButton = createButton(rend, "assets/backButton.bmp", diffmoderateButtonRect, backButtonClick);
+	Widget* diffhardButton = createButton(rend, "assets/backButton.bmp", diffhardButtonRect, backButtonClick);
+	Widget* diffExpertButton = createButton(rend, "assets/backButton.bmp", diffExpertButtonRect, backButtonClick);
+	
+	//user color buttons
+	Widget* whiteColorButton = createButton(rend, "assets/backButton.bmp", onePlayerButtonRect, backButtonClick);
+	Widget* blackColorButton = createButton(rend, "assets/backButton.bmp", twoPlayersButtonRect, backButtonClick);
+
+
+
+
+
+	
 	SDL_Rect slotsRects[5];
 	char curSlotImagePath[50];
 	int i = 0, curPos = 0;
@@ -266,14 +339,7 @@ chessWindow* createSettingsWindow() {
 		return NULL;
 	}
 	chessWindowsArray[LOAD_WINDOW_INDEX] = createChessWindow(loadWindow, rend);
-	SDL_Rect leftArrowRect = { .x = 125,.y = 275,.w = 50,.h = 50 };
-	SDL_Rect rightArrowRect = { .x = 625,.y = 275,.w = 50,.h = 50 };
-	SDL_Rect backButtonRect = { .x = 20,.y = 20,.w = 80,.h = 20 };
-	SDL_Rect slotRect1 = { .x = 300,.y = 75,.w = 200,.h = 50 };
-	SDL_Rect slotRect2 = { .x = 300,.y = 175,.w = 200,.h = 50 };
-	SDL_Rect slotRect3 = { .x = 300,.y = 275,.w = 200,.h = 50 };
-	SDL_Rect slotRect4 = { .x = 300,.y = 375,.w = 200,.h = 50 };
-	SDL_Rect slotRect5 = { .x = 300,.y = 475,.w = 200,.h = 50 };
+	
 	slotsRects[0] = slotRect1;
 	slotsRects[1] = slotRect2;
 	slotsRects[2] = slotRect3;
