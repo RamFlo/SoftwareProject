@@ -33,7 +33,7 @@ void drawAllWindowButtons(int windowIndex) {
 	chessWindow* curWindow = chessWindowsArray[windowIndex];
 	while (curWindow->buttons[i] != NULL) {
 		curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
-		i++;
+		i++; 
 	}
 }
 
