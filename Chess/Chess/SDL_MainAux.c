@@ -73,6 +73,9 @@ void SwitchOrRenderScreen(int lastHandledScreen) {
 	SDL_RenderPresent(chessWindowsArray[curScreen]->renderer);
 }
 
+void buttonThatDoesNothing() {
+}
+
 void saveOrLoadDrawWindowsButton(int windowIndex) {
 	int i = 0,lastIndex=0;
 	chessWindow* curWindow = chessWindowsArray[windowIndex];
@@ -171,13 +174,70 @@ chessWindow* createMainWindow() {
 	return chessWindowsArray[MAIN_WINDOW_INDEX];
 }
 
+void moveGameModeChoiceLine() {
+	if (g->gameMode == 1)
+		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[0]->data))->location.x = 240;
+	else
+		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[0]->data))->location.x = 350;
+}
+
 void gameModeButtonClick() {
-	SDL_Rect choice;
-	if (lastClickPoint.x >= 240 && lastClickPoint.x <= 340) {
+	if (lastClickPoint.x >= 240 && lastClickPoint.x <= 340)
 		g->gameMode = 1;
-		choice = {.x = 240, .y = }
-		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[0]->data))->location=rect
+	else
+		g->gameMode = 2;
+	moveGameModeChoiceLine();
+	shouldRenderSameScreenAgain = true;
+}
+
+void moveDiffLevelChoiceLine() {
+	if (g->difficulty == 1) 
+		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 240;
+	else if (g->difficulty == 2)
+		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 350;
+	else if (g->difficulty == 3)
+		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 460;
+	else if (g->difficulty == 4)
+		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 570;
+	else
+		((Button*)(chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[1]->data))->location.x = 680;
+}
+
+void diffLevelButtonClick() {
+	if (lastClickPoint.x >= 240 && lastClickPoint.x <= 340)
+		g->difficulty = 1;
+	else if (lastClickPoint.x >= 350 && lastClickPoint.x <= 450)
+		g->difficulty = 2;
+	else if (lastClickPoint.x >= 460 && lastClickPoint.x <=560)
+		g->difficulty = 3;
+	else if (lastClickPoint.x >= 570 && lastClickPoint.x <= 670)
+		g->difficulty = 4;
+	else 
+		g->difficulty = 5;
+	moveDiffLevelChoiceLine();
+	shouldRenderSameScreenAgain = true;
+}
+
+void startButtonClick() {
+	curScreen = BOARD_WINDOW_INDEX;
+}
+
+void moveuserColorChoiceLine() {
+	if (g->userColor == 1) {
+		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[2]->data))->location.x = 240;
 	}
+	else {
+		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[2]->data))->location.x = 350;
+	}
+}
+
+void userColorButtonClick() {
+	if (lastClickPoint.x >= 240 && lastClickPoint.x <= 340)
+		g->userColor = 1;
+	else 
+		g->userColor = 0;
+	moveuserColorChoiceLine();
+	shouldRenderSameScreenAgain = true;
 }
 
 void backButtonClick() {
@@ -209,8 +269,12 @@ void loadSlotButtonClick() {
 	for (i = 0; i < 50; i++)
 		loadedGamePath[i] = '\0';
 	sprintf(loadedGamePath, "savedGames/%d.txt", calcClickedSlotNumber());
-	if (ChessGameLoad(g, loadedGamePath) == SUCCESS)
+	if (ChessGameLoad(g, loadedGamePath) == SUCCESS) {
 		curScreen = SETTINGS_WINDOW_INDEX;
+		moveGameModeChoiceLine();
+		moveDiffLevelChoiceLine();
+		moveUserColorChoiceLine();
+	}
 }
 
 chessWindow* createLoadWindow() {
@@ -271,6 +335,12 @@ chessWindow* createSettingsWindow() {
 	}
 	chessWindowsArray[SETTINGS_WINDOW_INDEX] = createChessWindow(settingsWindow, rend);
 	
+	//choice marks - done
+	SDL_Rect gameModeChoiceRect = { .x = 240,.y = 113,.w = 100,.h = 3 };
+	SDL_Rect diffLevelChoiceRect = { .x = 350,.y = 213,.w = 100,.h = 3 };
+	SDL_Rect userColorChoiceRect = { .x = 240,.y = 313,.w = 100,.h = 3 };
+
+
 	//back-done
 	SDL_Rect backButtonRect = { .x = 20,.y = 20,.w = 80,.h = 20 };
 
@@ -291,37 +361,43 @@ chessWindow* createSettingsWindow() {
 	SDL_Rect diffExpertButtonRect = { .x = 680 ,.y = 185 ,.w = 100,.h = 25 };
 	
 	//User Color Buttons-done
-	SDL_Rect onePlayerButtonRect = { .x = 240 ,.y = 285 ,.w = 100,.h = 25 };
-	SDL_Rect twoPlayersButtonRect = { .x = 350 ,.y = 285 ,.w = 100,.h = 25 };
+	SDL_Rect whiteButtonRect = { .x = 240 ,.y = 285 ,.w = 100,.h = 25 };
+	SDL_Rect blackButtonRect = { .x = 350 ,.y = 285 ,.w = 100,.h = 25 };
 
 	//start button-done
 	SDL_Rect startButtonRect = { .x = 250,.y = 420,.w = 300,.h = 75 };
 	
+	//choice mark buttons
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[0] = createButton(rend, "assets/backButton.bmp", gameModeChoiceRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1] = createButton(rend, "assets/backButton.bmp", diffLevelChoiceRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[2] = createButton(rend, "assets/backButton.bmp", userColorChoiceRect, buttonThatDoesNothing);
+
+
 	//back button-done
-	Widget* backButton = createButton(rend, "assets/backButton.bmp", backButtonRect, backButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[3] = createButton(rend, "assets/backButton.bmp", backButtonRect, backButtonClick);
 
 	//left side buttons
-	Widget* gameModeButton = createButton(rend, "assets/backButton.bmp", gameModeRect, backButtonClick);
-	Widget* diffLevelButton = createButton(rend, "assets/backButton.bmp", diffLevelRect, backButtonClick);
-	Widget* userColorButton = createButton(rend, "assets/backButton.bmp", userColorRect, backButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[4] = createButton(rend, "assets/backButton.bmp", gameModeRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[5] = createButton(rend, "assets/backButton.bmp", diffLevelRect, buttonThatDoesNothing);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[6] = createButton(rend, "assets/backButton.bmp", userColorRect, buttonThatDoesNothing);
 
 	//game mode buttons
-	Widget* onePlayerButton = createButton(rend, "assets/backButton.bmp", onePlayerButtonRect, backButtonClick);
-	Widget* twoPlayerButton = createButton(rend, "assets/backButton.bmp", twoPlayersButtonRect, backButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[7] = createButton(rend, "assets/backButton.bmp", onePlayerButtonRect, gameModeButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[8] = createButton(rend, "assets/backButton.bmp", twoPlayersButtonRect, gameModeButtonClick);
 
 	//diff level buttons
-	Widget* diffAmateurButton = createButton(rend, "assets/backButton.bmp", diffAmateurButtonRect, backButtonClick);
-	Widget* diffeasyButton = createButton(rend, "assets/backButton.bmp", diffeasyButtonRect, backButtonClick);
-	Widget* diffmoderateButton = createButton(rend, "assets/backButton.bmp", diffmoderateButtonRect, backButtonClick);
-	Widget* diffhardButton = createButton(rend, "assets/backButton.bmp", diffhardButtonRect, backButtonClick);
-	Widget* diffExpertButton = createButton(rend, "assets/backButton.bmp", diffExpertButtonRect, backButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[9] = createButton(rend, "assets/backButton.bmp", diffAmateurButtonRect, diffLevelButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[10] = createButton(rend, "assets/backButton.bmp", diffeasyButtonRect, diffLevelButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[11] = createButton(rend, "assets/backButton.bmp", diffmoderateButtonRect, diffLevelButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[12] = createButton(rend, "assets/backButton.bmp", diffhardButtonRect, diffLevelButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[13] = createButton(rend, "assets/backButton.bmp", diffExpertButtonRect, diffLevelButtonClick);
 	
 	//user color buttons
-	Widget* whiteColorButton = createButton(rend, "assets/backButton.bmp", onePlayerButtonRect, backButtonClick);
-	Widget* blackColorButton = createButton(rend, "assets/backButton.bmp", twoPlayersButtonRect, backButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[14] = createButton(rend, "assets/backButton.bmp", onePlayerButtonRect, userColorButtonClick);
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[15] = createButton(rend, "assets/backButton.bmp", twoPlayersButtonRect, userColorButtonClick);
 
-
-
+	//start button
+	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[16] = createButton(rend, "assets/backButton.bmp", startButtonRect,startButtonClick);
 
 
 	
