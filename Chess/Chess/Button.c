@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "SDL_MainAux.h"
+#include <string.h>
 
 Widget* createButton(
 	SDL_Renderer* renderer,
@@ -26,6 +27,16 @@ Widget* createButton(
 		free(res);
 		free(data);
 		return NULL;
+	}
+	//transperency
+
+	if (strncmp(image, "assets/pieces/white", 19) == 0 || strncmp(image, "assets/pieces/black", 19) == 0 || strncmp(image, "assets/SquareBG", 15) == 0) {
+		if (SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 255, 255, 255)) < 0) {
+			free(res);
+			free(data);
+			SDL_FreeSurface(surface);
+			return NULL;
+		}
 	}
 
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -65,6 +76,7 @@ void handleButtonEvent(Widget* src, SDL_Event* e)
 		SDL_Point point = { .x = e->button.x,.y = e->button.y };
 		lastClickPoint.x = e->button.x;
 		lastClickPoint.y = e->button.y;
+		curEvent = e;
 		if (SDL_PointInRect(&point, &button->location)) {
 			button->action();
 		}

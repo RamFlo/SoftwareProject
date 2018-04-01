@@ -15,6 +15,7 @@
 extern chessWindow* chessWindowsArray[NUM_OF_WINDOWS];
 extern int shouldDrawPiece[32];
 extern int getMovesShouldDraw[256];
+extern int legalMovesForPieceShouldDraw[64];
 extern int curScreen;
 extern int curFirstSlotOnScreen;
 extern int previousScreen;
@@ -24,10 +25,12 @@ extern bool shouldReturnToMainMenu;
 extern ChessGame* g;
 extern SDL_Point lastClickPoint;
 extern bool shouldRenderSameScreenAgain;
+extern SDL_Event* curEvent;
 bool initializeAllWindows();
 void destroySDL();
 void drawWindowButtons(int windowIndex);
 void SwitchOrRenderScreen(int lastHandledScreen);
 void sendEventToButtons(SDL_Event* e, int windowIndex);
 void quitGameButtonClick();
+void updatePiecesRectsAccordingToBoard();
 #endif
