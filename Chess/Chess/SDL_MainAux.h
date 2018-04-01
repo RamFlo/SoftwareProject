@@ -13,11 +13,14 @@
 #define NUM_OF_SAVE_SLOTS 12
 #define NUM_OF_SCREEN_SLOTS 5
 extern chessWindow* chessWindowsArray[NUM_OF_WINDOWS];
+extern int shouldDrawPiece[32];
+extern int getMovesShouldDraw[256];
 extern int curScreen;
 extern int curFirstSlotOnScreen;
 extern int previousScreen;
 extern bool curGameSaved;
 extern bool shouldQuit;
+extern bool shouldReturnToMainMenu;
 extern ChessGame* g;
 extern SDL_Point lastClickPoint;
 extern bool shouldRenderSameScreenAgain;

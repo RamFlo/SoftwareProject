@@ -8,6 +8,7 @@ int SDL_main() {
 	shouldRenderSameScreenAgain = true;
 	SDL_Event e;
 	int lastHandledScreen = 0;
+
 	curGameSaved = true;
 	g = ChessGameCreate(HISTORY_SIZE);
 	if (g == NULL)
