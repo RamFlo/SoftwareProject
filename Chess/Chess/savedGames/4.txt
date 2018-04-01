@@ -6,8 +6,8 @@ USER_COLOR: white
 8| _ N B Q K B N R |
 7| _ M M M M M M M |
 6| _ _ _ _ _ _ _ _ |
-5| _ _ m m _ _ _ _ |
-4| _ _ _ _ R m m m |
+5| _ _ m _ _ _ _ _ |
+4| R _ _ m m m m m |
 3| n _ _ _ _ _ _ _ |
 2| _ _ r _ _ _ _ _ |
 1| _ _ b q k b n r |

@@ -13,6 +13,7 @@ int previousScreen;
 int shouldDrawPiece[32];
 int getMovesShouldDraw[256];
 int legalMovesForPieceShouldDraw[64];
+int movingPieceLocation;
 bool shouldRenderSameScreenAgain;
 bool curGameSaved;
 bool shouldQuit;
@@ -77,7 +78,7 @@ void boardSendEventToButtons(SDL_Event* e) {
 		if (getMovesShouldDraw[i - 43] == 1)
 			curWindow->buttons[i]->handleEvent(curWindow->buttons[i], e);
 	for (i = 299; i < 363; i++)
-		if (getMovesShouldDraw[i - 299] == 1)
+		if (legalMovesForPieceShouldDraw[i - 299] == 1)
 			curWindow->buttons[i]->handleEvent(curWindow->buttons[i], e);
 }
 
@@ -165,7 +166,7 @@ void boardDrawWindowButtons() {
 		if (getMovesShouldDraw[i - 43] == 1)
 			curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
 	for (i = 299; i < 363; i++)
-		if (getMovesShouldDraw[i - 299] == 1)
+		if (legalMovesForPieceShouldDraw[i - 299] == 1)
 			curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
 }
 
@@ -439,6 +440,44 @@ void undoButtonClick() {
 	}
 }
 
+bool isCheckmateOrDraw() {
+	return (g->checkmated != '\0' || g->draw);
+}
+
+void showCheckCheckmateOrDrawMessage() {
+	if (g->checkmated == WHITE_PLAYER)
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Checkmate", "Checkmate! black wins", NULL);
+	else if (g->checkmated == BLACK_PLAYER)
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Checkmate", "Checkmate! white wins", NULL);
+	else if (g->draw)
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Draw", "The game ends in a draw", NULL);
+	else if (g->checked == WHITE_PLAYER)
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Check", "white king is threatened", NULL);
+	else if (g->checked == BLACK_PLAYER)
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Check", "black king is threatened", NULL);
+}
+
+void legalMoveButtonClick() {
+	int srcRow, srcCol, lastClicked, destRow, destCol;
+	char rowChar, colChar;
+	lastClicked = calculatePositionOnBoardByPoint(lastClickPoint.x, lastClickPoint.y);
+	srcRow = movingPieceLocation / 10;
+	srcCol = movingPieceLocation % 10;
+	destRow = lastClicked / 10;
+	destCol = lastClicked % 10;
+	ChessGameSetMove(g, '8' - srcRow, 'A' + srcCol, '8' - destRow, 'A' + destCol);
+	resetLegalMovesShouldDrawArray();
+	curGameSaved = false;
+	shouldRenderSameScreenAgain = true;
+	updatePiecesRectsAccordingToBoard();
+	showCheckCheckmateOrDrawMessage();
+	if (g->gameMode == 1 && !isCheckmateOrDraw()) {
+		computerTurn(g);
+		updatePiecesRectsAccordingToBoard();
+		showCheckCheckmateOrDrawMessage();
+	}
+}
+
 void mainMenuButtonClick() {
 	int chosenButtonID = 0;
 	if (!curGameSaved) {
@@ -487,19 +526,26 @@ void updateLegalMovesShouldDrawArray(int row, int col) {
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
 			if (isLegalMove(g, row, col, i, j) && !isKingCheckedAfterMove(g, row, col, i, j)) {
-				legalMovesForPieceShouldDraw[curRectIndex] = 1;
+				legalMovesForPieceShouldDraw[8*i+j] = 1;
 			}
 		}
 	}
 }
 
 void chessPieceClick() {
-	int clickPointSum = 0, row = 0, col = 0;;
+	int clickPointSum = 0, row = 0, col = 0;
+	clickPointSum = calculatePositionOnBoardByPoint(lastClickPoint.x, lastClickPoint.y);
+	row = clickPointSum / 10;
+	col = clickPointSum % 10;
+	resetGetMovesShouldDrawArray();
 	if (curEvent->button.button == SDL_BUTTON_RIGHT) {
-		clickPointSum = calculatePositionOnBoardByPoint(lastClickPoint.x, lastClickPoint.y);
-		row = clickPointSum / 10;
-		col = clickPointSum % 10;
+		resetLegalMovesShouldDrawArray();
 		updateGetMovesShouldDrawArray(row, col);
+		shouldRenderSameScreenAgain = true;
+	}
+	else if (curEvent->button.button == SDL_BUTTON_LEFT && ((g->currentPlayer==WHITE_PLAYER && !isupper(g->gameBoard[row][col]))|| (g->currentPlayer == BLACK_PLAYER && isupper(g->gameBoard[row][col])))) {
+		movingPieceLocation = 10 * row + col;
+		updateLegalMovesShouldDrawArray(row, col);
 		shouldRenderSameScreenAgain = true;
 	}
 }
@@ -522,7 +568,6 @@ void createBoardLegalMoveRectsAndButtons() {
 			curRectIndex = (8 * row + column);
 			curButtonIndex = curRectIndex + 299;
 			chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[curButtonIndex] = createButton(rend, "assets/SquareBG_BoardWindow_moveSquare.bmp", boardSquareRects[curRectIndex], legalMoveButtonClick);
-			break;
 		}
 	}
 }

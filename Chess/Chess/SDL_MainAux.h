@@ -19,6 +19,7 @@ extern int legalMovesForPieceShouldDraw[64];
 extern int curScreen;
 extern int curFirstSlotOnScreen;
 extern int previousScreen;
+extern int movingPieceLocation;
 extern bool curGameSaved;
 extern bool shouldQuit;
 extern bool shouldReturnToMainMenu;
