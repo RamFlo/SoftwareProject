@@ -3,7 +3,7 @@
 #include "Button.h"
 #include <SDL.h>
 #include <SDL_video.h>
-#define MAX_BUTTON_AMOUNT 50
+#define MAX_BUTTON_AMOUNT 310
 
 typedef struct sdl_window_t {
 	Widget* buttons[MAX_BUTTON_AMOUNT];

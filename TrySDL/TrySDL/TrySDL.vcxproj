@@ -130,6 +130,7 @@
     <ClCompile Include="..\..\..\..\..\Desktop\Widgets-20180329\Widget.c" />
     <ClCompile Include="main_2.c" />
     <ClCompile Include="main_5.c" />
+    <ClCompile Include="tryagain.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\Desktop\Widgets-20180329\Button.h" />

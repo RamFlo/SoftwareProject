@@ -323,6 +323,26 @@ void loadSlotButtonClick() {
 	}
 }
 
+void restartButtonClick() {
+
+}
+
+void saveButtonClick() {
+
+}
+
+void chessPieceClick() {
+
+}
+
+void undoButtonClick() {
+
+}
+
+void mainMenuButtonClick() {
+
+}
+
 
 
 
@@ -373,112 +393,167 @@ SDL_Point calculatePointOfBoardPosition(int row, int col) {
 	return res;
 }
 
-void updatePiecesRects  //CONTINUEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-
-
-void createPiecesRectsAndButtons() { //currently with functions that do nothing
-	SDL_Rect boardPiecesRects[32], curRect = { .x = 140,.y = 45,.w = 65,.h = 65 };
-	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
+void updatePiecesRectsAccordingToBoard() {
+	SDL_Point curPoint = { .x = 0,.y = 0 };
+	chessWindow* boardWindow = chessWindowsArray[BOARD_WINDOW_INDEX];
 	int i = 0, j = 0;
-	
-	SDL_Rect WhiteRookRect = { .x = 140,.y = 500,.w = 65,.h = 65 };
-	SDL_Rect WhiteKnightRect = { .x = 205,.y = 500,.w = 65,.h = 65 };
-	SDL_Rect WhiteBishopRect = { .x = 270,.y = 500,.w = 65,.h = 65 };
-	SDL_Rect WhiteQueenRect = { .x = 270,.y = 500,.w = 65,.h = 65 };
-	
+	int whiteRookCurIndex = 11, whiteKnightCurIndex = 12, whiteBishopCurIndex = 13, whiteQueenCurIndex = 14, whiteKingCurIndex = 15, whitePawnCurIndex = 19;
+	int blackRookCurIndex = 27, blackKnightCurIndex = 28, blackBishopCurIndex = 29, blackQueenCurIndex = 30, blackKingCurIndex = 31, blackPawnCurIndex = 35;
 	for (i = 0; i < 8; i++) {
-		boardPiecesRects[i+8]=
+		for (j = 0; j < 8; j++) {
+			if (g->gameBoard[i][j] != '\0') {
+				curPoint = calculatePointOfBoardPosition(i, j);
+				switch (g->gameBoard[i][j]) {
+				case WHITE_ROOK:
+					((Button*)boardWindow->buttons[whiteRookCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[whiteRookCurIndex]->data)->location.y = curPoint.y;
+					whiteRookCurIndex = 18;
+					break;
+				case WHITE_KNIGHT:
+					((Button*)boardWindow->buttons[whiteKnightCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[whiteKnightCurIndex]->data)->location.y = curPoint.y;
+					whiteKnightCurIndex = 17;
+					break;
+				case WHITE_BISHOP:
+					((Button*)boardWindow->buttons[whiteBishopCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[whiteBishopCurIndex]->data)->location.y = curPoint.y;
+					whiteBishopCurIndex = 16;
+					break;
+				case WHITE_QUEEN:
+					((Button*)boardWindow->buttons[whiteQueenCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[whiteQueenCurIndex]->data)->location.y = curPoint.y;
+					break;
+				case WHITE_KING:
+					((Button*)boardWindow->buttons[whiteKingCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[whiteKingCurIndex]->data)->location.y = curPoint.y;
+					break;
+				case WHITE_PAWN:
+					((Button*)boardWindow->buttons[whitePawnCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[whitePawnCurIndex]->data)->location.y = curPoint.y;
+					whitePawnCurIndex++;
+					break;
+				case BLACK_ROOK:
+					((Button*)boardWindow->buttons[blackRookCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[blackRookCurIndex]->data)->location.y = curPoint.y;
+					blackRookCurIndex = 34;
+					break;
+				case BLACK_KNIGHT:
+					((Button*)boardWindow->buttons[blackKnightCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[blackKnightCurIndex]->data)->location.y = curPoint.y;
+					blackKnightCurIndex = 33;
+					break;
+				case BLACK_BISHOP:
+					((Button*)boardWindow->buttons[blackBishopCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[blackBishopCurIndex]->data)->location.y = curPoint.y;
+					blackBishopCurIndex = 32;
+					break;
+				case BLACK_QUEEN:
+					((Button*)boardWindow->buttons[blackQueenCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[blackQueenCurIndex]->data)->location.y = curPoint.y;
+					break;
+				case BLACK_KING:
+					((Button*)boardWindow->buttons[blackKingCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[blackKingCurIndex]->data)->location.y = curPoint.y;
+					break;
+				case BLACK_PAWN:
+					((Button*)boardWindow->buttons[blackPawnCurIndex]->data)->location.x = curPoint.x;
+					((Button*)boardWindow->buttons[blackPawnCurIndex]->data)->location.y = curPoint.y;
+					blackPawnCurIndex++;
+					break;
+				}
 
+			}
+		}
 	}
-
 }
 
+void createPiecesRectsAndButtons() { //currently with functions that do nothing
+	SDL_Rect boardPiecesRects[32], curRect = { .x = 0,.y = 0,.w = 65,.h = 65 };
+	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
+	chessWindow* boardWindow = chessWindowsArray[BOARD_WINDOW_INDEX];
+	Widget* curWidget;
+	int whiteRookCurIndex = 11, whiteKnightCurIndex = 12, whiteBishopCurIndex = 13, whiteQueenCurIndex = 14, whiteKingCurIndex = 15, whitePawnCurIndex = 19;
+	int blackRookCurIndex = 27, blackKnightCurIndex = 28, blackBishopCurIndex = 29, blackQueenCurIndex = 30, blackKingCurIndex = 31, blackPawnCurIndex = 35;
+	int i = 0;
+	for (i = 0; i < 8; i++) {
+		boardWindow->buttons[whitePawnCurIndex] = createButton(rend, "assets/pieces/whitePawn.bmp", curRect, chessPieceClick);
+		boardWindow->buttons[blackPawnCurIndex] = createButton(rend, "assets/pieces/blackPawn.bmp", curRect, chessPieceClick);
+		whitePawnCurIndex++;
+		blackPawnCurIndex++;
+	}
+	for (i = 0; i < 2; i++) {
+		curWidget = createButton(rend, "assets/pieces/whiteRook.bmp", curRect, chessPieceClick);
+		boardWindow->buttons[whiteRookCurIndex] = curWidget;
+		//boardWindow->buttons[whiteRookCurIndex] = createButton(rend, "assets/pieces/whiteRook.bmp", curRect, chessPieceClick);
+		boardWindow->buttons[blackRookCurIndex] = createButton(rend, "assets/pieces/blackRook.bmp", curRect, chessPieceClick);
+		whiteRookCurIndex = 18;
+		blackRookCurIndex = 34;
+		boardWindow->buttons[whiteKnightCurIndex] = createButton(rend, "assets/pieces/whiteKnight.bmp", curRect, chessPieceClick);
+		boardWindow->buttons[blackKnightCurIndex] = createButton(rend, "assets/pieces/blackKnight.bmp", curRect, chessPieceClick);
+		whiteKnightCurIndex = 17;
+		blackKnightCurIndex = 33;
+		boardWindow->buttons[whiteBishopCurIndex] = createButton(rend, "assets/pieces/whiteBishop.bmp", curRect, chessPieceClick);
+		boardWindow->buttons[blackBishopCurIndex] = createButton(rend, "assets/pieces/blackBishop.bmp", curRect, chessPieceClick);
+		whiteBishopCurIndex = 16;
+		blackBishopCurIndex = 32;
+	}
+	boardWindow->buttons[whiteQueenCurIndex] = createButton(rend, "assets/pieces/whiteQueen.bmp", curRect, chessPieceClick);
+	boardWindow->buttons[blackQueenCurIndex] = createButton(rend, "assets/pieces/blackQueen.bmp", curRect, chessPieceClick);
+	boardWindow->buttons[whiteKingCurIndex] = createButton(rend, "assets/pieces/whiteKing.bmp", curRect, chessPieceClick);
+	boardWindow->buttons[blackKingCurIndex] = createButton(rend, "assets/pieces/blackKing.bmp", curRect, chessPieceClick);
+}
+
+
 chessWindow* createBoardWindow() {
+	int i = 0;
 	SDL_Window* boardWindow = SDL_CreateWindow("Board Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (loadWindow == NULL)
+	if (boardWindow == NULL)
 		return NULL;
 	SDL_Renderer* rend = SDL_CreateRenderer(boardWindow, -1, SDL_RENDERER_SOFTWARE);
 	if (rend == NULL) {
-		free(loadWindow);
+		free(boardWindow);
 		return NULL;
 	}
-	
+	chessWindowsArray[BOARD_WINDOW_INDEX] = createChessWindow(boardWindow, rend);
 	//upper menu button rects - done
-	SDL_Rect RestartButtonRect = { .x = 20,.y = 10,.w = 100,.h = 25 };
-	SDL_Rect SaveButtonRect = { .x = 130,.y = 10,.w = 100,.h = 25 };
+	SDL_Rect restartButtonRect = { .x = 20,.y = 10,.w = 100,.h = 25 };
+	SDL_Rect saveButtonRect = { .x = 130,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect loadButtonRect = { .x = 240,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect undoButtonRect = { .x = 350,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect mainMenuButtonRect = { .x = 460,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect quitButtonRect = { .x = 570,.y = 10,.w = 100,.h = 25 };
-
 	//saved or unsaved game rects - done
 	SDL_Rect gameIsSavedRect = { .x = 680,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect gameIsUnsavedRect = { .x = 680,.y = 10,.w = 100,.h = 25 };
-	
 	//board rect - done
 	SDL_Rect gameboardRect = { .x = 140,.y = 45,.w = 520,.h = 520 };
-	
-	
 	//numbers column and letters row
 	SDL_Rect lettersRowRect = { .x = 140,.y = 565,.w = 520,.h = 25 };
 	SDL_Rect numbersColumnRect = { .x = 115,.y = 45,.w = 25,.h = 520 }; //waiting for Ram's approval
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[0] = createButton(rend, "assets/boardWindow_restartButton.bmp", restartButtonRect, restartButtonClick);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[1] = createButton(rend, "assets/boardWindow_saveButton.bmp", saveButtonRect, saveButtonClick);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[2] = createButton(rend, "assets/boardWindow_loadButton.bmp", loadButtonRect, loadGameButtonClick);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[3] = createButton(rend, "assets/boardWindow_undoButton.bmp", undoButtonRect, undoButtonClick);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[4] = createButton(rend, "assets/boardWindow_mainMenuButton.bmp", mainMenuButtonRect, mainMenuButtonClick);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[5] = createButton(rend, "assets/boardWindow_quitButton.bmp", quitButtonRect, quitGameButtonClick);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[6] = createButton(rend, "assets/boardWindow_gameSaved.bmp", gameIsSavedRect, buttonThatDoesNothing);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[7] = createButton(rend, "assets/boardWindow_gameNotSaved.bmp", gameIsUnsavedRect, buttonThatDoesNothing);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[8] = createButton(rend, "assets/boardWindow_board.bmp", gameboardRect, buttonThatDoesNothing);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[9] = createButton(rend, "assets/boardWindow_boardBottomLegend.bmp", lettersRowRect, buttonThatDoesNothing);
+	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[10] = createButton(rend, "assets/boardWindow_boardLeftLegend.bmp", numbersColumnRect, buttonThatDoesNothing);
 
-
+	//pieces buttons
+	createPiecesRectsAndButtons();
+	updatePiecesRectsAccordingToBoard();
 	//square colors rects
 	createBoardSquaresRectsAndButtons();
 
-	//pieces button rects
-
-
-
-
-
-	
-	
-	SDL_Rect slotsRects[5];
-	char curSlotImagePath[50];
-	int i = 0, curPos = 0;
-	for (i = 0; i < 50; i++)
-		curSlotImagePath[i] = '\0';
-	SDL_Window* loadWindow = SDL_CreateWindow("Load Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (loadWindow == NULL)
-		return NULL;
-	SDL_Renderer* rend = SDL_CreateRenderer(loadWindow, -1, SDL_RENDERER_SOFTWARE);
-	if (rend == NULL) {
-		free(loadWindow);
-		return NULL;
-	}
-	chessWindowsArray[LOAD_WINDOW_INDEX] = createChessWindow(loadWindow, rend);
-	SDL_Rect leftArrowRect = { .x = 125,.y = 275,.w = 50,.h = 50 };
-	SDL_Rect rightArrowRect = { .x = 625,.y = 275,.w = 50,.h = 50 };
-	SDL_Rect backButtonRect = { .x = 20,.y = 20,.w = 80,.h = 20 };
-	SDL_Rect slotRect1 = { .x = 300,.y = 75,.w = 200,.h = 50 };
-	SDL_Rect slotRect2 = { .x = 300,.y = 175,.w = 200,.h = 50 };
-	SDL_Rect slotRect3 = { .x = 300,.y = 275,.w = 200,.h = 50 };
-	SDL_Rect slotRect4 = { .x = 300,.y = 375,.w = 200,.h = 50 };
-	SDL_Rect slotRect5 = { .x = 300,.y = 475,.w = 200,.h = 50 };
-	slotsRects[0] = slotRect1;
-	slotsRects[1] = slotRect2;
-	slotsRects[2] = slotRect3;
-	slotsRects[3] = slotRect4;
-	slotsRects[4] = slotRect5;
-	Widget* leftArrowButton = createButton(rend, "assets/load_saveWindow_leftArrow.bmp", leftArrowRect, leftArrowButtonClick);
-	Widget* rightArrowButton = createButton(rend, "assets/load_saveWindow_rightArrow.bmp", rightArrowRect, rightArrowButtonClick);
-	Widget* backButton = createButton(rend, "assets/backButton.bmp", backButtonRect, backButtonClick);
-	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[0] = leftArrowButton;
-	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[1] = rightArrowButton;
-	chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[2] = backButton;
-	for (i = 3; i < 3 + NUM_OF_SAVE_SLOTS; i++) {
-		curPos = (i - 3) % NUM_OF_SCREEN_SLOTS;
-		sprintf(curSlotImagePath, "assets/load_saveWindowSlot%d.bmp", i - 2);
-		chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[i] = createButton(rend, curSlotImagePath, slotsRects[curPos], loadSlotButtonClick);
-	}
-	for (i = 0; i < 3 + NUM_OF_SAVE_SLOTS; i++) {
-		if (chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[i] == NULL)
+	for (i = 0; i < 299; i++) {
+		if (chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[i] == NULL)
 			return NULL;
 	}
-	SDL_HideWindow(chessWindowsArray[LOAD_WINDOW_INDEX]->window);
-	return chessWindowsArray[LOAD_WINDOW_INDEX];
+	SDL_HideWindow(chessWindowsArray[BOARD_WINDOW_INDEX]->window);
+	return chessWindowsArray[BOARD_WINDOW_INDEX];
 }
 
 chessWindow* createLoadWindow() {
@@ -614,7 +689,7 @@ chessWindow* createSettingsWindow() {
 }
 
 bool initializeAllWindows() {
-	if (createMainWindow() == NULL || createLoadWindow()==NULL|| createSettingsWindow() == NULL)
+	if (createMainWindow() == NULL || createLoadWindow()==NULL|| createSettingsWindow() == NULL|| createBoardWindow()==NULL)
 		return false;
 	return true;
 }
