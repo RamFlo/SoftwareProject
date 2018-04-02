@@ -111,7 +111,7 @@ ChessGame* ChessGameCreate(int historySize) {
 
 ChessGame* ChessGameCopy(ChessGame* src) {
 	ChessGame *g;
-	int i = 0, j = 0, k = 0;
+	int i = 0, j = 0;
 	SPArrayList* p;
 	if (src == NULL)
 		return NULL;
@@ -139,7 +139,7 @@ void ChessGameDestroy(ChessGame* src) {
 }
 
 bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
-	int i = 0, j = 0, lower_r = 0, left_c = 0, upper_r = 0, right_c = 0, diag_type = 0, uppercase = 0;
+	int i = 0, lower_r = 0, left_c = 0, upper_r = 0, right_c = 0, diag_type = 0;
 	lower_r = (r1_n > r2_n) ? r1_n : r2_n;
 	upper_r = (r1_n > r2_n) ? r2_n : r1_n;
 	left_c = (c1_n < c2_n) ? c1_n : c2_n;
@@ -493,7 +493,7 @@ bool isThreatenedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_
 
 CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1) {
 	int i = 0, j = 0, r1_n = 8 - (r1 - '0'), c1_n = c1 - 'A';
-	char threateningPlayerColor;
+	//char threateningPlayerColor;
 	//bool curPlayerPiece = false;
 	if (src == NULL || !isValidSquare(r1_n, c1_n))
 		return INVALID_POSITION;
@@ -501,7 +501,7 @@ CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1) {
 		return NO_PIECE_IN_SQUARE;
 	//if (!(curPlayerPiece = isCurPlayerPiece(src, r1_n, c1_n)))
 		//ChessGameSwitchPlayer(src);
-	threateningPlayerColor = isupper(src->gameBoard[r1_n][c1_n]) ? WHITE_PLAYER : BLACK_PLAYER;
+	//threateningPlayerColor = isupper(src->gameBoard[r1_n][c1_n]) ? WHITE_PLAYER : BLACK_PLAYER;
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
 			if (isLegalMove(src, r1_n, c1_n, i, j) && !isKingCheckedAfterMove(src, r1_n, c1_n, i, j)) {
@@ -581,6 +581,7 @@ char* getDifficultyString(ChessGame* src) {
 		return "expert";
 		break;
 	}
+	return "amateur";
 }
 
 int getDifficultyNum(char* diff) {
@@ -617,7 +618,7 @@ void printDifficulty(ChessGame* src) {
 }
 
 CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
-	int i = 0, j = 0,size= src->history->actualSize;
+	int i = 0, j = 0;
 	FILE* myFile;
 	char* curPlayerColor;
 	if (path[0] == '\0')
@@ -653,8 +654,7 @@ CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
 
 
 CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path) {
-	int i = 0, j = 0, size=0;
-	char c = '\0';
+	int i = 0, j = 0;
 	char curLine[100];
 	FILE* myFile;
 	if (src == NULL)

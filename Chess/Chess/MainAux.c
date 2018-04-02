@@ -5,7 +5,7 @@
 
 //Chess code starts here
 
-ChessCommand readCommand(ChessGame* curGame) {
+ChessCommand readCommand() {
 	ChessCommand cmd;
 	char command[SP_MAX_LINE_LENGTH];
 	fgets(command, SP_MAX_LINE_LENGTH, stdin);
@@ -32,7 +32,7 @@ void settingsState(ChessGame* g) {
 	CHESS_GAME_MESSAGE curMsg;
 	printf("Specify game settings or type 'start' to begin a game with the current settings:\n");
 	while (true) {
-		curCmd = readCommand(g);
+		curCmd = readCommand();
 		if (curCmd.cmd == START)
 			return;
 		if (curCmd.type == 1 || curCmd.cmd == INVALID_LINE || (curCmd.cmd == USER_COLOR && g->gameMode == 2) || (curCmd.cmd == DIFFICULTY && g->gameMode == 2) || (curCmd.cmd == LOAD && curCmd.path == NULL)) {
@@ -88,6 +88,7 @@ void settingsState(ChessGame* g) {
 		case QUIT:
 			quitGame(g);
 			break;
+		default:;
 		}
 	}
 }
@@ -116,7 +117,7 @@ void playerTurn(ChessGame* g) {
 			printf("Enter your move (white player):\n");
 		else
 			printf("Enter your move (black player):\n");
-		curCmd = readCommand(g);
+		curCmd = readCommand();
 		if (curCmd.type == 0 || curCmd.cmd == INVALID_LINE) {
 			printf("ERROR: invalid command\n");
 			continue;
@@ -174,6 +175,7 @@ void playerTurn(ChessGame* g) {
 		case QUIT:
 			quitGame(g);
 			break;
+		default:;
 		}
 	}
 }
