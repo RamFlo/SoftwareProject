@@ -39,6 +39,10 @@ void destroySDL() {
 	exit(0);
 }
 
+bool isCheckmateOrDraw() {
+	return (g->checkmated != '\0' || g->draw);
+}
+
 void resetGetMovesShouldDrawArray() {
 	int i = 0;
 	for (i = 0; i < 256; i++)
@@ -132,6 +136,7 @@ void sendEventToButtons(SDL_Event* e, int windowIndex) {
 	}
 }
 
+//to be changed
 void SwitchOrRenderScreen(int lastHandledScreen) {
 	if (curScreen != lastHandledScreen) {
 		previousScreen = lastHandledScreen;
@@ -215,6 +220,8 @@ void newGameButtonClick(void) {
 }
 
 void loadGameButtonClick(void) {//subject to renaming
+	resetGetMovesShouldDrawArray();
+	resetLegalMovesShouldDrawArray();
 	curScreen = LOAD_WINDOW_INDEX;
 }
 
@@ -242,7 +249,10 @@ int unsavedGameBeforeLeaving() {
 
 void quitGameButtonClick() {
 	int chosenButtonID = 0;
-	if (!curGameSaved) {
+	resetGetMovesShouldDrawArray();
+	resetLegalMovesShouldDrawArray();
+	shouldRenderSameScreenAgain = true;
+	if (!curGameSaved && !isCheckmateOrDraw()) {
 		chosenButtonID = unsavedGameBeforeLeaving();
 		if (chosenButtonID == 0)
 			destroySDL();
@@ -332,6 +342,11 @@ void diffLevelButtonClick() {
 
 void startButtonClick() {
 	curScreen = BOARD_WINDOW_INDEX;
+	if (g->gameMode == 1 && ((g->userColor==0 && g->currentPlayer==WHITE_PLAYER)|| (g->userColor == 1 && g->currentPlayer == BLACK_PLAYER))) {
+		computerTurn(g);
+		updatePiecesRectsAccordingToBoard();
+		showCheckCheckmateOrDrawMessage();
+	}
 }
 
 void moveUserColorChoiceLine() {
@@ -355,11 +370,14 @@ void userColorButtonClick() {
 void backButtonClick() {
 	if (curScreen == SETTINGS_WINDOW_INDEX) {
 		chessGameDefault(g);
+		updatePiecesRectsAccordingToBoard();
 		moveDiffLevelChoiceLine();
 		moveGameModeChoiceLine();
 		moveUserColorChoiceLine();
+		curScreen = MAIN_WINDOW_INDEX;
 	}
-	curScreen = previousScreen;
+	else
+		curScreen = previousScreen;
 }
 
 void leftArrowButtonClick() {
@@ -400,6 +418,8 @@ void loadSlotButtonClick() {
 
 void restartButtonClick() {
 	chessGameReset(g);
+	resetGetMovesShouldDrawArray();
+	resetLegalMovesShouldDrawArray();
 	updatePiecesRectsAccordingToBoard();
 	shouldRenderSameScreenAgain = true;
 }
@@ -416,6 +436,7 @@ void saveSlotButtonClick() {
 			destroySDL();
 		else if (shouldReturnToMainMenu) {
 			chessGameDefault(g);
+			updatePiecesRectsAccordingToBoard();
 			curScreen = MAIN_WINDOW_INDEX;
 			shouldReturnToMainMenu = false;
 		}	
@@ -424,7 +445,12 @@ void saveSlotButtonClick() {
 }
 
 void saveButtonClick() {
-	curScreen = SAVE_WINDOW_INDEX;
+	if (!isCheckmateOrDraw()) {
+		resetGetMovesShouldDrawArray();
+		resetLegalMovesShouldDrawArray();
+		curScreen = SAVE_WINDOW_INDEX;
+	}
+		
 }
 
 int calculatePositionOnBoardByPoint(int x, int y) {
@@ -432,16 +458,15 @@ int calculatePositionOnBoardByPoint(int x, int y) {
 }
 
 void undoButtonClick() {
+	resetGetMovesShouldDrawArray();
+	resetLegalMovesShouldDrawArray();
+	shouldRenderSameScreenAgain = true;
 	if (g->checkmated == '\0' && !g->draw) {
 		if (ChessGameUndoPrevMove(g) == SUCCESS)
-			shouldRenderSameScreenAgain = true;
+			curGameSaved = false;
 		ChessGameUndoPrevMove(g);
 		updatePiecesRectsAccordingToBoard();
 	}
-}
-
-bool isCheckmateOrDraw() {
-	return (g->checkmated != '\0' || g->draw);
 }
 
 void showCheckCheckmateOrDrawMessage() {
@@ -480,11 +505,14 @@ void legalMoveButtonClick() {
 
 void mainMenuButtonClick() {
 	int chosenButtonID = 0;
-	if (!curGameSaved) {
+	resetGetMovesShouldDrawArray();
+	resetLegalMovesShouldDrawArray();
+	if (!curGameSaved && !isCheckmateOrDraw()) {
 		chosenButtonID = unsavedGameBeforeLeaving();
 		if (chosenButtonID == 0) {
 			curScreen = MAIN_WINDOW_INDEX;
 			chessGameDefault(g);
+			updatePiecesRectsAccordingToBoard();
 		}
 			
 		else if (chosenButtonID == 1) {
@@ -496,6 +524,7 @@ void mainMenuButtonClick() {
 	else {
 		curScreen = MAIN_WINDOW_INDEX;
 		chessGameDefault(g);
+		updatePiecesRectsAccordingToBoard();
 	}
 		
 }
@@ -538,7 +567,7 @@ void chessPieceClick() {
 	row = clickPointSum / 10;
 	col = clickPointSum % 10;
 	resetGetMovesShouldDrawArray();
-	if (curEvent->button.button == SDL_BUTTON_RIGHT) {
+	if (curEvent->button.button == SDL_BUTTON_RIGHT && !isCheckmateOrDraw()) {
 		resetLegalMovesShouldDrawArray();
 		updateGetMovesShouldDrawArray(row, col);
 		shouldRenderSameScreenAgain = true;

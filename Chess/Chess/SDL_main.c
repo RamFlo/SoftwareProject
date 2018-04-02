@@ -2,8 +2,6 @@
 #include "SDL_MainAux.h"
 #include "MainAux.h"
 
-
-
 int SDL_main() {
 	shouldRenderSameScreenAgain = true;
 	SDL_Event e;
@@ -24,14 +22,15 @@ int SDL_main() {
 		exit(0);
 	}
 	while (true) {
+		//while (SDL_WaitEvent(&e)) //works as well
 		while (SDL_PollEvent(&e)) {
-			sendEventToButtons(&e, curScreen);
-			if (curScreen != lastHandledScreen || shouldRenderSameScreenAgain)
-				break;
 			if (e.type == SDL_QUIT) {//DOESN'T WORK!
 				quitGameButtonClick();
 				break;
 			}
+			sendEventToButtons(&e, curScreen);
+			if (curScreen != lastHandledScreen || shouldRenderSameScreenAgain)
+				break;
 		}
 		if (curScreen != lastHandledScreen || shouldRenderSameScreenAgain) {//check if needed
 			SwitchOrRenderScreen(lastHandledScreen);

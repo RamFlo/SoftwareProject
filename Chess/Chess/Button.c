@@ -29,8 +29,15 @@ Widget* createButton(
 		return NULL;
 	}
 	//transperency
-
-	if (strncmp(image, "assets/pieces/white", 19) == 0 || strncmp(image, "assets/pieces/black", 19) == 0 || strncmp(image, "assets/SquareBG", 15) == 0) {
+	if (strncmp(image, "assets/pieces/black", 19) == 0) {
+		if (SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 0, 0, 0)) < 0) {
+			free(res);
+			free(data);
+			SDL_FreeSurface(surface);
+			return NULL;
+		}
+	}
+	if (strncmp(image, "assets/pieces/white", 19) == 0 || strncmp(image, "assets/SquareBG", 15) == 0) {
 		if (SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 255, 255, 255)) < 0) {
 			free(res);
 			free(data);

@@ -34,4 +34,5 @@ void SwitchOrRenderScreen(int lastHandledScreen);
 void sendEventToButtons(SDL_Event* e, int windowIndex);
 void quitGameButtonClick();
 void updatePiecesRectsAccordingToBoard();
+void showCheckCheckmateOrDrawMessage();
 #endif
