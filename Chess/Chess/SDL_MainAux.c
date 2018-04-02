@@ -238,6 +238,7 @@ int unsavedGameBeforeLeaving() {
 		"The current game is unsaved. Would you like to save it?",
 		SDL_arraysize(buttons),
 		buttons,
+		NULL
 	};
 	int buttonid;
 	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
@@ -484,7 +485,6 @@ void showCheckCheckmateOrDrawMessage() {
 
 void legalMoveButtonClick() {
 	int srcRow, srcCol, lastClicked, destRow, destCol;
-	char rowChar, colChar;
 	lastClicked = calculatePositionOnBoardByPoint(lastClickPoint.x, lastClickPoint.y);
 	srcRow = movingPieceLocation / 10;
 	srcCol = movingPieceLocation % 10;
@@ -531,7 +531,6 @@ void mainMenuButtonClick() {
 
 void updateGetMovesShouldDrawArray(int row, int col) {
 	int i = 0, j = 0, curRectIndex=0, modifier=0;
-	char threateningPlayerColor = isupper(g->gameBoard[row][col]) ? WHITE_PLAYER : BLACK_PLAYER;
 	resetGetMovesShouldDrawArray();
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
@@ -549,8 +548,7 @@ void updateGetMovesShouldDrawArray(int row, int col) {
 }
 
 void updateLegalMovesShouldDrawArray(int row, int col) {
-	int i = 0, j = 0, curRectIndex = 0, modifier = 0;
-	char threateningPlayerColor = isupper(g->gameBoard[row][col]) ? WHITE_PLAYER : BLACK_PLAYER;
+	int i = 0, j = 0;
 	resetLegalMovesShouldDrawArray();
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
@@ -581,9 +579,8 @@ void chessPieceClick() {
 
 void createBoardLegalMoveRectsAndButtons() { 
 	SDL_Rect boardSquareRects[64], curRect = { .x = 140,.y = 45,.w = 65,.h = 65 };
-	Widget* curButton;
 	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
-	int i = 0, row = 0, column = 0, curRectIndex, curButtonIndex;
+	int row = 0, column = 0, curRectIndex, curButtonIndex;
 	for (row = 0; row < 8; row++) {
 		for (column = 0; column < 8; column++) {
 			curRectIndex = (8 * row + column);
@@ -603,7 +600,6 @@ void createBoardLegalMoveRectsAndButtons() {
 
 void createBoardSquaresRectsAndButtons() { //finish after pieces
 	SDL_Rect boardSquareRects[256], curRect= { .x = 140,.y = 45,.w = 65,.h = 65 };
-	Widget* curButton;
 	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
 	int i = 0, row = 0, column = 0, curRectIndex, curButtonIndex;
 	for (row = 0; row < 8; row++) {
@@ -737,7 +733,7 @@ void updatePiecesRectsAccordingToBoard() {
 }
 
 void createPiecesRectsAndButtons() { //currently with functions that do nothing
-	SDL_Rect boardPiecesRects[32], curRect = { .x = 0,.y = 0,.w = 65,.h = 65 };
+	SDL_Rect curRect = { .x = 0,.y = 0,.w = 65,.h = 65 };
 	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
 	chessWindow* boardWindow = chessWindowsArray[BOARD_WINDOW_INDEX];
 	Widget* curWidget;

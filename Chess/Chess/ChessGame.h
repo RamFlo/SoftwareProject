@@ -88,4 +88,6 @@ bool isOppositeColorsSquares(ChessGame* src, int r1_n, int c1_n, int r2_n, int c
 bool isLegalMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n);
 
 bool isKingCheckedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n);
+
+bool isThreatenedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n);
 #endif
