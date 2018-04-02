@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int main() {
+int main3534() {
 	//shouldRenderSameScreenAgain = true;
 	SDL_Event e;
 	int lastHandledScreen = 0;

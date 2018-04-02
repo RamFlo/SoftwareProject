@@ -1,7 +1,6 @@
 #include "MainAux.h"
 #include "SDL_main.h"
 #include <stdlib.h>
-#include <string.h>
 /*
 * This function is the main game's function. It operates using an outer 'while' loop
 * that handles creating a new game (for the first game and every time that the game is restatred),

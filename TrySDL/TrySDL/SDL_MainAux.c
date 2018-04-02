@@ -20,10 +20,7 @@ bool shouldQuit;
 bool shouldReturnToMainMenu;
 ChessGame* g;
 chessWindow* chessWindowsArray[NUM_OF_WINDOWS];
-SDL_Window* settingsWindow = NULL;
-SDL_Window* loadWindow = NULL;
-SDL_Window* gameWindow = NULL;
-SDL_Window* saveWindow = NULL;
+SDL_Window* programWindow;
 SDL_Point lastClickPoint;
 SDL_Event* curEvent;
 
@@ -268,16 +265,11 @@ void quitGameButtonClick() {
 
 
 chessWindow* createMainWindow() {
-	SDL_Window* mainWindow = SDL_CreateWindow("Main Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (mainWindow == NULL)
+	SDL_Window* w2 = programWindow;
+	SDL_Renderer* rend = SDL_CreateRenderer(w2, -1, SDL_RENDERER_SOFTWARE);
+	if (rend == NULL)
 		return NULL;
-	SDL_Renderer* rend = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_SOFTWARE);
-	if (rend == NULL) {
-		free(mainWindow);
-		return NULL;
-	}
-	if ((chessWindowsArray[MAIN_WINDOW_INDEX] = createChessWindow(mainWindow, rend))==NULL) {
-		free(mainWindow);
+	if ((chessWindowsArray[MAIN_WINDOW_INDEX] = createChessWindow(programWindow, rend))==NULL) {
 		free(rend);
 		return NULL;
 	}
@@ -292,7 +284,6 @@ chessWindow* createMainWindow() {
 	chessWindowsArray[MAIN_WINDOW_INDEX]->buttons[2] = quitGameButton;
 	if (newGameButton == NULL || loadGameButton == NULL || quitGameButton == NULL)
 		return NULL;
-	SDL_HideWindow(chessWindowsArray[MAIN_WINDOW_INDEX]->window);
 	return chessWindowsArray[MAIN_WINDOW_INDEX];
 }
 
@@ -775,22 +766,15 @@ void createPiecesRectsAndButtons() { //currently with functions that do nothing
 
 chessWindow* createBoardWindow() {
 	int i = 0;
-	SDL_Window* boardWindow = SDL_CreateWindow("Board Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (boardWindow == NULL)
+	SDL_Renderer* rend = SDL_CreateRenderer(programWindow, -1, SDL_RENDERER_SOFTWARE);
+	if (rend == NULL)
 		return NULL;
-	SDL_Renderer* rend = SDL_CreateRenderer(boardWindow, -1, SDL_RENDERER_SOFTWARE);
-	if (rend == NULL) {
-		free(boardWindow);
-		return NULL;
-	}
 	if (SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_BLEND) < 0) {
-		free(boardWindow);
 		free(rend);
 		return NULL;
 	}
 		
-	if ((chessWindowsArray[BOARD_WINDOW_INDEX] = createChessWindow(boardWindow, rend)) == NULL) {
-		free(boardWindow);
+	if ((chessWindowsArray[BOARD_WINDOW_INDEX] = createChessWindow(programWindow, rend)) == NULL) {
 		free(rend);
 		return NULL;
 	}
@@ -833,7 +817,6 @@ chessWindow* createBoardWindow() {
 		if (chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[i] == NULL)
 			return NULL;
 	}
-	SDL_HideWindow(chessWindowsArray[BOARD_WINDOW_INDEX]->window);
 	return chessWindowsArray[BOARD_WINDOW_INDEX];
 }
 
@@ -843,16 +826,10 @@ chessWindow* createSaveWindow() {
 	int i = 0, curPos = 0;
 	for (i = 0; i < 50; i++)
 		curSlotImagePath[i] = '\0';
-	SDL_Window* saveWindow = SDL_CreateWindow("Save Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (saveWindow == NULL)
+	SDL_Renderer* rend = SDL_CreateRenderer(programWindow, -1, SDL_RENDERER_SOFTWARE);
+	if (rend == NULL)
 		return NULL;
-	SDL_Renderer* rend = SDL_CreateRenderer(saveWindow, -1, SDL_RENDERER_SOFTWARE);
-	if (rend == NULL) {
-		free(saveWindow);
-		return NULL;
-	}
-	if ((chessWindowsArray[SAVE_WINDOW_INDEX] = createChessWindow(saveWindow, rend)) == NULL) {
-		free(saveWindow);
+	if ((chessWindowsArray[SAVE_WINDOW_INDEX] = createChessWindow(programWindow, rend)) == NULL) {
 		free(rend);
 		return NULL;
 	}
@@ -884,7 +861,6 @@ chessWindow* createSaveWindow() {
 		if (chessWindowsArray[SAVE_WINDOW_INDEX]->buttons[i] == NULL)
 			return NULL;
 	}
-	SDL_HideWindow(chessWindowsArray[SAVE_WINDOW_INDEX]->window);
 	return chessWindowsArray[SAVE_WINDOW_INDEX];
 }
 
@@ -894,16 +870,10 @@ chessWindow* createLoadWindow() {
 	int i = 0,curPos=0;
 	for (i = 0; i < 50; i++)
 		curSlotImagePath[i] = '\0';
-	SDL_Window* loadWindow = SDL_CreateWindow("Load Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (loadWindow == NULL)
+	SDL_Renderer* rend = SDL_CreateRenderer(programWindow, -1, SDL_RENDERER_SOFTWARE);
+	if (rend == NULL)
 		return NULL;
-	SDL_Renderer* rend = SDL_CreateRenderer(loadWindow, -1, SDL_RENDERER_SOFTWARE);
-	if (rend == NULL) {
-		free(loadWindow);
-		return NULL;
-	}
-	if ((chessWindowsArray[LOAD_WINDOW_INDEX] = createChessWindow(loadWindow, rend))==NULL) {
-		free(loadWindow);
+	if ((chessWindowsArray[LOAD_WINDOW_INDEX] = createChessWindow(programWindow, rend))==NULL) {
 		free(rend);
 		return NULL;
 	}
@@ -935,22 +905,15 @@ chessWindow* createLoadWindow() {
 		if (chessWindowsArray[LOAD_WINDOW_INDEX]->buttons[i] == NULL)
 			return NULL;
 	}
-	SDL_HideWindow(chessWindowsArray[LOAD_WINDOW_INDEX]->window);
 	return chessWindowsArray[LOAD_WINDOW_INDEX];
 }
 
 chessWindow* createSettingsWindow() {
 	int i = 0;
-	SDL_Window* settingsWindow = SDL_CreateWindow("Settings Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-	if (settingsWindow == NULL)
+	SDL_Renderer* rend = SDL_CreateRenderer(programWindow, -1, SDL_RENDERER_SOFTWARE);
+	if (rend == NULL)
 		return NULL;
-	SDL_Renderer* rend = SDL_CreateRenderer(settingsWindow, -1, SDL_RENDERER_SOFTWARE);
-	if (rend == NULL) {
-		free(settingsWindow);
-		return NULL;
-	}
-	if((chessWindowsArray[SETTINGS_WINDOW_INDEX] = createChessWindow(settingsWindow, rend))==NULL) {
-		free(settingsWindow);
+	if((chessWindowsArray[SETTINGS_WINDOW_INDEX] = createChessWindow(programWindow, rend))==NULL) {
 		free(rend);
 		return NULL;
 	}
@@ -1024,12 +987,11 @@ chessWindow* createSettingsWindow() {
 		if (chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[i] == NULL)
 			return NULL;
 	}
-	SDL_HideWindow(chessWindowsArray[SETTINGS_WINDOW_INDEX]->window);
 	return chessWindowsArray[SETTINGS_WINDOW_INDEX];
 }
 
 bool initializeAllWindows() {
-	if (createLoadWindow()==NULL || createMainWindow() == NULL || createSettingsWindow() == NULL|| createBoardWindow()==NULL ||createSaveWindow()==NULL)
+	if (createMainWindow() == NULL ||createLoadWindow()==NULL || createSettingsWindow() == NULL|| createBoardWindow()==NULL ||createSaveWindow()==NULL)
 		return false;
 	return true;
 }

@@ -18,6 +18,29 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ArrayList.c" />
+    <ClCompile Include="Button.c" />
+    <ClCompile Include="ChessGame.c" />
+    <ClCompile Include="ChessParser.c" />
+    <ClCompile Include="ChessWindow.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="MainAux.c" />
+    <ClCompile Include="Minimax.c" />
+    <ClCompile Include="SDL_main.c" />
+    <ClCompile Include="SDL_MainAux.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArrayList.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="ChessGame.h" />
+    <ClInclude Include="ChessParser.h" />
+    <ClInclude Include="ChessWindow.h" />
+    <ClInclude Include="MainAux.h" />
+    <ClInclude Include="Minimax.h" />
+    <ClInclude Include="SDL_main.h" />
+    <ClInclude Include="SDL_MainAux.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{66F61EDA-C45F-4E98-B6F3-4E1094570434}</ProjectGuid>
@@ -77,6 +100,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\SDL\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\SDL\SDL2-2.0.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -120,23 +144,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\..\Desktop\SDL-20180329\braid.bmp" />
-    <Image Include="..\..\..\..\..\Desktop\SDL-20180329\Chess.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\Widgets-20180329\Button.c" />
-    <ClCompile Include="..\..\..\..\..\Desktop\Widgets-20180329\main.c" />
-    <ClCompile Include="..\..\..\..\..\Desktop\Widgets-20180329\Widget.c" />
-    <ClCompile Include="main_2.c" />
-    <ClCompile Include="main_5.c" />
-    <ClCompile Include="tryagain.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\Widgets-20180329\Button.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\Widgets-20180329\SPBufferset.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\Widgets-20180329\Widget.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
