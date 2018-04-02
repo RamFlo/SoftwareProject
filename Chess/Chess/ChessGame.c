@@ -264,7 +264,7 @@ bool isLegalWhitePawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n
 	else if (r2_n == r1_n - 2 && c2_n == c1_n) {
 		if (r1_n != 6)
 			return false;
-		return (src->gameBoard[r2_n][c2_n] == '\0');
+		return (src->gameBoard[r2_n][c2_n] == '\0' && src->gameBoard[r2_n+1][c2_n] == '\0');
 	}
 	else if (r2_n == r1_n - 1 && abs(c1_n - c2_n) == 1) {
 		if (isOppositeColorsSquares(src,r1_n, c1_n, r2_n, c2_n))
@@ -281,7 +281,7 @@ bool isLegalBlackPawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n
 	else if (r2_n == r1_n + 2 && c2_n == c1_n) {
 		if (r1_n != 1)
 			return false;
-		return (src->gameBoard[r2_n][c2_n] == '\0');
+		return (src->gameBoard[r2_n][c2_n] == '\0' && src->gameBoard[r2_n - 1][c2_n] == '\0');
 	}
 	else if (r2_n == r1_n + 1 && abs(c1_n - c2_n) == 1) {
 		if (isOppositeColorsSquares(src, r1_n, c1_n, r2_n, c2_n))
