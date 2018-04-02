@@ -418,6 +418,7 @@ void loadSlotButtonClick() {
 }
 
 void restartButtonClick() {
+	curGameSaved = true;
 	chessGameReset(g);
 	resetGetMovesShouldDrawArray();
 	resetLegalMovesShouldDrawArray();
