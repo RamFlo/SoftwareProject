@@ -733,7 +733,7 @@ void updatePiecesRectsAccordingToBoard() {
 }
 
 void createPiecesRectsAndButtons() { //currently with functions that do nothing
-	SDL_Rect curRect = { .x = 0,.y = 0,.w = 65,.h = 65 }; 
+	SDL_Rect curRect = { .x = 0,.y = 0,.w = 65,.h = 65 };
 	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
 	chessWindow* boardWindow = chessWindowsArray[BOARD_WINDOW_INDEX];
 	Widget* curWidget;
