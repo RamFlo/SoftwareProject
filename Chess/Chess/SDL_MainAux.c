@@ -156,8 +156,15 @@ void buttonThatDoesNothing() {
 void boardDrawWindowButtons() {
 	int i = 0;
 	chessWindow* curWindow = chessWindowsArray[BOARD_WINDOW_INDEX];
-	for (i = 0; i < 6; i++)
-		curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
+	for (i = 0; i < 6; i++) {
+		if (i!=3)
+			curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
+		else {
+			if(g->history->actualSize!=0)
+				curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
+		}
+	}
+		
 	if (curGameSaved)
 		curWindow->buttons[6]->draw(curWindow->buttons[6], curWindow->renderer);
 	else
@@ -175,15 +182,34 @@ void boardDrawWindowButtons() {
 			curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
 }
 
+bool checkIfFilenameExists(const char *fileName) {
+	FILE *file;
+	if ((file = fopen(fileName, "r"))){
+		fclose(file);
+		return true;
+	}
+	return false;
+}
+
 void saveOrLoadDrawWindowsButton(int windowIndex) {
+	char loadedGamePath[50];
 	int i = 0,lastIndex=0;
 	chessWindow* curWindow = chessWindowsArray[windowIndex];
+	for (i = 0; i < 50; i++)
+		loadedGamePath[i] = '\0';
 	lastIndex = (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS) < NUM_OF_SAVE_SLOTS ? (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS) : NUM_OF_SAVE_SLOTS;
 	curWindow->buttons[0]->draw(curWindow->buttons[0], curWindow->renderer);
 	curWindow->buttons[1]->draw(curWindow->buttons[1], curWindow->renderer);
 	curWindow->buttons[2]->draw(curWindow->buttons[2], curWindow->renderer);
-	for (i = curFirstSlotOnScreen + 3; i < lastIndex + 3; i++)
-		curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
+	for (i = curFirstSlotOnScreen + 3; i < lastIndex + 3; i++) {
+		if (windowIndex == LOAD_WINDOW_INDEX) {
+			sprintf(loadedGamePath, "savedGames/%d.txt", i - 2);
+			if (checkIfFilenameExists(loadedGamePath))
+				curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
+		}
+		else
+			curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
+	}
 }
 
 void settingsDrawWindowButtons() {
@@ -369,6 +395,8 @@ void userColorButtonClick() {
 }
 
 void backButtonClick() {
+	shouldQuit = false;
+	shouldReturnToMainMenu = false;
 	if (curScreen == SETTINGS_WINDOW_INDEX) {
 		chessGameDefault(g);
 		updatePiecesRectsAccordingToBoard();

@@ -89,7 +89,7 @@ int MinimaxSuggestMoveRec(ChessGame* g, int maxDepth, int fatherCurBestScore) {
 			if (isCurPlayerPiece(g,i, j)) {
 				for (l = 0; l < 8; l++) {
 					for (k = 7; k >= 0; k--) {
-						if ((minOrMax == 0 && curBestScore <= fatherCurBestScore) || (minOrMax == 1 && curBestScore >= fatherCurBestScore))
+						if ((minOrMax == 0 && curBestScore <= fatherCurBestScore) || (minOrMax == 1 && curBestScore >= fatherCurBestScore)) //pruning
 							return curBestScore;
 						gCopy = ChessGameCopy(g);
 						if (gCopy == NULL)
