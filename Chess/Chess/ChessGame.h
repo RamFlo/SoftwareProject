@@ -50,44 +50,63 @@ typedef enum chess_game_message_t {
 	NULL_PATH,
 } CHESS_GAME_MESSAGE;
 
-
+//creates a new ChessGame, initializes the board and settings and returns a pointer to the newly created ChessGame
 ChessGame* ChessGameCreate(int historySize);
 
+//checks if a square contains a piece of the current player
 bool isCurPlayerPiece(ChessGame* src,int r1_n, int c1_n);
 
+//copies a ChessGame, copiesthe board and settings and returns a pointer to the newly created ChessGame
 ChessGame* ChessGameCopy(ChessGame* src);
 
+//Tries to do a given move, returns a CHESS_GAME_MESSAGE indicating if the move was done successfully.
 CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, char c2);
 
+//given a ChessGame, this function gets it's difficulty (an integer) and prints it's name
 void printDifficulty(ChessGame* src);
 
+//loads a previous's game board and settings from a specified path
 CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path);
 
+//destroys a given ChessGame
 void ChessGameDestroy(ChessGame* src);
 
+//resets a game's settings to the default
 void chessGameDefault(ChessGame* g);
 
+//prints a given game's settings
 void chessGamePrintSettings(ChessGame* src);
 
+//Gets and prints all the legal moves of a piece in a given square
 CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1);
 
+//checks if a square is currently threatened by a specific player
 bool isSquareThreatenedByColor(ChessGame* src, int r1_n, int c1_n, char threateningPlayer);
 
+//given a char representing a piece, prints the piece's name
 void printPieceName(char p);
 
+//prints the current state of the given game's board
 CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src);
 
+//save the current game's board and settings in a specified path
 CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path);
 
+//revokes the last move that was made - returns a CHESS_GAME_MESSAGE indicating if execution was successful or not
 CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src);
 
+//resets the board and history of the current game
 void chessGameReset(ChessGame* g);
 
+//checks if two squares have pieces of opposing colors
 bool isOppositeColorsSquares(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n);
 
+//given two squares representing a move, checks if the given move is legal
 bool isLegalMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n);
 
+//checks if the king is checked after a specific move is executed
 bool isKingCheckedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n);
 
+//Checks if a piece is threatened after a move it does
 bool isThreatenedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n);
 #endif
