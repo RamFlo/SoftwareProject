@@ -1,15 +1,15 @@
 white
 SETTINGS:
 GAME_MODE: 1-player
-DIFFICULTY: hard
+DIFFICULTY: easy
 USER_COLOR: white
-8| _ N B Q K B N R |
+8| R N B Q K B N R |
 7| _ M M M M M M M |
 6| _ _ _ _ _ _ _ _ |
-5| _ _ _ _ m _ _ _ |
-4| _ _ _ m _ m m m |
+5| M _ _ _ _ _ _ _ |
+4| _ _ _ _ _ m _ _ |
 3| _ _ _ _ _ _ _ _ |
-2| R _ m _ _ _ _ _ |
-1| M n b q k b n r |
+2| m m m m m _ m m |
+1| r n b q k b n r |
   -----------------
    A B C D E F G H

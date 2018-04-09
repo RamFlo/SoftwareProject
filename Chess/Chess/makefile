@@ -11,37 +11,37 @@ SDL_LIB = -L/usr/local/lib/sdl_2.0.5/lib -Wl,-rpath,/usr/local/lib/sdl_2.0.5/lib
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) $(SDL_LIB) -o $@
 main.o: main.c MainAux.h SDL_main.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 	
 ArrayList.o: ArrayList.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 	
 Button.o: Button.h SDL_MainAux.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 	
 ChessGame.o: ChessGame.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 	
 ChessParser.o: ChessParser.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 	
 ChessWindow.o: ChessWindow.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c	
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c	
 
 MainAux.o: MainAux.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 	
 Minimax.o: Minimax.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 	
 SDL_main.o: SDL_MainAux.h MainAux.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c		
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c		
 	
 SDL_MainAux.o: Button.h ChessWindow.h SDL_MainAux.h MainAux.h ChessGame.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 	
 Widget.o: Widget.h
-	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c	
+	$(CC) $(CC_COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c	
 	
 clean:
 	rm -f *.o $(EXEC) $(UNIT_TESTS)
