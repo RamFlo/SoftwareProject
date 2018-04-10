@@ -5,6 +5,7 @@
 
 //Chess code starts here
 
+//gets a command (string) from the user, converts it to ChessCommand and returns it
 ChessCommand readCommand() {
 	ChessCommand cmd;
 	char command[SP_MAX_LINE_LENGTH];
@@ -13,6 +14,7 @@ ChessCommand readCommand() {
 	return cmd;
 }
 
+//Checks if the current player is a human player, or the computer
 bool isHuman(ChessGame* g) {
 	if (g->gameMode == 2)
 		return true;
@@ -21,12 +23,15 @@ bool isHuman(ChessGame* g) {
 	return false;
 }
 
+//quits game - destroys the game, prints message and exits
 void quitGame(ChessGame* g) {
 	ChessGameDestroy(g);
 	printf("Exiting...\n");
 	exit(0);
 }
 
+//Starts the settings state - gets a command from the user, makes sure it's a legal command that's executable on the settings state according to the instructions,
+//then executes it accordingly
 void settingsState(ChessGame* g) {
 	ChessCommand curCmd;
 	CHESS_GAME_MESSAGE curMsg;
@@ -93,6 +98,7 @@ void settingsState(ChessGame* g) {
 	}
 }
 
+//if it's a human player's turn - executes a player turn function. Else - executes a computer turn.
 void gameState(ChessGame* g) {
 	if (isHuman(g))
 		playerTurn(g);
@@ -100,6 +106,7 @@ void gameState(ChessGame* g) {
 		computerTurn(g);
 }
 
+//Computes the best move using Minimax, executes the move and prints it
 void computerTurn(ChessGame* g) {
 	MinimaxSuggestMove(g);
 	ChessGameSetMove(g, '8' - g->bestMoveSrcRow, 'A' + g->bestMoveSrcCol, '8' - g->bestMoveDstRow, 'A' + g->bestMoveDstCol);
@@ -108,6 +115,8 @@ void computerTurn(ChessGame* g) {
 	printf(" at <%c, %c> to <%c, %c>\n", '8' - g->bestMoveSrcRow, 'A' + g->bestMoveSrcCol, '8' - g->bestMoveDstRow, 'A' + g->bestMoveDstCol);
 }
 
+//Executes a human player's turn:
+//prints the relevant messages, gets a command and executes it according to it's specified effect.
 void playerTurn(ChessGame* g) {
 	ChessCommand curCmd;
 	CHESS_GAME_MESSAGE curMsg;

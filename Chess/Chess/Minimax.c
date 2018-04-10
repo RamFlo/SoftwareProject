@@ -4,6 +4,8 @@
 
 bool memError;
 
+//This function compares the current and new score. if the current is bigger/equal it returns the current.
+//else, it updates the src and dest row+col of the new best move, and returns the new best score.
 int chooseMax(int curScore, int newScore,ChessGame* g,int srcCol,int srcRow,int dstCol,int dstRow) {
 	if (curScore >= newScore)
 		return curScore;
@@ -14,6 +16,8 @@ int chooseMax(int curScore, int newScore,ChessGame* g,int srcCol,int srcRow,int 
 	return newScore;
 }
 
+//This function compares the current and new score. if the current is smaller/equal it returns the current.
+//else, it updates the src and dest row+col of the new best move, and returns the new best score.
 int chooseMin(int curScore, int newScore, ChessGame* g, int srcCol, int srcRow, int dstCol, int dstRow) {
 	if (curScore <= newScore)
 		return curScore;
@@ -24,6 +28,7 @@ int chooseMin(int curScore, int newScore, ChessGame* g, int srcCol, int srcRow, 
 	return newScore;
 }
 
+//This is the scoring function, as described on the PDF - computes and returns the total value of the board's pieces.
 int scoringFunction(ChessGame* src) {
 	int i = 0, j = 0, score = 0;
 	if (src->checkmated == WHITE_PLAYER)
@@ -77,6 +82,9 @@ int scoringFunction(ChessGame* src) {
 	return score;
 }
 
+//The recursive helper function of the Minimax computation.
+//returns the best score of the relevant computation level (meaning of "best" depends on min/max level).
+//the pruning is done in the commented line.
 int MinimaxSuggestMoveRec(ChessGame* g, int maxDepth, int fatherCurBestScore) {
 	int minOrMax = 0, curBestScore = 0, i = 0, j = 0, k = 0, l = 0, curMoveScore = 0;
 	ChessGame* gCopy;
@@ -107,6 +115,7 @@ int MinimaxSuggestMoveRec(ChessGame* g, int maxDepth, int fatherCurBestScore) {
 	return curBestScore;
 }
 
+//This function computes the best move using the minimax algorithm and the recursive helper function above.
 void MinimaxSuggestMove(ChessGame* g) {
 	int curBestScore = (g->currentPlayer == WHITE_PLAYER) ? 1001 : -1001;
 	MinimaxSuggestMoveRec(g, g->difficulty, curBestScore);

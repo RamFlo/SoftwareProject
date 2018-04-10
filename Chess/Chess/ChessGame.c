@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <string.h>
 
+//checks if two squares have pieces of opposing colors
 bool isOppositeColorsSquares(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	char s1 = src->gameBoard[r1_n][c1_n], s2 = src->gameBoard[r2_n][c2_n];
 	if (s1 == '\0' || s2 == '\0')
@@ -13,6 +14,7 @@ bool isOppositeColorsSquares(ChessGame* src, int r1_n, int c1_n, int r2_n, int c
 	return false;
 }
 
+//given a char representing a piece, prints the piece's name
 void printPieceName(char p) {
 	switch (p) {
 	case WHITE_PAWN:
@@ -42,6 +44,7 @@ void printPieceName(char p) {
 	}
 }
 
+//switches the game's current player
 void ChessGameSwitchPlayer(ChessGame* src) {
 	if (src != NULL) {
 		if (src->currentPlayer == WHITE_PLAYER)
@@ -51,6 +54,7 @@ void ChessGameSwitchPlayer(ChessGame* src) {
 	}
 }
 
+//adds the white pieces to the board at the beginning of the game
 void addWhitePieces(ChessGame* g) {
 	int i = 0;
 	for (i = 0; i < 8; i++) {
@@ -66,6 +70,7 @@ void addWhitePieces(ChessGame* g) {
 	g->gameBoard[7][4] = WHITE_KING;
 }
 
+//adds the black pieces to the board at the beginning of the game
 void addBlackPieces(ChessGame* g) {
 	int i = 0;
 	for (i = 0; i < 8; i++) {
@@ -81,6 +86,7 @@ void addBlackPieces(ChessGame* g) {
 	g->gameBoard[0][4] = BLACK_KING;
 }
 
+//creates a new ChessGame, initializes the board and settings and returns a pointer to the newly created ChessGame
 ChessGame* ChessGameCreate(int historySize) {
 	ChessGame* g;
 	int i = 0, j = 0;
@@ -109,6 +115,7 @@ ChessGame* ChessGameCreate(int historySize) {
 	return g;
 }
 
+//copies a ChessGame, copiesthe board and settings and returns a pointer to the newly created ChessGame
 ChessGame* ChessGameCopy(ChessGame* src) {
 	ChessGame *g;
 	int i = 0, j = 0;
@@ -131,6 +138,7 @@ ChessGame* ChessGameCopy(ChessGame* src) {
 	return g;
 }
 
+//destroys a given ChessGame
 void ChessGameDestroy(ChessGame* src) {
 	if (src != NULL) {
 		spArrayListDestroy(src->history);
@@ -138,6 +146,7 @@ void ChessGameDestroy(ChessGame* src) {
 	}
 }
 
+//given a src square and dest square - checks if the path from the src square to the dest square is blocked
 bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	int i = 0, lower_r = 0, left_c = 0, upper_r = 0, right_c = 0, diag_type = 0;
 	lower_r = (r1_n > r2_n) ? r1_n : r2_n;
@@ -175,12 +184,14 @@ bool blockedPathCheck(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	return false;
 }
 
+//checks if given indexes represent a legal board square
 bool isValidSquare(int r1_n, int c1_n) {
 	if (r1_n < 0|| r1_n>7 || c1_n < 0 || c1_n>7)
 		return false;
 	return true;
 }
 
+//checks if a square contains a piece of the current player
 bool isCurPlayerPiece(ChessGame* src, int r1_n, int c1_n) {
 	bool blackPiece;
 	if (src->gameBoard[r1_n][c1_n] == '\0')
@@ -191,30 +202,35 @@ bool isCurPlayerPiece(ChessGame* src, int r1_n, int c1_n) {
 	return false;
 }
 
+//checks if a square contains a piece of the other player
 bool isOtherPlayerPiece(ChessGame* src, int r1_n, int c1_n) {
 	if (src->gameBoard[r1_n][c1_n] == '\0' || isCurPlayerPiece( src,r1_n, c1_n))
 		return false;
 	return true;
 }
 
+//returns the player which isn't (!) the current player
 char getOtherPlayer(ChessGame* src) {
 	if (src->currentPlayer == WHITE_PLAYER)
 		return BLACK_PLAYER;
 	return WHITE_PLAYER;
 }
 
+//checks if the path between two squares is a diagonal
 bool isDiagonal(int r1_n, int c1_n, int r2_n, int c2_n) {
 	if (abs(r1_n - r2_n) == abs(c1_n - c2_n))
 		return true;
 	return false;
 }
 
+//checks if the path between two squares is a straight line
 bool isStraightLine(int r1_n, int c1_n, int r2_n, int c2_n) {
 	if (r1_n - r2_n == 0 || c1_n - c2_n == 0)
 		return true;
 	return false;
 }
 
+//checks if the path between two squares is a legal knight move
 bool isLegalKnightMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	bool isFriendlyPiece = false;
 	if (src->gameBoard[r2_n][c2_n] != '\0' && !isOppositeColorsSquares(src, r1_n, c1_n, r2_n, c2_n))
@@ -232,6 +248,7 @@ bool isLegalKnightMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	return false;
 }
 
+//checks if the path between two squares is a legal king move
 bool isLegalKingMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	if (abs(r1_n - r2_n) > 1)
 		return false;
@@ -240,24 +257,28 @@ bool isLegalKingMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
 }
 
+//checks if the path between two squares is a legal queen move
 bool isLegalQueenMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	if (!isStraightLine(r1_n, c1_n, r2_n, c2_n) && !isDiagonal(r1_n, c1_n, r2_n, c2_n))
 		return false;
 	return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
 }
 
+//checks if the path between two squares is a legal bishop move
 bool isLegalBishopMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	if (!isDiagonal(r1_n, c1_n, r2_n, c2_n))
 		return false;
 	return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
 }
 
+//checks if the path between two squares is a legal rook move
 bool isLegalRookMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	if (!isStraightLine(r1_n, c1_n, r2_n, c2_n))
 		return false;
 	return (!blockedPathCheck(src, r1_n, c1_n, r2_n, c2_n));
 }
 
+//checks if the path between two squares is a legal white pawn move
 bool isLegalWhitePawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	if (r2_n == r1_n - 1 && c2_n == c1_n) //minus 1 because white pawns start in row 6 and move towards row 0
 		return (src->gameBoard[r2_n][c2_n]=='\0');
@@ -275,6 +296,7 @@ bool isLegalWhitePawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n
 	return false;
 }
 
+//checks if the path between two squares is a legal black pawn move
 bool isLegalBlackPawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	if (r2_n == r1_n + 1 && c2_n == c1_n) //plus 1 because black pawns start in row 1 and move towards row 7
 		return (src->gameBoard[r2_n][c2_n] == '\0');
@@ -291,6 +313,7 @@ bool isLegalBlackPawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n
 	return false;
 }
 
+//findes the square of the current player's king
 int findCurPlayerKing(ChessGame* src) {
 	int i = 0, j = 0, rc_index = 0;
 	char king = (src->currentPlayer == WHITE_PLAYER) ? WHITE_KING : BLACK_KING;
@@ -303,6 +326,7 @@ int findCurPlayerKing(ChessGame* src) {
 	return rc_index;
 }
 
+//given two squares representing a move, checks if the given move is legal
 bool isLegalMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	bool isLegalMove = false;
 	switch (src->gameBoard[r1_n][c1_n]) {
@@ -335,6 +359,8 @@ bool isLegalMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	}
 	return isLegalMove;
 }
+
+//checks if a square is currently threatened by the opposing player to the current player
 bool isSquareThreatened(ChessGame* src, int r1_n, int c1_n) {
 	int i = 0, j = 0;
 	bool shouldCheck = false;
@@ -354,6 +380,7 @@ bool isSquareThreatened(ChessGame* src, int r1_n, int c1_n) {
 	return false;
 }
 
+//checks if a square is currently threatened by a specific player
 bool isSquareThreatenedByColor(ChessGame* src, int r1_n, int c1_n,char threateningPlayer) {
 	int i = 0, j = 0;
 	bool shouldCheck = false;
@@ -373,7 +400,7 @@ bool isSquareThreatenedByColor(ChessGame* src, int r1_n, int c1_n,char threateni
 	return false;
 }
 
-
+//checks if the current player's king is threatened
 bool isCurKingThreatened(ChessGame* src) {
 	int kingCol = 0, kingRow = 0, res;
 	res = findCurPlayerKing(src);
@@ -383,12 +410,13 @@ bool isCurKingThreatened(ChessGame* src) {
 }
 
 
-
+//executes a move (updates the piece's location)
 void executeMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	src->gameBoard[r2_n][c2_n] = src->gameBoard[r1_n][c1_n];
 	src->gameBoard[r1_n][c1_n] = '\0';
 }
 
+//checks if the king is checked after a specific move is executed
 bool isKingCheckedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	bool KingStillChecked = false;
 	ChessGame* gameCopy= ChessGameCopy(src);
@@ -398,6 +426,7 @@ bool isKingCheckedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2
 	return KingStillChecked;
 }
 
+//checks if the current player is checkmated
 bool isCheckmate(ChessGame* src) {
 	int i, j, k, l;
 	bool shouldCheck = false;
@@ -422,6 +451,7 @@ bool isCheckmate(ChessGame* src) {
 	return true;
 }
 
+// adds a move to the ChessGame's history
 void addMoveToHistory(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	int i = 0;
 	if (spArrayListAddLast(src->history, r1_n) != SP_ARRAY_LIST_SUCCESS) {
@@ -435,6 +465,7 @@ void addMoveToHistory(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	spArrayListAddLast(src->history, src->gameBoard[r2_n][c2_n]);
 }
 
+//Checks if the current player is checked, checkmated or there is a draw
 void CheckCheckmateDrawTest(ChessGame* src) {
 	src->checked = '\0';
 	if (isCurKingThreatened(src)) {
@@ -448,6 +479,7 @@ void CheckCheckmateDrawTest(ChessGame* src) {
 	}
 }
 
+//Tries to do a given move, returns a CHESS_GAME_MESSAGE indicating if the move was done successfully.
 CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, char c2) {
 	int r1_n = 8-(r1 - '0'), r2_n = 8 - (r2 - '0'), c1_n = c1 - 'A', c2_n = c2 - 'A';
 	if (src == NULL || !isValidSquare(r1_n, c1_n) || !isValidSquare(r2_n, c2_n))
@@ -473,6 +505,7 @@ CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, c
 	return SUCCESS;
 }
 
+//Checks if a piece is threatened after a move it does
 bool isThreatenedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n) {
 	ChessGame* gameCopy;
 	bool squareThreatened = false, isCurrentPlayerPiece =true;
@@ -491,6 +524,7 @@ bool isThreatenedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_
 	return squareThreatened;
 }
 
+//Gets and prints all the legal moves of a piece in a given square
 CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1) {
 	int i = 0, j = 0, r1_n = 8 - (r1 - '0'), c1_n = c1 - 'A';
 	//char threateningPlayerColor;
@@ -522,7 +556,7 @@ CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1) {
 	return SUCCESS;
 }
 
-
+//revokes the last move that was made - returns a CHESS_GAME_MESSAGE indicating if execution was successful or not
 CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src) {
 	char lastPiece = spArrayListGetLast(src->history);
 	int i=0,size = src->history->actualSize, dstCol = 0, dstRow = 0, srcCol = 0, srcRow = 0;
@@ -544,6 +578,7 @@ CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src) {
 	return SUCCESS;
 }
 
+//prints the current state of the given game's board
 CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src) {
 	int i = 0, j = 0;
 	if (src == NULL)
@@ -562,6 +597,7 @@ CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src) {
 	return SUCCESS;
 }
 
+//given a ChessGame, this function gets it's difficulty (an integer) and returns it's name
 char* getDifficultyString(ChessGame* src) {
 	switch (src->difficulty)
 	{
@@ -584,6 +620,7 @@ char* getDifficultyString(ChessGame* src) {
 	return "amateur";
 }
 
+//given a difficulty (a string) prints it's suitable number
 int getDifficultyNum(char* diff) {
 	if (strcmp(diff, "DIFFICULTY: amateur\n") == 0)
 		return 1;
@@ -596,6 +633,7 @@ int getDifficultyNum(char* diff) {
 	return 5;
 }
 
+//given a ChessGame, this function gets it's difficulty (an integer) and prints it's name
 void printDifficulty(ChessGame* src) {
 	switch (src->difficulty)
 	{
@@ -617,6 +655,7 @@ void printDifficulty(ChessGame* src) {
 	}
 }
 
+//save the current game's board and settings in a specified path
 CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
 	int i = 0, j = 0;
 	FILE* myFile;
@@ -652,7 +691,7 @@ CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path) {
 	return SUCCESS;
 }
 
-
+//loads a previous's game board and settings from a specified path
 CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path) {
 	int i = 0, j = 0;
 	char curLine[100];
@@ -689,6 +728,7 @@ CHESS_GAME_MESSAGE ChessGameLoad(ChessGame* src, char* path) {
 	return SUCCESS;
 }
 
+//prints a given game's settings
 void chessGamePrintSettings(ChessGame* src) {
 	printf("SETTINGS:\n");
 	printf("GAME_MODE: %d-player\n", src->gameMode);
@@ -703,12 +743,14 @@ void chessGamePrintSettings(ChessGame* src) {
 	}
 }
 
+//destroys and quits the current game
 void quit(ChessGame* src) {
 	ChessGameDestroy(src);
 	printf("Exiting...\n");
 	exit(0);
 }
 
+//resets the board and history of the current game
 void chessGameReset(ChessGame* g) {
 	int i = 0, j = 0, size = g->history->actualSize;
 	for (i = 0; i < 8; i++) {
@@ -727,6 +769,7 @@ void chessGameReset(ChessGame* g) {
 	}
 }
 
+//resets a game's settings to the default
 void chessGameDefault(ChessGame* g) {
 	g->gameMode = 1;
 	g->difficulty = 2;

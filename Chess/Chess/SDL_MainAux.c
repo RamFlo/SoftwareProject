@@ -23,6 +23,9 @@ chessWindow* chessWindowsArray[NUM_OF_WINDOWS];
 SDL_Point lastClickPoint;
 SDL_Event* curEvent;
 
+/**
+*  Destroys the game's program and the game itself, and invokes SDL_Quit()
+*/
 void destroySDL() {
 	int i = 0;
 	if (g != NULL)
@@ -35,22 +38,38 @@ void destroySDL() {
 	exit(0);
 }
 
+/**
+*  Checks if the current game is in state of checkmate or draw.
+*  @return
+*  true, if the game is in state of checkmate or draw
+*  false, otherwise
+*/
 bool isCheckmateOrDraw() {
 	return (g->checkmated != '\0' || g->draw);
 }
 
+/**
+*  Resets the getMovesShouldDraw array (0: should not draw square. 1: should draw square)
+*/
 void resetGetMovesShouldDrawArray() {
 	int i = 0;
 	for (i = 0; i < 256; i++)
 		getMovesShouldDraw[i] = 0;
 }
 
+/**
+*  Resets the legalMovesForPieceShouldDraw array (0: should not draw square. 1: should draw square)
+*/
 void resetLegalMovesShouldDrawArray() {
 	int i = 0;
 	for (i = 0; i < 64; i++)
 		legalMovesForPieceShouldDraw[i] = 0;
 }
 
+/**
+*  Draws all window's buttons.
+*  @param windowIndex - the index of the window upon which the function draws the buttons.
+*/
 void drawAllWindowButtons(int windowIndex) {
 	int i = 0;
 	chessWindow* curWindow = chessWindowsArray[windowIndex];
@@ -60,6 +79,11 @@ void drawAllWindowButtons(int windowIndex) {
 	}
 }
 
+/**
+*  Sends the current event pointer 'e' to all of the relevant board window's buttons
+*  (the buttons that are currently drawn).
+*  @param e - a pointer to an event
+*/
 void boardSendEventToButtons(SDL_Event* e) {
 	int i = 0;
 	chessWindow* curWindow = chessWindowsArray[BOARD_WINDOW_INDEX];
@@ -82,6 +106,11 @@ void boardSendEventToButtons(SDL_Event* e) {
 			curWindow->buttons[i]->handleEvent(curWindow->buttons[i], e);
 }
 
+/**
+*  Sends the current event pointer 'e' to all of the relevant settings window's buttons
+*  (the buttons that are currently drawn).
+*  @param e - a pointer to an event
+*/
 void settingsSendEventToButtons(SDL_Event* e) {
 	int i = 0, lastIndex = 0, curIndex = 0;
 	int buttonIndexArray[] = { 0,3,4,7,8,16,1,2,5,6,9,10,11,12,13,14,15 };
@@ -93,6 +122,12 @@ void settingsSendEventToButtons(SDL_Event* e) {
 	}
 }
 
+/**
+*  Sends the current event pointer 'e' to all of the relevant save or load window's buttons
+*  (the buttons that are currently drawn).
+*  @param e - a pointer to an event
+*  @param windowIndex - the index of the window (SAVE_WINDOW_INDEX or LOAD_WINDOW_INDEX)
+*/
 void saveOrLoadSendEventToButtons(SDL_Event* e, int windowIndex) {
 	int i = 0, lastIndex = 0;
 	chessWindow* curWindow = chessWindowsArray[windowIndex];
@@ -104,6 +139,11 @@ void saveOrLoadSendEventToButtons(SDL_Event* e, int windowIndex) {
 		curWindow->buttons[i]->handleEvent(curWindow->buttons[i], e);
 }
 
+/**
+*  Sends the current event pointer 'e' to all of the relevant main window's buttons
+*  (the buttons that are currently drawn).
+*  @param e - a pointer to an event
+*/
 void mainSendEventToButtons(SDL_Event* e) {
 	Widget* curButton;
 	int i = 0;
@@ -114,6 +154,11 @@ void mainSendEventToButtons(SDL_Event* e) {
 	}
 }
 
+/**
+*  Sends the current event pointer 'e' to all of the buttons of the window according to windowIndex
+*  @param e - a pointer to an event
+*  @param windowIndex - the index of the window
+*/
 void sendEventToButtons(SDL_Event* e, int windowIndex) {
 	switch (windowIndex) {
 	case MAIN_WINDOW_INDEX:
@@ -132,7 +177,10 @@ void sendEventToButtons(SDL_Event* e, int windowIndex) {
 	}
 }
 
-//to be changed
+/**
+*  Switches the current program's screen and renders the new screen or re-renders the current screen
+*  @param lastHandledScreen - the last seen screen index
+*/
 void SwitchOrRenderScreen(int lastHandledScreen) {
 	if (curScreen != lastHandledScreen) {
 		previousScreen = lastHandledScreen;
@@ -146,9 +194,15 @@ void SwitchOrRenderScreen(int lastHandledScreen) {
 	SDL_RenderPresent(chessWindowsArray[curScreen]->renderer);
 }
 
+/**
+*  An empty function, used for buttons with no click action
+*/
 void buttonThatDoesNothing() {
 }
 
+/**
+*  Draws the board window's buttons.
+*/
 void boardDrawWindowButtons() {
 	int i = 0;
 	chessWindow* curWindow = chessWindowsArray[BOARD_WINDOW_INDEX];
@@ -178,6 +232,13 @@ void boardDrawWindowButtons() {
 			curWindow->buttons[i]->draw(curWindow->buttons[i], curWindow->renderer);
 }
 
+/**
+*  Checks if a file exists and can be read
+*  @param fileName - string that represents the file's path and name
+*  @return
+*  true, if the file exists and can be read
+*  false, otherwise
+*/
 bool checkIfFilenameExists(const char *fileName) {
 	FILE *file;
 	if ((file = fopen(fileName, "r"))){
@@ -187,6 +248,10 @@ bool checkIfFilenameExists(const char *fileName) {
 	return false;
 }
 
+/**
+*  Draws the save or load window's buttons.
+*  @param windowIndex - the index of the window (SAVE_WINDOW_INDEX or LOAD_WINDOW_INDEX)
+*/
 void saveOrLoadDrawWindowsButton(int windowIndex) {
 	char loadedGamePath[50];
 	int i = 0,lastIndex=0;
@@ -208,6 +273,9 @@ void saveOrLoadDrawWindowsButton(int windowIndex) {
 	}
 }
 
+/**
+*  Draws the settings window's buttons.
+*/
 void settingsDrawWindowButtons() {
 	int i = 0, lastIndex = 0,curIndex=0;
 	int buttonIndexArray[] = { 0,3,4,7,8,16,1,2,5,6,9,10,11,12,13,14,15 };
@@ -219,6 +287,10 @@ void settingsDrawWindowButtons() {
 	}
 }
 
+/**
+*  Draws all of the buttons of the window according to windowIndex
+*  @param windowIndex - the index of the window
+*/
 void drawWindowButtons(int windowIndex) {
 	switch (windowIndex) {
 	case MAIN_WINDOW_INDEX:
@@ -237,16 +309,27 @@ void drawWindowButtons(int windowIndex) {
 	}
 }
 
+/**
+*  Click action for New Game button in the main window. Switches the current screen to the settings window.
+*/
 void newGameButtonClick(void) {
 	curScreen = SETTINGS_WINDOW_INDEX;
 }
 
+/**
+*  Click action for Load Game button in the main and board windows. Switches the current screen to the load window.
+*/
 void loadGameButtonClick(void) {//subject to renaming
 	resetGetMovesShouldDrawArray();
 	resetLegalMovesShouldDrawArray();
 	curScreen = LOAD_WINDOW_INDEX;
 }
 
+/**
+*  Upon trying to leave an unsaved game, this function is called.
+*  It returns the user's choice value (0: no, 1: yes, 2: cancel)
+*  @return: integer (0/1/2)
+*/
 int unsavedGameBeforeLeaving() {
 	const SDL_MessageBoxButtonData buttons[] = {
 		{ 0, 0, "no" },
@@ -270,6 +353,10 @@ int unsavedGameBeforeLeaving() {
 	return buttonid;
 }
 
+/**
+*  Click action for Quit button in the main and board windows. Also called upon clicking the X button.
+*  Checks for unsaved game the acts accordingly.
+*/
 void quitGameButtonClick() {
 	int chosenButtonID = 0;
 	resetGetMovesShouldDrawArray();
@@ -289,7 +376,10 @@ void quitGameButtonClick() {
 		destroySDL();
 }
 
-
+/**
+*  Creates and returns a pointer to a new chessWindow: main window.
+*  @return: a chessWindow pointer. NULL on memory error.
+*/
 chessWindow* createMainWindow() {
 	SDL_Window* mainWindow = SDL_CreateWindow("Main Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
 	if (mainWindow == NULL)
@@ -319,6 +409,9 @@ chessWindow* createMainWindow() {
 	return chessWindowsArray[MAIN_WINDOW_INDEX];
 }
 
+/**
+*  Moves the selection mark for the game mode choice in the settings window upon clicking the game mode options.
+*/
 void moveGameModeChoiceLine() {
 	if (g->gameMode == 1)
 		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[0]->data))->location.x = 240;
@@ -326,6 +419,9 @@ void moveGameModeChoiceLine() {
 		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[0]->data))->location.x = 350;
 }
 
+/**
+*  'Game mode' button action: changes the game mode according to the user's choice.
+*/
 void gameModeButtonClick() {
 	if (lastClickPoint.x >= 240 && lastClickPoint.x <= 340)
 		g->gameMode = 1;
@@ -335,6 +431,9 @@ void gameModeButtonClick() {
 	shouldRenderSameScreenAgain = true;
 }
 
+/**
+*  Moves the selection mark for the difficulty choice in the settings window upon clicking the game difficulty options.
+*/
 void moveDiffLevelChoiceLine() {
 	if (g->difficulty == 1) 
 		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1]->data))->location.x = 240;
@@ -348,6 +447,9 @@ void moveDiffLevelChoiceLine() {
 		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1]->data))->location.x = 680;
 }
 
+/**
+*  'Difficulty' button action: changes the game's difficulty according to the user's choice.
+*/
 void diffLevelButtonClick() {
 	if (lastClickPoint.x >= 240 && lastClickPoint.x <= 340)
 		g->difficulty = 1;
@@ -363,6 +465,9 @@ void diffLevelButtonClick() {
 	shouldRenderSameScreenAgain = true;
 }
 
+/**
+*  'Start' button action: changes the screen to the board window (the actual game screen)
+*/
 void startButtonClick() {
 	curScreen = BOARD_WINDOW_INDEX;
 	if (g->gameMode == 1 && ((g->userColor==0 && g->currentPlayer==WHITE_PLAYER)|| (g->userColor == 1 && g->currentPlayer == BLACK_PLAYER))) {
@@ -372,6 +477,9 @@ void startButtonClick() {
 	}
 }
 
+/**
+*  Moves the selection mark for the user color choice in the settings window upon clicking the user color options.
+*/
 void moveUserColorChoiceLine() {
 	if (g->userColor == 1) {
 		((Button*)(chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[2]->data))->location.x = 240;
@@ -381,6 +489,9 @@ void moveUserColorChoiceLine() {
 	}
 }
 
+/**
+*  'User color' button action: changes the user color according to the user's choice.
+*/
 void userColorButtonClick() {
 	if (lastClickPoint.x >= 240 && lastClickPoint.x <= 340)
 		g->userColor = 1;
@@ -390,6 +501,9 @@ void userColorButtonClick() {
 	shouldRenderSameScreenAgain = true;
 }
 
+/**
+*  'back' button action: switches the program to the previous screen
+*/
 void backButtonClick() {
 	shouldQuit = false;
 	shouldReturnToMainMenu = false;
@@ -405,6 +519,9 @@ void backButtonClick() {
 		curScreen = previousScreen;
 }
 
+/**
+*  'left arrow' button action: scrolls save\load screen's slots
+*/
 void leftArrowButtonClick() {
 	if (curFirstSlotOnScreen > 0) {
 		shouldRenderSameScreenAgain = true;
@@ -412,6 +529,9 @@ void leftArrowButtonClick() {
 	}
 }
 
+/**
+*  'right arrow' button action: scrolls save\load screen's slots
+*/
 void rightArrowButtonClick() {
 	if (curFirstSlotOnScreen + NUM_OF_SCREEN_SLOTS < NUM_OF_SAVE_SLOTS) {
 		shouldRenderSameScreenAgain = true;
@@ -419,11 +539,17 @@ void rightArrowButtonClick() {
 	}	
 }
 
-//1-Indexed
+/**
+*  Calculates the clicked slot's number according to the position clicked (1-indexed)
+*  @return: integer
+*/
 int calcClickedSlotNumber() {
 	return (lastClickPoint.y - 75) / 100 + 1 + curFirstSlotOnScreen;
 }
 
+/**
+*  'load slot' button action: attempts to load the selected save file
+*/
 void loadSlotButtonClick() {
 	char loadedGamePath[50];
 	int i = 0;
@@ -441,6 +567,9 @@ void loadSlotButtonClick() {
 	}
 }
 
+/**
+*  'restart' button action: restarts the current game in the board window
+*/
 void restartButtonClick() {
 	curGameSaved = true;
 	chessGameReset(g);
@@ -450,6 +579,9 @@ void restartButtonClick() {
 	shouldRenderSameScreenAgain = true;
 }
 
+/**
+*  'save slot' button action: attempts to save in the selected save slot
+*/
 void saveSlotButtonClick() {
 	char savedGamePath[50];
 	int i = 0;
@@ -470,6 +602,9 @@ void saveSlotButtonClick() {
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Save success", "game saved!", NULL);
 }
 
+/**
+*  'save' button action (board window): switches the current screen to the save screen
+*/
 void saveButtonClick() {
 	if (!isCheckmateOrDraw()) {
 		resetGetMovesShouldDrawArray();
@@ -479,10 +614,17 @@ void saveButtonClick() {
 		
 }
 
+/**
+*  Calculates the clicked square's position index according to the position clicked on board
+*  @return: integer: y-pos*10 + x-pos
+*/
 int calculatePositionOnBoardByPoint(int x, int y) {
 	return ((y - 45) / 65) * 10 + ((x - 140) / 65);
 }
 
+/**
+*  'undo' button action (board window): undos the last two moves.
+*/
 void undoButtonClick() {
 	resetGetMovesShouldDrawArray();
 	resetLegalMovesShouldDrawArray();
@@ -495,6 +637,9 @@ void undoButtonClick() {
 	}
 }
 
+/**
+*  Called at the end of every turn. Shows a message upon check, checkmate or draw situations
+*/
 void showCheckCheckmateOrDrawMessage() {
 	if (g->checkmated == WHITE_PLAYER)
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Checkmate", "Checkmate! black wins", NULL);
@@ -508,6 +653,9 @@ void showCheckCheckmateOrDrawMessage() {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Check", "black king is threatened", NULL);
 }
 
+/**
+*  move piece button action (board window): executes a legal board move and switches turn.
+*/
 void legalMoveButtonClick() {
 	int srcRow, srcCol, lastClicked, destRow, destCol;
 	lastClicked = calculatePositionOnBoardByPoint(lastClickPoint.x, lastClickPoint.y);
@@ -528,6 +676,10 @@ void legalMoveButtonClick() {
 	}
 }
 
+/**
+*  Click action for 'main menu' button in the board window.
+*  Checks for unsaved game the acts accordingly.
+*/
 void mainMenuButtonClick() {
 	int chosenButtonID = 0;
 	resetGetMovesShouldDrawArray();
@@ -544,7 +696,6 @@ void mainMenuButtonClick() {
 			shouldReturnToMainMenu = true;
 			curScreen = SAVE_WINDOW_INDEX;
 		}
-		//else if (buttonid == -1 || buttonid == 2) {closed window or canceled}
 	}
 	else {
 		curScreen = MAIN_WINDOW_INDEX;
@@ -554,6 +705,12 @@ void mainMenuButtonClick() {
 		
 }
 
+/**
+*  Calculates which squares should be drawn and the color they should be drawn in after 
+*  the user attempts to get moves for a board piece (right clicks it).
+*  @param row - the row position of the piece clicked (int)
+*  @param col - the column position of the piece clicked (int)
+*/
 void updateGetMovesShouldDrawArray(int row, int col) {
 	int i = 0, j = 0, curRectIndex=0, modifier=0;
 	resetGetMovesShouldDrawArray();
@@ -572,6 +729,12 @@ void updateGetMovesShouldDrawArray(int row, int col) {
 	}
 }
 
+/**
+*  Calculates which squares should be drawn and the color they should be drawn in after
+*  the user attempts to move a board piece (left clicks it).
+*  @param row - the row position of the piece clicked (int)
+*  @param col - the column position of the piece clicked (int)
+*/
 void updateLegalMovesShouldDrawArray(int row, int col) {
 	int i = 0, j = 0;
 	resetLegalMovesShouldDrawArray();
@@ -584,6 +747,9 @@ void updateLegalMovesShouldDrawArray(int row, int col) {
 	}
 }
 
+/**
+*  piece button action (board window): calculates which piece was clicked and the requested action (move or get moves)
+*/
 void chessPieceClick() {
 	int clickPointSum = 0, row = 0, col = 0;
 	clickPointSum = calculatePositionOnBoardByPoint(lastClickPoint.x, lastClickPoint.y);
@@ -602,6 +768,9 @@ void chessPieceClick() {
 	}
 }
 
+/**
+*  Creates the board window's move squares rectangles and buttons.
+*/
 void createBoardLegalMoveRectsAndButtons() { 
 	SDL_Rect boardSquareRects[64], curRect = { .x = 140,.y = 45,.w = 65,.h = 65 };
 	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
@@ -623,6 +792,9 @@ void createBoardLegalMoveRectsAndButtons() {
 	}
 }
 
+/**
+*  Creates the board window's get moves squares rectangles and buttons.
+*/
 void createBoardSquaresRectsAndButtons() { //finish after pieces
 	SDL_Rect boardSquareRects[256], curRect= { .x = 140,.y = 45,.w = 65,.h = 65 };
 	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
@@ -662,6 +834,12 @@ void createBoardSquaresRectsAndButtons() { //finish after pieces
 	}
 }
 
+/**
+*  Calculates a square's position on board according to it's position in the game board's array
+*  @param row - the row position of the square (int)
+*  @param col - the column position of the square (int)
+*  @return: SDL_Point with the correct x and y values.
+*/
 SDL_Point calculatePointOfBoardPosition(int row, int col) {
 	SDL_Point res;
 	res.x = 140 + col * 65;
@@ -669,6 +847,9 @@ SDL_Point calculatePointOfBoardPosition(int row, int col) {
 	return res;
 }
 
+/**
+*  Calculates and updates the positions of the pieces's buttons that currently exist on the board.
+*/
 void updatePiecesRectsAccordingToBoard() {
 	SDL_Point curPoint = { .x = 0,.y = 0 };
 	chessWindow* boardWindow = chessWindowsArray[BOARD_WINDOW_INDEX];
@@ -757,7 +938,10 @@ void updatePiecesRectsAccordingToBoard() {
 	}
 }
 
-void createPiecesRectsAndButtons() { //currently with functions that do nothing
+/**
+*  Creates the board window's pieces' rectangles and buttons.
+*/
+void createPiecesRectsAndButtons() { 
 	SDL_Rect curRect = { .x = 0,.y = 0,.w = 65,.h = 65 };
 	SDL_Renderer* rend = chessWindowsArray[BOARD_WINDOW_INDEX]->renderer;
 	chessWindow* boardWindow = chessWindowsArray[BOARD_WINDOW_INDEX];
@@ -774,7 +958,6 @@ void createPiecesRectsAndButtons() { //currently with functions that do nothing
 	for (i = 0; i < 2; i++) {
 		curWidget = createButton(rend, "assets/pieces/whiteRook.bmp", curRect, chessPieceClick);
 		boardWindow->buttons[whiteRookCurIndex] = curWidget;
-		//boardWindow->buttons[whiteRookCurIndex] = createButton(rend, "assets/pieces/whiteRook.bmp", curRect, chessPieceClick);
 		boardWindow->buttons[blackRookCurIndex] = createButton(rend, "assets/pieces/blackRook.bmp", curRect, chessPieceClick);
 		whiteRookCurIndex = 18;
 		blackRookCurIndex = 34;
@@ -793,7 +976,10 @@ void createPiecesRectsAndButtons() { //currently with functions that do nothing
 	boardWindow->buttons[blackKingCurIndex] = createButton(rend, "assets/pieces/blackKing.bmp", curRect, chessPieceClick);
 }
 
-
+/**
+*  Creates and returns a pointer to a new chessWindow: board window.
+*  @return: a chessWindow pointer. NULL on memory error.
+*/
 chessWindow* createBoardWindow() {
 	int i = 0;
 	SDL_Window* boardWindow = SDL_CreateWindow("Board Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
@@ -815,21 +1001,17 @@ chessWindow* createBoardWindow() {
 		free(rend);
 		return NULL;
 	}
-	//upper menu button rects - done
 	SDL_Rect restartButtonRect = { .x = 20,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect saveButtonRect = { .x = 130,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect loadButtonRect = { .x = 240,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect undoButtonRect = { .x = 350,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect mainMenuButtonRect = { .x = 460,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect quitButtonRect = { .x = 570,.y = 10,.w = 100,.h = 25 };
-	//saved or unsaved game rects - done
 	SDL_Rect gameIsSavedRect = { .x = 680,.y = 10,.w = 100,.h = 25 };
 	SDL_Rect gameIsUnsavedRect = { .x = 680,.y = 10,.w = 100,.h = 25 };
-	//board rect - done
 	SDL_Rect gameboardRect = { .x = 140,.y = 45,.w = 520,.h = 520 };
-	//numbers column and letters row
 	SDL_Rect lettersRowRect = { .x = 140,.y = 565,.w = 520,.h = 25 };
-	SDL_Rect numbersColumnRect = { .x = 115,.y = 45,.w = 25,.h = 520 }; //waiting for Ram's approval
+	SDL_Rect numbersColumnRect = { .x = 115,.y = 45,.w = 25,.h = 520 };
 	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[0] = createButton(rend, "assets/boardWindow_restartButton.bmp", restartButtonRect, restartButtonClick);
 	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[1] = createButton(rend, "assets/boardWindow_saveButton.bmp", saveButtonRect, saveButtonClick);
 	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[2] = createButton(rend, "assets/boardWindow_loadButton.bmp", loadButtonRect, loadGameButtonClick);
@@ -841,15 +1023,10 @@ chessWindow* createBoardWindow() {
 	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[8] = createButton(rend, "assets/boardWindow_board.bmp", gameboardRect, buttonThatDoesNothing);
 	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[9] = createButton(rend, "assets/boardWindow_boardBottomLegend.bmp", lettersRowRect, buttonThatDoesNothing);
 	chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[10] = createButton(rend, "assets/boardWindow_boardLeftLegend.bmp", numbersColumnRect, buttonThatDoesNothing);
-
-	//pieces buttons
 	createPiecesRectsAndButtons();
 	updatePiecesRectsAccordingToBoard();
-	//square colors rects
 	createBoardSquaresRectsAndButtons();
-
 	createBoardLegalMoveRectsAndButtons();
-
 	for (i = 0; i < 363; i++) {
 		if (chessWindowsArray[BOARD_WINDOW_INDEX]->buttons[i] == NULL)
 			return NULL;
@@ -858,6 +1035,10 @@ chessWindow* createBoardWindow() {
 	return chessWindowsArray[BOARD_WINDOW_INDEX];
 }
 
+/**
+*  Creates and returns a pointer to a new chessWindow: save window.
+*  @return: a chessWindow pointer. NULL on memory error.
+*/
 chessWindow* createSaveWindow() {
 	SDL_Rect slotsRects[5];
 	char curSlotImagePath[50];
@@ -909,6 +1090,10 @@ chessWindow* createSaveWindow() {
 	return chessWindowsArray[SAVE_WINDOW_INDEX];
 }
 
+/**
+*  Creates and returns a pointer to a new chessWindow: load window.
+*  @return: a chessWindow pointer. NULL on memory error.
+*/
 chessWindow* createLoadWindow() {
 	SDL_Rect slotsRects[5];
 	char curSlotImagePath[50];
@@ -960,6 +1145,10 @@ chessWindow* createLoadWindow() {
 	return chessWindowsArray[LOAD_WINDOW_INDEX];
 }
 
+/**
+*  Creates and returns a pointer to a new chessWindow: settings window.
+*  @return: a chessWindow pointer. NULL on memory error.
+*/
 chessWindow* createSettingsWindow() {
 	int i = 0;
 	SDL_Window* settingsWindow = SDL_CreateWindow("Settings Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
@@ -975,72 +1164,40 @@ chessWindow* createSettingsWindow() {
 		free(rend);
 		return NULL;
 	}
-	
-	//choice marks - done
 	SDL_Rect gameModeChoiceRect = { .x = 240,.y = 113,.w = 100,.h = 3 };
 	SDL_Rect diffLevelChoiceRect = { .x = 350,.y = 213,.w = 100,.h = 3 };
 	SDL_Rect userColorChoiceRect = { .x = 240,.y = 313,.w = 100,.h = 3 };
-
-
-	//back-done
 	SDL_Rect backButtonRect = { .x = 20,.y = 20,.w = 80,.h = 20 };
-
-	//left buttons-done
 	SDL_Rect gameModeRect = { .x = 20,.y = 60,.w = 200,.h = 50 };
 	SDL_Rect diffLevelRect = { .x = 20,.y = 160,.w = 200,.h = 50 };
 	SDL_Rect userColorRect = { .x = 20,.y =260,.w = 200,.h = 50 };
-
-	//Game Mode Buttons-done
 	SDL_Rect onePlayerButtonRect = { .x = 240 ,.y = 85 ,.w = 100,.h = 25 };
 	SDL_Rect twoPlayersButtonRect = { .x = 350 ,.y = 85 ,.w = 100,.h = 25 };
-
-	//difficulty level buttons-done
 	SDL_Rect diffAmateurButtonRect = { .x = 240,.y = 185,.w = 100,.h = 25 };
 	SDL_Rect diffeasyButtonRect = { .x = 350 ,.y = 185 ,.w = 100,.h = 25 };
 	SDL_Rect diffmoderateButtonRect = { .x = 460 ,.y = 185 ,.w = 100,.h = 25 };
 	SDL_Rect diffhardButtonRect = { .x = 570 ,.y = 185 ,.w = 100,.h = 25 };
 	SDL_Rect diffExpertButtonRect = { .x = 680 ,.y = 185 ,.w = 100,.h = 25 };
-	
-	//User Color Buttons-done
 	SDL_Rect whiteButtonRect = { .x = 240 ,.y = 285 ,.w = 100,.h = 25 };
 	SDL_Rect blackButtonRect = { .x = 350 ,.y = 285 ,.w = 100,.h = 25 };
-
-	//start button-done
 	SDL_Rect startButtonRect = { .x = 250,.y = 420,.w = 300,.h = 75 };
-	
-	//choice mark buttons
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[0] = createButton(rend, "assets/settingsWindow_choiceMark.bmp", gameModeChoiceRect, buttonThatDoesNothing);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[1] = createButton(rend, "assets/settingsWindow_choiceMark.bmp", diffLevelChoiceRect, buttonThatDoesNothing);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[2] = createButton(rend, "assets/settingsWindow_choiceMark.bmp", userColorChoiceRect, buttonThatDoesNothing);
-
-
-	//back button-done
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[3] = createButton(rend, "assets/backButton.bmp", backButtonRect, backButtonClick);
-
-	//left side buttons
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[4] = createButton(rend, "assets/settingsWindow_gameMode.bmp", gameModeRect, buttonThatDoesNothing);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[5] = createButton(rend, "assets/settingsWindow_diffLevel.bmp", diffLevelRect, buttonThatDoesNothing);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[6] = createButton(rend, "assets/settingsWindow_userColor.bmp", userColorRect, buttonThatDoesNothing);
-
-	//game mode buttons
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[7] = createButton(rend, "assets/settingsWindow_1player.bmp", onePlayerButtonRect, gameModeButtonClick);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[8] = createButton(rend, "assets/settingsWindow_2player.bmp", twoPlayersButtonRect, gameModeButtonClick);
-
-	//diff level buttons
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[9] = createButton(rend, "assets/settingsWindow_amateur.bmp", diffAmateurButtonRect, diffLevelButtonClick);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[10] = createButton(rend, "assets/settingsWindow_easy.bmp", diffeasyButtonRect, diffLevelButtonClick);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[11] = createButton(rend, "assets/settingsWindow_moderate.bmp", diffmoderateButtonRect, diffLevelButtonClick);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[12] = createButton(rend, "assets/settingsWindow_hard.bmp", diffhardButtonRect, diffLevelButtonClick);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[13] = createButton(rend, "assets/settingsWindow_expert.bmp", diffExpertButtonRect, diffLevelButtonClick);
-	
-	//user color buttons
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[14] = createButton(rend, "assets/settingsWindow_white.bmp", whiteButtonRect, userColorButtonClick);
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[15] = createButton(rend, "assets/settingsWindow_black.bmp", blackButtonRect, userColorButtonClick);
-
-	//start button
 	chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[16] = createButton(rend, "assets/settingsWindow_start.bmp", startButtonRect,startButtonClick);
-
-
 	for (i = 0; i < 17; i++) {
 		if (chessWindowsArray[SETTINGS_WINDOW_INDEX]->buttons[i] == NULL)
 			return NULL;
@@ -1049,6 +1206,12 @@ chessWindow* createSettingsWindow() {
 	return chessWindowsArray[SETTINGS_WINDOW_INDEX];
 }
 
+/**
+*  Initializes all of the program's needed windows.
+*  @return
+*  true, if the windows all initialied successfully
+*  false, otherwise
+*/
 bool initializeAllWindows() {
 	if (createLoadWindow()==NULL || createMainWindow() == NULL || createSettingsWindow() == NULL|| createBoardWindow()==NULL ||createSaveWindow()==NULL)
 		return false;
