@@ -115,7 +115,7 @@ void computerTurn(ChessGame* g, bool shouldPrint) {
 	if (shouldPrint) {
 		printf("Computer: move ");
 		printPieceName(g->gameBoard[g->bestMoveDstRow][g->bestMoveDstCol]);
-		printf(" at <%c, %c> to <%c, %c>\n", '8' - g->bestMoveSrcRow, 'A' + g->bestMoveSrcCol, '8' - g->bestMoveDstRow, 'A' + g->bestMoveDstCol);
+		printf(" at <%c,%c> to <%c,%c>\n", '8' - g->bestMoveSrcRow, 'A' + g->bestMoveSrcCol, '8' - g->bestMoveDstRow, 'A' + g->bestMoveDstCol);
 	}
 }
 
