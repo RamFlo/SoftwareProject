@@ -38,8 +38,10 @@ void settingsState(ChessGame* g) {
 	printf("Specify game settings or type 'start' to begin a game with the current settings:\n");
 	while (true) {
 		curCmd = readCommand();
-		if (curCmd.cmd == START)
+		if (curCmd.cmd == START) {
+			printf("Starting game...\n");
 			return;
+		}
 		if (curCmd.type == 1 || curCmd.cmd == INVALID_LINE || (curCmd.cmd == USER_COLOR && g->gameMode == 2) || (curCmd.cmd == DIFFICULTY && g->gameMode == 2) || (curCmd.cmd == LOAD && curCmd.path == NULL)) {
 			printf("ERROR: invalid command\n");
 			continue;
@@ -103,16 +105,18 @@ void gameState(ChessGame* g) {
 	if (isHuman(g))
 		playerTurn(g);
 	else
-		computerTurn(g);
+		computerTurn(g,true);
 }
 
-//Computes the best move using Minimax, executes the move and prints it
-void computerTurn(ChessGame* g) {
+//Computes the best move using Minimax, executes the move and prints it if shouldPrint=true
+void computerTurn(ChessGame* g, bool shouldPrint) {
 	MinimaxSuggestMove(g);
 	ChessGameSetMove(g, '8' - g->bestMoveSrcRow, 'A' + g->bestMoveSrcCol, '8' - g->bestMoveDstRow, 'A' + g->bestMoveDstCol);
-	printf("Computer: move ");
-	printPieceName(g->gameBoard[g->bestMoveDstRow][g->bestMoveDstCol]);
-	printf(" at <%c, %c> to <%c, %c>\n", '8' - g->bestMoveSrcRow, 'A' + g->bestMoveSrcCol, '8' - g->bestMoveDstRow, 'A' + g->bestMoveDstCol);
+	if (shouldPrint) {
+		printf("Computer: move ");
+		printPieceName(g->gameBoard[g->bestMoveDstRow][g->bestMoveDstCol]);
+		printf(" at <%c, %c> to <%c, %c>\n", '8' - g->bestMoveSrcRow, 'A' + g->bestMoveSrcCol, '8' - g->bestMoveDstRow, 'A' + g->bestMoveDstCol);
+	}
 }
 
 //Executes a human player's turn:
@@ -169,10 +173,10 @@ void playerTurn(ChessGame* g) {
 				printf("File cannot be created or modified\n");
 			break;
 		case UNDO:
-			curMsg = ChessGameUndoPrevMove(g);
+			curMsg = ChessGameUndoPrevMove(g,true);
 			if (curMsg == NO_HISTORY)
 				printf("Empty history, no move to undo\n");
-			ChessGameUndoPrevMove(g);
+			ChessGameUndoPrevMove(g,true);
 			if (curMsg == SUCCESS)
 				return;
 			break;

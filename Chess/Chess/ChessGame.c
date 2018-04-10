@@ -557,7 +557,7 @@ CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1) {
 }
 
 //revokes the last move that was made - returns a CHESS_GAME_MESSAGE indicating if execution was successful or not
-CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src) {
+CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src, bool shouldPrint) {
 	char lastPiece = spArrayListGetLast(src->history);
 	int i=0,size = src->history->actualSize, dstCol = 0, dstRow = 0, srcCol = 0, srcRow = 0;
 	if (size == 0)
@@ -569,10 +569,12 @@ CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src) {
 	src->gameBoard[srcRow][srcCol] = src->gameBoard[dstRow][dstCol];
 	src->gameBoard[dstRow][dstCol] = lastPiece;
 	ChessGameSwitchPlayer(src);
-	if (src->currentPlayer == WHITE_PLAYER)
-		printf("Undo move for black player: <%c,%c> -> <%c,%c>\n", '8'-dstRow, 'A' + dstCol, '8'-srcRow, 'A'+srcCol);
-	else
-		printf("Undo move for white player: <%c,%c> -> <%c,%c>\n", '8' - dstRow, 'A' + dstCol, '8' - srcRow, 'A' + srcCol);
+	if (shouldPrint) {
+		if (src->currentPlayer == WHITE_PLAYER)
+			printf("Undo move for black player: <%c,%c> -> <%c,%c>\n", '8' - dstRow, 'A' + dstCol, '8' - srcRow, 'A' + srcCol);
+		else
+			printf("Undo move for white player: <%c,%c> -> <%c,%c>\n", '8' - dstRow, 'A' + dstCol, '8' - srcRow, 'A' + srcCol);
+	}
 	for (i = 0; i < 5; i++)
 		spArrayListRemoveLast(src->history);
 	return SUCCESS;

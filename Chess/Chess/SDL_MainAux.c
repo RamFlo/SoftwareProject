@@ -471,7 +471,7 @@ void diffLevelButtonClick() {
 void startButtonClick() {
 	curScreen = BOARD_WINDOW_INDEX;
 	if (g->gameMode == 1 && ((g->userColor==0 && g->currentPlayer==WHITE_PLAYER)|| (g->userColor == 1 && g->currentPlayer == BLACK_PLAYER))) {
-		computerTurn(g);
+		computerTurn(g,false);
 		updatePiecesRectsAccordingToBoard();
 		showCheckCheckmateOrDrawMessage();
 	}
@@ -630,9 +630,9 @@ void undoButtonClick() {
 	resetLegalMovesShouldDrawArray();
 	shouldRenderSameScreenAgain = true;
 	if (g->checkmated == '\0' && !g->draw) {
-		if (ChessGameUndoPrevMove(g) == SUCCESS)
+		if (ChessGameUndoPrevMove(g, false) == SUCCESS)
 			curGameSaved = false;
-		ChessGameUndoPrevMove(g);
+		ChessGameUndoPrevMove(g,false);
 		updatePiecesRectsAccordingToBoard();
 	}
 }
@@ -670,7 +670,7 @@ void legalMoveButtonClick() {
 	updatePiecesRectsAccordingToBoard();
 	showCheckCheckmateOrDrawMessage();
 	if (g->gameMode == 1 && !isCheckmateOrDraw()) {
-		computerTurn(g);
+		computerTurn(g,false);
 		updatePiecesRectsAccordingToBoard();
 		showCheckCheckmateOrDrawMessage();
 	}

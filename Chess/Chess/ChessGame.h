@@ -93,7 +93,7 @@ CHESS_GAME_MESSAGE ChessGamePrintBoard(ChessGame* src);
 CHESS_GAME_MESSAGE ChessGameSave(ChessGame* src, char* path);
 
 //revokes the last move that was made - returns a CHESS_GAME_MESSAGE indicating if execution was successful or not
-CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src);
+CHESS_GAME_MESSAGE ChessGameUndoPrevMove(ChessGame* src, bool shouldPrint);
 
 //resets the board and history of the current game
 void chessGameReset(ChessGame* g);

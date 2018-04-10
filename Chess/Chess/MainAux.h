@@ -11,8 +11,8 @@
 //then executes it accordingly
 void settingsState(ChessGame* g);
 
-//Computes the best move using Minimax, executes the move and prints it
-void computerTurn(ChessGame* g);
+//Computes the best move using Minimax, executes the move and prints it if shouldPrint=true
+void computerTurn(ChessGame* g, bool shouldPrint);
 
 //Executes a human player's turn:
 //prints the relevant messages, gets a command and executes it according to it's specified effect.
