@@ -4,6 +4,18 @@
 #include "SDL_MainAux.h"
 #include <string.h>
 
+/**
+* Returns pointer to a button created using the supplied arguments,
+* with the assertion that all arguments are valid. If any of the arguments is
+* invalid then NULL is returned.
+* @param renderer - a pointer to the button's renderer
+* @param image - the button's image given as a string
+* @param location - the button's rect
+* @param (*action)(void) - the button's function to execute upon click
+* @return
+* NULL on invalid args or memory error
+* Otherwise, a pointer to the created button
+*/
 Widget* createButton(
 	SDL_Renderer* renderer,
 	const char* image,
@@ -68,6 +80,10 @@ Widget* createButton(
 	return res;
 }
 
+/**
+* Destroys the given button (frees all the button's resources)
+* @param src - a pointer to the button which should be destroyed
+*/
 void destroyButton(Widget* src)
 {
 	Button* button = (Button*)src->data;
@@ -76,6 +92,12 @@ void destroyButton(Widget* src)
 	free(src);
 }
 
+/**
+* A function called upon a button's click. 
+* Updates the last click point, and calls the button action if the click was inside the button.
+* @param src - a pointer to the button
+* @param e - a pointer to an event
+*/
 void handleButtonEvent(Widget* src, SDL_Event* e)
 {
 	if (e->type == SDL_MOUSEBUTTONUP) {
@@ -90,6 +112,11 @@ void handleButtonEvent(Widget* src, SDL_Event* e)
 	}
 }
 
+/**
+* A function used to draw a button using the renderer given.
+* @param src - a pointer to the button
+* @param render - a pointer to a renderer
+*/
 void drawButton(Widget* src, SDL_Renderer* render)
 {
 	Button* button = (Button*)src->data;

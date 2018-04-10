@@ -20,10 +20,6 @@ bool shouldQuit;
 bool shouldReturnToMainMenu;
 ChessGame* g;
 chessWindow* chessWindowsArray[NUM_OF_WINDOWS];
-SDL_Window* settingsWindow = NULL;
-SDL_Window* loadWindow = NULL;
-SDL_Window* gameWindow = NULL;
-SDL_Window* saveWindow = NULL;
 SDL_Point lastClickPoint;
 SDL_Event* curEvent;
 

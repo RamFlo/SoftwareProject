@@ -3,8 +3,14 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-//#include "SPMainAux.h"
 
+/**
+* Returns whether or not the given string str is a valid integer.
+* @param str - a string (not allowed to be NULL)
+* @return
+* true ,if the given string is a valid integer
+* false ,otherwise
+*/
 bool spParserIsInt(const char* str) {
 	int size = 0,i=0;
 	if (sizeof(str) == 0)
@@ -25,7 +31,13 @@ bool spParserIsInt(const char* str) {
 	return true;
 }
 
-
+/**
+* Returns whether or not the given string str is a valid integer using spParserIsInt, making sure the given string isn't NULL
+* @param str - a string
+* @return
+* true ,if the given string is a valid integer
+* false ,otherwise
+*/
 bool isValidNumArg(char* token) {
 	if (token == NULL)
 		return false;
@@ -34,6 +46,15 @@ bool isValidNumArg(char* token) {
 	return false;
 }
 
+/**
+* Returns whether or not the given string 'token' is a valid square on the board. If so, stores the squre's position in 'result'
+* @param token - a string 
+* @param result - a pointer to a ChessCommand
+* @param squareNum - the number of the square in the command (source square-1, destination square-2)
+* @return
+* true ,if the given string is a valid square position
+* false ,otherwise
+*/
 bool isValidSquareArg(char* token, ChessCommand* result, int squareNum) {
 	int i = 0, commaIndex = 0, length = (int)strlen(token);
 	if (token == NULL || token[0] != '<' || token[length - 1] != '>')
@@ -59,12 +80,22 @@ bool isValidSquareArg(char* token, ChessCommand* result, int squareNum) {
 	return true;
 }
 
+/**
+* Fills the ChessCommand pointer cmd's 'path' arg with null characters.
+* @param cmd - a pointer to a ChessCommand
+*/
 void initiateEmptyPath(ChessCommand *cmd) {
 	int i = 0;
 	for (i = 0; i < 2048; i++)
 		cmd->path[i] = '\0';
 }
 
+/**
+* This function parses the given string 'str' into a ChessCommand
+* @param str - a string
+* @return
+* a ChessCommand containing the parsed command values
+*/
 ChessCommand spParserPraseLine(char* str) {
 	ChessCommand result;
 	result.validArg = false;

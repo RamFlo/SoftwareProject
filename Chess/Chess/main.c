@@ -2,19 +2,14 @@
 #include "SDL_main.h"
 #include <stdlib.h>
 #include <string.h>
+
 /*
 * This function is the main game's function. It operates using an outer 'while' loop
-* that handles creating a new game (for the first game and every time that the game is restatred),
-* and an inner 'while' loop that handles a single game's turns.
-
-* 1. In case of a memory error or 'quit' command, the function ends the game using endGame (frees all
-*	 allocated memory).
+* that handles the game state using the function 'gameState'.
+* If the user initiated the graphics mode (using -g arg), this function calls SDL_chessGame() to initiate the game.
+* 1. In case of a memory error or 'quit' command, the function ends the game (frees all allocated memory).
 * 2. In every turn, the inner 'while' loop checks for a winner or tie. If there's a winner or tie,
-*    only the 'restart'\'quit'\'undo_move' commands are accepted.
-* 3. If there's no winner\tie, the function executes the user's or the computer's
-*    turn according to the current game's state. (In the user's turn, the function also
-*    prints the board).
-
+*    the game ends.
 * @return
 * Undefined value
 */

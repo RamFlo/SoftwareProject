@@ -34,27 +34,19 @@ typedef struct command_t {
 } ChessCommand;
 
 /**
-* Checks if a specified string represents a valid integer. It is recommended
-* to use this function prior to calling the standard library function atoi.
-*
+* Returns whether or not the given string str is a valid integer.
+* @param str - a string (not allowed to be NULL)
 * @return
-* true if the string represents a valid integer, and false otherwise.
+* true ,if the given string is a valid integer
+* false ,otherwise
 */
 bool spParserIsInt(const char* str);
 
 /**
-* Parses a specified line. If the line is a command which has an integer
-* argument then the argument is parsed and is saved in the field arg and the
-* field validArg is set to true. In any other case then 'validArg' is set to
-* false and the value 'arg' is undefined
-*
+* This function parses the given string 'str' into a ChessCommand
+* @param str - a string
 * @return
-* A parsed line such that:
-*   cmd - contains the command type, if the line is invalid then this field is
-*         set to INVALID_LINE
-*   validArg - is set to true if the command is add_disc and the integer argument
-*              is valid
-*   arg      - the integer argument in case validArg is set to true
+* a ChessCommand containing the parsed command values
 */
 ChessCommand spParserPraseLine(char* str);
 

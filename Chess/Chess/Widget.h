@@ -4,6 +4,9 @@
 #include <SDL.h>
 #include <SDL_video.h>
 
+/*
+* A widget 'object' that is drawn on screen using rednerer, used as a containing type for a button.
+*/
 typedef struct widget_t Widget;
 struct widget_t {
 	void(*draw)(Widget*, SDL_Renderer*);
@@ -12,7 +15,9 @@ struct widget_t {
 	void* data;
 };
 
-// useful function for NULL-safe destroy
+/*
+* A function that destroys the widget pointed by src.
+*/
 void destroyWidget(Widget* src);
 
 #endif /* WIDGET_H_ */
