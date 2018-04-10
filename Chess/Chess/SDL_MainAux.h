@@ -11,7 +11,7 @@
 #define LOAD_WINDOW_INDEX 2
 #define SAVE_WINDOW_INDEX 3
 #define BOARD_WINDOW_INDEX 4
-#define NUM_OF_SAVE_SLOTS 12
+#define NUM_OF_SAVE_SLOTS 5
 #define NUM_OF_SCREEN_SLOTS 5
 
 //an array of the program's windows
