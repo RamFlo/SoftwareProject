@@ -688,6 +688,7 @@ void mainMenuButtonClick() {
 		chosenButtonID = unsavedGameBeforeLeaving();
 		if (chosenButtonID == 0) {
 			curScreen = MAIN_WINDOW_INDEX;
+			curGameSaved = true;
 			chessGameDefault(g);
 			updatePiecesRectsAccordingToBoard();
 		}
