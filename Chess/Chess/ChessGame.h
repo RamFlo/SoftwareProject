@@ -109,4 +109,7 @@ bool isKingCheckedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2
 
 //Checks if a piece is threatened after a move it does
 bool isThreatenedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n);
+
+//switches the game's current player
+void ChessGameSwitchPlayer(ChessGame* src);
 #endif

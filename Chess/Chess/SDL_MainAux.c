@@ -714,8 +714,25 @@ void mainMenuButtonClick() {
 */
 void updateGetMovesShouldDrawArray(int row, int col) {
 	int i = 0, j = 0, curRectIndex=0, modifier=0;
+	ChessGame* gameCopy = ChessGameCopy(g);
 	resetGetMovesShouldDrawArray();
+	if (!isCurPlayerPiece(gameCopy, row, col))
+		ChessGameSwitchPlayer(gameCopy);
 	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			if (isLegalMove(gameCopy, row, col, i, j) && !isKingCheckedAfterMove(gameCopy, row, col, i, j)) {
+				modifier = 0;
+				if (isThreatenedAfterMove(gameCopy, row, col, i, j))
+					modifier += 1;
+				if (isOppositeColorsSquares(gameCopy, i, j, row, col))
+					modifier += 2;
+				curRectIndex = (8 * i + j) * 4 + modifier;
+				getMovesShouldDraw[curRectIndex] = 1;
+			}
+		}
+	}
+	ChessGameDestroy(gameCopy);
+	/*for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
 			if (isLegalMove(g, row, col, i, j) && !isKingCheckedAfterMove(g, row, col, i, j)) {
 				modifier = 0;
@@ -727,7 +744,7 @@ void updateGetMovesShouldDrawArray(int row, int col) {
 				getMovesShouldDraw[curRectIndex] = 1;
 			}
 		}
-	}
+	}*/
 }
 
 /**

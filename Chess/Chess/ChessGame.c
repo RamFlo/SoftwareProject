@@ -290,8 +290,6 @@ bool isLegalWhitePawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n
 	else if (r2_n == r1_n - 1 && abs(c1_n - c2_n) == 1) {
 		if (isOppositeColorsSquares(src,r1_n, c1_n, r2_n, c2_n))
 			return true;
-		//if (isOtherPlayerPiece(src, r2_n, c2_n)) return true;
-			
 	}
 	return false;
 }
@@ -308,7 +306,6 @@ bool isLegalBlackPawnMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_n
 	else if (r2_n == r1_n + 1 && abs(c1_n - c2_n) == 1) {
 		if (isOppositeColorsSquares(src, r1_n, c1_n, r2_n, c2_n))
 			return true;
-		//if (isOtherPlayerPiece(src, r2_n, c2_n)) return true;
 	}
 	return false;
 }
@@ -371,7 +368,6 @@ bool isSquareThreatened(ChessGame* src, int r1_n, int c1_n) {
 			if (curSquare != '\0') {
 				shouldCheck = (src->currentPlayer == WHITE_PLAYER) ? isupper(curSquare) : !isupper(curSquare);
 				if (shouldCheck && isLegalMove(src, i, j, r1_n, c1_n)){
-					//printf("	<%d,%d> is threatened by <%d,%d>\n", r1_n, c1_n, i, j);
 					return true;
 				}
 			}
@@ -391,7 +387,6 @@ bool isSquareThreatenedByColor(ChessGame* src, int r1_n, int c1_n,char threateni
 			if (curSquare != '\0') {
 				shouldCheck = (threateningPlayer == WHITE_PLAYER) ? !isupper(curSquare) : isupper(curSquare);
 				if (shouldCheck && isLegalMove(src, i, j, r1_n, c1_n)) {
-					//printf("	<%d,%d> is threatened by <%d,%d>\n", r1_n, c1_n, i, j);
 					return true;
 				}
 			}
@@ -431,7 +426,6 @@ bool isCheckmate(ChessGame* src) {
 	int i, j, k, l;
 	bool shouldCheck = false;
 	char curSquare = '\0';
-	//res = findCurPlayerKing(src);
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
 			curSquare = src->gameBoard[i][j];
@@ -490,8 +484,6 @@ CHESS_GAME_MESSAGE ChessGameSetMove(ChessGame* src, char r1, char c1, char r2, c
 		return ILLEGAL_MOVE;
 	if (!isLegalMove(src, r1_n, c1_n, r2_n, c2_n))
 		return ILLEGAL_MOVE;
-	//if (r1 == '7' && c1 == 'C' && r2 == '7' && c2 == 'D')
-	//	printf("");
 	if (isKingCheckedAfterMove(src, r1_n, c1_n, r2_n, c2_n)) {
 		if (src->checked == src->currentPlayer)
 			return KING_STILL_THREATENED;
@@ -527,32 +519,29 @@ bool isThreatenedAfterMove(ChessGame* src, int r1_n, int c1_n, int r2_n, int c2_
 //Gets and prints all the legal moves of a piece in a given square
 CHESS_GAME_MESSAGE ChessGameGetMoves(ChessGame* src, char r1, char c1) {
 	int i = 0, j = 0, r1_n = 8 - (r1 - '0'), c1_n = c1 - 'A';
-	//char threateningPlayerColor;
-	//bool curPlayerPiece = false;
+	ChessGame* newGameCopy;
 	if (src == NULL || !isValidSquare(r1_n, c1_n))
 		return INVALID_POSITION;
 	if (src->gameBoard[r1_n][c1_n] == '\0')
 		return NO_PIECE_IN_SQUARE;
-	//if (!(curPlayerPiece = isCurPlayerPiece(src, r1_n, c1_n)))
-		//ChessGameSwitchPlayer(src);
-	//threateningPlayerColor = isupper(src->gameBoard[r1_n][c1_n]) ? WHITE_PLAYER : BLACK_PLAYER;
+	newGameCopy = ChessGameCopy(src);
+	if (newGameCopy==NULL)
+		return NULL_SRC;
+	if (!isCurPlayerPiece(src, r1_n, c1_n))
+		ChessGameSwitchPlayer(newGameCopy);
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
-			if (isLegalMove(src, r1_n, c1_n, i, j) && !isKingCheckedAfterMove(src, r1_n, c1_n, i, j)) {
+			if (isLegalMove(newGameCopy, r1_n, c1_n, i, j) && !isKingCheckedAfterMove(newGameCopy, r1_n, c1_n, i, j)) {
 				printf("<%c,%c>", '8' - i, 'A' + j);
-				//if (isSquareThreatened(src, i, j))
-				//	printf("*");
-				//if (isOtherPlayerPiece(src,i, j))	printf("^");
-				if (isThreatenedAfterMove(src, r1_n, c1_n, i, j))
+				if (isThreatenedAfterMove(newGameCopy, r1_n, c1_n, i, j))
 						printf("*");
-				if (isOppositeColorsSquares(src,i,j, r1_n, c1_n))
+				if (isOppositeColorsSquares(newGameCopy,i,j, r1_n, c1_n))
 					printf("^");
 				printf("\n");
 			}
 		}
 	}
-	//if (!curPlayerPiece)
-		//ChessGameSwitchPlayer(src);
+	ChessGameDestroy(newGameCopy);
 	return SUCCESS;
 }
 
@@ -776,7 +765,7 @@ void chessGameDefault(ChessGame* g) {
 	g->gameMode = 1;
 	g->difficulty = 2;
 	g->userColor = 1;
-	chessGameReset(g); //maybe
+	chessGameReset(g);
 }
 
 
